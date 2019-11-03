@@ -1,12 +1,15 @@
 package com.example.mesh.ui.home;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mesh.MessageActivity;
 import com.example.mesh.R;
 
 import java.util.List;
@@ -14,20 +17,28 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
-        protected TextView vName;
-        protected TextView vEmail;
-        protected TextView vIcon;
+        protected TextView name;
+        protected TextView content;
+        protected ImageView icon;
+        private final String CONTACT_PARCEL = "Contact Parcel";
 
-        public ContactViewHolder(View v) {
+        public ContactViewHolder(final View v) {
             super(v);
-            vName = (TextView) v.findViewById(R.id.txtName);
-            vEmail = (TextView) v.findViewById(R.id.txtEmail);
-            vIcon = (TextView) v.findViewById(R.id.title);
+            name = (TextView) v.findViewById(R.id.txtName);
+            content = (TextView) v.findViewById(R.id.txtContent);
+            icon = (ImageView) v.findViewById(R.id.title);
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                    intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                    v.getContext().startActivity(intent);
+                }
+            });
         }
     }
 
-    private List<ContactInfo> contactList;
-
+    private static List<ContactInfo> contactList;
     public ContactAdapter(List<ContactInfo> contactList) {
         this.contactList = contactList;
     }
@@ -40,9 +51,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         ContactInfo ci = contactList.get(i);
-        contactViewHolder.vName.setText(ci.name);
-        contactViewHolder.vEmail.setText(ci.email);
-        contactViewHolder.vIcon.setText(ci.icon);
+        contactViewHolder.name.setText(ci.name);
+        contactViewHolder.content.setText(ci.content);
+        contactViewHolder.icon.setImageBitmap(ci.icon);
     }
 
     @Override

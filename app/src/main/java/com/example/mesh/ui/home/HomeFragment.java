@@ -1,5 +1,7 @@
 package com.example.mesh.ui.home;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +31,8 @@ public class HomeFragment extends Fragment {
         recList.setLayoutManager(llm);
 
         for (int i = 0; i < 15; i++) {
-            contactList.add(new ContactInfo("Terry", "Seah", "Win"));
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.default_icon);
+            contactList.add(new ContactInfo("Contact " + i, bm, "(Content Here)"));
         }
         ContactAdapter contactAdapter = new ContactAdapter(contactList);
         recList.setAdapter(contactAdapter);
