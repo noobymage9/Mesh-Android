@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class ContactInfo implements Parcelable {
+public class ContactInfo implements Parcelable { // Parcelable is an efficient version of serializable for android. This is required to pass the object from recycler view to the message activity
     protected String name;
     protected Bitmap icon;
     protected String content;

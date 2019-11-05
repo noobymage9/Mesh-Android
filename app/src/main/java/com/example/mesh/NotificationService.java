@@ -13,6 +13,7 @@ import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
@@ -29,14 +30,12 @@ public class NotificationService extends NotificationListenerService {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onNotificationPosted(StatusBarNotification sbn) {
+    public void onNotificationPosted(StatusBarNotification sbn) { // Reading data from notification
         String pack = sbn.getPackageName();
-        String ticker = sbn.getNotification().tickerText.toString();
         Bundle extras = sbn.getNotification().extras;
         String title = "";
         String text = "";
-        String content = "";
-
+        String info = "";
 
         if (extras.containsKey("android.title")) {
             title = extras.getString("android.title");
@@ -50,19 +49,23 @@ public class NotificationService extends NotificationListenerService {
         if (pack != null) {
 
             Log.i("Package", pack);
-        }
-
-        if (ticker != null) {
-            Log.i("ticker", ticker);
+            info += "Package: " + pack + "\n";
         }
 
         if (title != null) {
             Log.i("Title", title);
+            info += "Title: " + title + "\n";
         }
 
         if (text != null) {
             Log.i("Text", text);
+            info += "Text: " + text + "\n";
         }
+
+        // Sending results to message activity
+        Intent i = new Intent(MessageActivity.RECEIVE_JSON);
+        i.putExtra("json", info);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }
 
     @Override

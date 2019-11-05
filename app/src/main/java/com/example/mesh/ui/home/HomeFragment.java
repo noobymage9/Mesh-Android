@@ -30,10 +30,11 @@ public class HomeFragment extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 15; i++) { // Generating sample contacts
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.default_icon);
-            contactList.add(new ContactInfo("Contact " + i, bm, "(Content Here)"));
+            contactList.add(new ContactInfo("Contact " + i, bm, "(Text Here)"));
         }
+
         ContactAdapter contactAdapter = new ContactAdapter(contactList);
         recList.setAdapter(contactAdapter);
         return root;

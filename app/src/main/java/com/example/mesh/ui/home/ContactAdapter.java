@@ -16,13 +16,17 @@ import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
+    /* This class is to serve as a mechanism to produce the "cards" for the recyclerView. Cards that are scrolled out of screen
+        are reused for the next card that is entering the screen. This sorts of save resources.
+     */
+
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected TextView content;
         protected ImageView icon;
         private final String CONTACT_PARCEL = "Contact Parcel";
 
-        public ContactViewHolder(final View v) {
+        public ContactViewHolder(final View v) {  //
             super(v);
             name = (TextView) v.findViewById(R.id.txtName);
             content = (TextView) v.findViewById(R.id.txtContent);
