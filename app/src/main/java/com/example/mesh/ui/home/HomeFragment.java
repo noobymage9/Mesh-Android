@@ -24,7 +24,9 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        RecyclerView recList = root.findViewById(R.id.cardList);
+
+        // Recycler View
+        RecyclerView recList = root.findViewById(R.id.contactList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);

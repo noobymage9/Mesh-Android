@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.mesh.MessageActivity;
+import com.example.mesh.ui.message.MessageActivity;
 import com.example.mesh.R;
 
 import java.util.List;

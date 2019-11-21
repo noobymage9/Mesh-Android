@@ -1,19 +1,19 @@
 package com.example.mesh;
 
-import android.app.Notification;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Parcelable;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.example.mesh.ui.message.MessageActivity;
+import com.example.mesh.ui.message.speechBubbleAdaptor;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
@@ -62,8 +62,12 @@ public class NotificationService extends NotificationListenerService {
             info += "Text: " + text + "\n";
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            info += "\n" + Calendar.getInstance().getTime();
+        }
+
         // Sending results to message activity
-        Intent i = new Intent(MessageActivity.RECEIVE_JSON);
+        Intent i = new Intent(speechBubbleAdaptor.RECEIVE_JSON);
         i.putExtra("json", info);
         LocalBroadcastManager.getInstance(this).sendBroadcast(i);
     }

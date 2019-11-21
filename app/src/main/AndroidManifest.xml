@@ -25,7 +25,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MessageActivity" />
+        <activity android:name=".ui.message.MessageActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"

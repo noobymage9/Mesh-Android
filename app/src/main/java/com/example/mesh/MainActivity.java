@@ -49,9 +49,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        // Check for permission
         ComponentName cn = new ComponentName(this, NotificationService.class);
         String flat = Settings.Secure.getString(this.getContentResolver(), "enabled_notification_listeners");
         final boolean enabled = flat != null && flat.contains(cn.flattenToString());
+
+        // Alert Dialog
         if (!enabled) {
             AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
             builder1.setMessage("Please enable the notification listener for our application to work");
