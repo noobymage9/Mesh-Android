@@ -47,7 +47,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
             if (intent.getAction().equals(RECEIVE_JSON)) {
 
                 String info = intent.getStringExtra("json");
-                messageList.add(counter + ". " + info);  // quick fix counter
+                messageList.add(counter + ". \n" + info);  // quick fix counter
                 counter++;
                 notifyDataSetChanged();
             }
