@@ -1,25 +1,16 @@
-package com.example.mesh.ui.message;
+package com.example.mesh.message;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.mesh.R;
-import com.example.mesh.ui.home.ContactAdapter;
 import com.example.mesh.ui.home.ContactInfo;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
     private final String CONTACT_PARCEL = "Contact Parcel";

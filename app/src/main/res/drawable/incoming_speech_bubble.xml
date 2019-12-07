@@ -91,7 +91,7 @@
             android:toDegrees="0">
             <shape android:shape="rectangle">
                 <corners android:radius="4dp" />
-                <solid android:color="@color/White" />
+                <solid android:color="@color/FloralWhite" />
             </shape>
         </rotate>
     </item>

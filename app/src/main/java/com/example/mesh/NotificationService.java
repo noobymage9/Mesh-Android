@@ -12,8 +12,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.mesh.ui.message.MessageActivity;
-import com.example.mesh.ui.message.speechBubbleAdaptor;
+import com.example.mesh.message.speechBubbleAdaptor;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {

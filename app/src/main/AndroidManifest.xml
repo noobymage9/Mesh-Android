@@ -25,7 +25,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.message.MessageActivity"
+        <activity android:name=".message.MessageActivity"
             android:configChanges="orientation|screenSize"/>
         <activity
             android:name=".MainActivity"
