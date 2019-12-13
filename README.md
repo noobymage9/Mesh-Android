@@ -12,6 +12,7 @@ A database application that collate and display messages from various chatting p
 * **Simran221099** - [Simran221099](https://github.com/Simran221099)
 * **YunRuRuRu0910** - [YunRuRuRu0910](https://github.com/YunRuRuRu0910)
 * **Creasu** - [Creasu](https://github.com/Creasu)
+* **kimbelynsim** - [kimbelynsim](https://github.com/kimbelynsim)
 
 See also the list of [contributors](https://github.com/noobymage9/Mesh/contributors) who participated in this project.
 
