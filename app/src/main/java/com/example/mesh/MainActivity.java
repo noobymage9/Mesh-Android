@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.provider.Settings;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -96,5 +97,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    public boolean onOptionsItemSelected(MenuItem item) {  // Back button
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                Intent i = new Intent(this, Setting.class);
+                startActivity(i);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
 }
