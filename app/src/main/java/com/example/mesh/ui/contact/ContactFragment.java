@@ -22,8 +22,8 @@ public class ContactFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         contactViewModel =
                 ViewModelProviders.of(this).get(ContactViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_tools, container, false);
-        final TextView textView = root.findViewById(R.id.text_tools);
+        View root = inflater.inflate(R.layout.fragment_contact, container, false);
+        final TextView textView = root.findViewById(R.id.text_contact);
         contactViewModel.getText().observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {

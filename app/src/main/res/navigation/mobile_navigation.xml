@@ -21,23 +21,17 @@
         android:id="@+id/nav_favourite"
         android:name="com.example.mesh.ui.favourite.FavouriteFragment"
         android:label="@string/menu_favourite"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_favourite" />
 
     <fragment
         android:id="@+id/nav_contact"
         android:name="com.example.mesh.ui.contact.ContactFragment"
         android:label="@string/menu_contact"
-        tools:layout="@layout/fragment_tools" />
-
-    <fragment
-        android:id="@+id/nav_share"
-        android:name="com.example.mesh.ui.share.ShareFragment"
-        android:label="@string/menu_share"
         tools:layout="@layout/fragment_contact" />
 
-    <fragment
-        android:id="@+id/nav_send"
-        android:name="com.example.mesh.ui.send.SendFragment"
-        android:label="@string/menu_send"
-        tools:layout="@layout/fragment_favourite" />
+    <activity
+        android:id="@+id/nav_setting"
+        android:name="com.example.mesh.Setting"
+        android:label="@string/menu_setting"
+        tools:layout="@layout/activity_setting" />
 </navigation>
