@@ -30,7 +30,8 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/title"
             android:text="(Name Here)"
-            android:textColor="@color/Tiger"
+            android:textStyle="bold"
+            android:textColor="@color/Ivory"
             android:paddingLeft="10dp"
             android:textSize="28sp" />
 

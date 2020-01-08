@@ -15,6 +15,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
@@ -22,4 +23,6 @@
     <style name="popUp">
         <item name="android:textColor">@color/Ivory</item>
     </style>
+
+    <style name="overflowMenu" parent="@style/Widget.AppCompat.ActionButton.Overflow"/>
 </resources>

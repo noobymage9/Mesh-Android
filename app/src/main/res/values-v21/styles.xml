@@ -12,4 +12,15 @@
         <item name="android:actionMenuTextColor">@color/Ivory</item>
         <item name="android:actionOverflowMenuStyle">@style/popUp</item>
     </style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- Original: #00574B -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:itemBackground">@color/WinterSoldierBlue</item>
+        <item name="android:itemTextAppearance">@style/popUp</item>
+        <item name="android:navigationBarColor">@color/Black</item>
+        <item name="android:actionOverflowButtonStyle">@style/overflowMenu</item>
+    </style>
 </resources>
