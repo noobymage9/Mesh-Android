@@ -29,7 +29,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         public ContactViewHolder(final View v) {  //
             super(v);
             name = (TextView) v.findViewById(R.id.txtName);
-            content = (TextView) v.findViewById(R.id.txtContent);
             icon = (ImageView) v.findViewById(R.id.title);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -56,7 +55,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         ContactInfo ci = contactList.get(i);
         contactViewHolder.name.setText(ci.name);
-        contactViewHolder.content.setText(ci.content);
         contactViewHolder.icon.setImageBitmap(ci.icon);
     }
 

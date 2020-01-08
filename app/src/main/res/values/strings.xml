@@ -14,4 +14,5 @@
     <string name="title_activity_message">MessageActivity</string>
     <string name="service_name">NotificationListener</string>
     <string name="menu_setting">Setting</string>
+    <string name="timestamp">31 December 23:59</string>
 </resources>
