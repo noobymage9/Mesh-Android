@@ -4,11 +4,12 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    card_view:cardCornerRadius="4dp"
+    card_view:cardCornerRadius="20dp"
     android:layout_margin="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@color/WinterSoldierBlue"
         android:layout_height="79dp">
 
         <ImageView
@@ -29,7 +30,7 @@
             android:layout_marginLeft="5dp"
             android:layout_toRightOf="@id/title"
             android:text="(Name Here)"
-            android:textColor="#000000"
+            android:textColor="@color/Tiger"
             android:textSize="14sp" />
 
 
@@ -42,6 +43,7 @@
             android:layout_below="@id/txtName"
             android:layout_alignLeft="@id/txtName"
             android:text="(Content Here)"
+            android:textColor="@color/Tiger"
             android:textSize="10dp" />
 
     </RelativeLayout>

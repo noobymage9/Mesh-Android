@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="White">#FFFFFF</color>
-    <color name="Ivory">#FFFFF0</color>
     <color name="LightYellow">#FFFFE0</color>
     <color name="Yellow">#FFFF00</color>
     <color name="Snow">#FFFAFA</color>
@@ -140,4 +139,12 @@
     <color name="DarkBlue">#00008B</color>
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
+    <color name="Ivory">#ECE5DD</color>
+    <color name="Tiger">#F9AA33</color>
+    <color name="BritishBlue">#4A6595</color>
+    <color name="WinterSoldierBlue">#232F34</color>
+    <color name="Montfort">#344955</color>
+    <color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
+    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimaryDark">@color/Black</color>
 </resources>

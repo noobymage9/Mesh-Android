@@ -5,4 +5,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="ToolBarStyle">
+        <item name="android:textColorPrimary">@color/Ivory</item>
+        <item name="android:textColorSecondary">@color/Ivory</item>
+        <item name="android:actionMenuTextColor">@color/Ivory</item>
+        <item name="android:actionOverflowMenuStyle">@style/popUp</item>
+    </style>
 </resources>
