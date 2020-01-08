@@ -15,4 +15,6 @@
     <string name="service_name">NotificationListener</string>
     <string name="menu_setting">Setting</string>
     <string name="timestamp">31 December 23:59</string>
+    <string name="sideBarName">Kimbelyn</string>
+    <string name="sideBarAddress">\@bubbletehgahdai</string>
 </resources>
