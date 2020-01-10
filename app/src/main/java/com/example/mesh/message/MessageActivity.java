@@ -5,11 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.mesh.R;
 import com.example.mesh.Setting;
@@ -31,9 +36,24 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
         actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
-        actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
         actionBar.setDisplayUseLogoEnabled(true);
+
+
+        actionBar.setDisplayShowHomeEnabled(true);
+        /*
+        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View v =  inflator.inflate(R.layout.activity_message_actionbar, null);
+        ImageView iv = (ImageView) v.findViewById(R.id.activity_message_actionbar_logo);
+        BitmapDrawable bd = new BitmapDrawable(getResources(), contactInfo.getBitmap());
+        if (iv != null) {
+            iv.setImageDrawable(bd);
+        }
+        TextView tv = (TextView) v.findViewById(R.id.activity_message_actionbar_name);
+        tv.setText(contactInfo.getName());
+
+        actionBar.setCustomView(v);
+        */
 
         // Recycler View
         RecyclerView recList = findViewById(R.id.messageList);
