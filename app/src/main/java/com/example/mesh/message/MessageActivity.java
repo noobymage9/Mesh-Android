@@ -21,23 +21,21 @@ import com.example.mesh.Setting;
 import com.example.mesh.ui.home.ContactInfo;
 
 public class MessageActivity extends AppCompatActivity {
-    private final String CONTACT_PARCEL = "Contact Parcel";
+    private final String CONTACT_PARCEL = "Contact Parcel";     // Key for Intent from NotificationService
     private ContactInfo contactInfo;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
         actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
         actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
+
         actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
 
         // Recycler View
@@ -46,7 +44,6 @@ public class MessageActivity extends AppCompatActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-
 
         speechBubbleAdaptor speechBubbleAdaptor = new speechBubbleAdaptor(this);
         recList.setAdapter(speechBubbleAdaptor);
