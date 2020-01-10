@@ -27,11 +27,10 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
 
-
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
-        actionBar.setTitle(contactInfo.getName());
+        actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
         actionBar.setDisplayUseLogoEnabled(true);
