@@ -38,22 +38,7 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
         actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
         actionBar.setDisplayUseLogoEnabled(true);
-
-
         actionBar.setDisplayShowHomeEnabled(true);
-        /*
-        LayoutInflater inflator = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v =  inflator.inflate(R.layout.activity_message_actionbar, null);
-        ImageView iv = (ImageView) v.findViewById(R.id.activity_message_actionbar_logo);
-        BitmapDrawable bd = new BitmapDrawable(getResources(), contactInfo.getBitmap());
-        if (iv != null) {
-            iv.setImageDrawable(bd);
-        }
-        TextView tv = (TextView) v.findViewById(R.id.activity_message_actionbar_name);
-        tv.setText(contactInfo.getName());
-
-        actionBar.setCustomView(v);
-        */
 
         // Recycler View
         RecyclerView recList = findViewById(R.id.messageList);
