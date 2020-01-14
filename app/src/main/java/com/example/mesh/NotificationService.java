@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.mesh.message.DBManager;
+import com.example.mesh.message.MessageActivity;
 import com.example.mesh.message.speechBubbleAdaptor;
 
 import java.text.SimpleDateFormat;
@@ -95,11 +96,10 @@ public class NotificationService extends NotificationListenerService {
         dbManager.close();
 
         // Sending results to message activity
-        /*
-        Intent i = new Intent(speechBubbleAdaptor.RECEIVE_JSON);
-        i.putExtra("json", info);
+
+        Intent i = new Intent(MessageActivity.RECEIVE_JSON);
         LocalBroadcastManager.getInstance(this).sendBroadcast(i);
-         */
+
     }
 
     @Override

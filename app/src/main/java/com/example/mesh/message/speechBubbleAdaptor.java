@@ -23,9 +23,14 @@ import java.util.List;
 public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdaptor.speechBubbleViewHolder> {
 
 
+    public void update(ArrayList<String> messages) {
+        this.messageList = messages;
+        notifyDataSetChanged();
+    }
+
     /* This class is to serve as a mechanism to produce the "cards" for the recyclerView. Cards that are scrolled out of screen
-        are reused for the next card that is entering the screen. This sorts of save resources.
-     */
+            are reused for the next card that is entering the screen. This sorts of save resources.
+         */
     public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
 
@@ -39,23 +44,8 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     private List<String> messageList = new ArrayList<>();
 
     //Your activity will respond to this action String
-    //public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
 
-    /*
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(RECEIVE_JSON)) {
 
-                String info = intent.getStringExtra("json");
-                messageList.add(counter + ". \n" + info);  // quick fix counter
-                counter++;
-                notifyDataSetChanged();
-            }
-        }
-    };
-    LocalBroadcastManager bManager;
-     */
 
     public speechBubbleAdaptor(Context c, ArrayList<String> messageList) {
 

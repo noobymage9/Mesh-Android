@@ -2,11 +2,14 @@ package com.example.mesh.message;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -25,8 +28,11 @@ import com.example.mesh.ui.home.ContactInfo;
 import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
+    public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
     private final String CONTACT_PARCEL = "Contact Parcel"; // from ContactAdapter
     private ContactInfo contactInfo;
+    private speechBubbleAdaptor speechBubbleAdaptor;
+    private LocalBroadcastManager bManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +57,27 @@ public class MessageActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        speechBubbleAdaptor speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
+        speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
         recList.setAdapter(speechBubbleAdaptor);
+
+        bManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVE_JSON);
+        bManager.registerReceiver(bReceiver, intentFilter);
 
 
     }
+
+
+
+
+    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            speechBubbleAdaptor.update(getMessages(contactInfo.getName()));
+        }
+    };
+
 
     private ArrayList<String> getMessages(String contactName)
     {
