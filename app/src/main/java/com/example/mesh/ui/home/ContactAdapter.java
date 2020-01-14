@@ -22,7 +22,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
-        protected TextView content;
+        //protected TextView content;
         protected ImageView icon;
         private final String CONTACT_PARCEL = "Contact Parcel";
 

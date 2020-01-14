@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,8 +22,10 @@ import com.example.mesh.R;
 import com.example.mesh.Setting;
 import com.example.mesh.ui.home.ContactInfo;
 
+import java.util.ArrayList;
+
 public class MessageActivity extends AppCompatActivity {
-    private final String CONTACT_PARCEL = "Contact Parcel";     // Key for Intent from NotificationService
+    private final String CONTACT_PARCEL = "Contact Parcel"; // from ContactAdapter
     private ContactInfo contactInfo;
 
     @Override
@@ -29,6 +33,8 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
+
+        ArrayList<String> messages = getMessages(contactInfo.getName());
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
@@ -45,8 +51,29 @@ public class MessageActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
 
-        speechBubbleAdaptor speechBubbleAdaptor = new speechBubbleAdaptor(this);
+        speechBubbleAdaptor speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
         recList.setAdapter(speechBubbleAdaptor);
+
+
+    }
+
+    private ArrayList<String> getMessages(String contactName)
+    {
+        ArrayList<String> messages = new ArrayList<String>();
+
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        Cursor c = dbManager.fetchMessages(contactName);
+        if (c.moveToFirst())
+        {
+            do
+            {
+                messages.add(c.getString(0));
+            } while (c.moveToNext());
+        }
+
+        dbManager.close();
+        return messages;
     }
 
     @Override
