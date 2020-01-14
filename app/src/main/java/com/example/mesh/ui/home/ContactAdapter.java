@@ -43,7 +43,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     private static List<ContactInfo> contactList;
     public ContactAdapter(List<ContactInfo> contactList) {
-        this.contactList = contactList;
+        ContactAdapter.contactList = contactList;
     }
 
     @Override
