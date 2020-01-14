@@ -1,12 +1,15 @@
 package com.example.mesh.message;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -33,12 +36,12 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     }
 
     private int counter = 0; // index the notification
-
-
     private List<String> messageList = new ArrayList<>();
-    //Your activity will respond to this action String
-    public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
 
+    //Your activity will respond to this action String
+    //public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
+
+    /*
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -52,14 +55,19 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         }
     };
     LocalBroadcastManager bManager;
+     */
 
-    public speechBubbleAdaptor(Context c) {
+    public speechBubbleAdaptor(Context c, ArrayList<String> messageList) {
 
         // Create receiver (Temporary way to show log)
+        /*
         bManager = LocalBroadcastManager.getInstance(c);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(RECEIVE_JSON);
         bManager.registerReceiver(bReceiver, intentFilter);
+         */
+
+        this.messageList = messageList;
     }
 
 

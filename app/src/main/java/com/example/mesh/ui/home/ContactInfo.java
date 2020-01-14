@@ -8,14 +8,19 @@ public class ContactInfo implements Parcelable { // Parcelable is an efficient v
     protected String name;
     protected Bitmap icon;
     protected String content;
+    protected int ID;
     protected static final String NAME_PREFIX = "Name_";
     protected static final String SURNAME_PREFIX = "Surname_";
     protected static final String EMAIL_PREFIX = "email_";
+
+    private static int IDCount = 1;
 
     public ContactInfo(String name, Bitmap icon, String content) {
         this.name = name;
         this.icon = icon;
         this.content = content;
+        this.ID = IDCount;
+        IDCount++;
     }
 
     public ContactInfo(Parcel in) {
