@@ -1,18 +1,11 @@
 package com.example.mesh.message;
 
-import android.app.Activity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.mesh.R;
@@ -36,7 +29,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
 
         public speechBubbleViewHolder(final View v) {  //
             super(v);
-            message = (TextView) v.findViewById(R.id.incoming_bubble);
+            message = (TextView) v.findViewById(R.id.incoming_bubble_text);
         }
     }
 

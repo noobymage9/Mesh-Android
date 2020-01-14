@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/incoming_bubble"
+        android:id="@+id/incoming_bubble_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/incoming_speech_bubble"
@@ -22,4 +22,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_max="wrap"
         app:layout_constraintWidth_percent="0.8" />
-</LinearLayout>
+
+    <!-- ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:id="@+id/incoming_bubble_source"
+        android:layout_alignRight="@id/incoming_bubble_text"
+        android:layout_alignBottom="@id/incoming_bubble_text"
+        android:src="@mipmap/default_icon"
+        /-->
+</RelativeLayout>
