@@ -29,18 +29,21 @@ public class MessageActivity extends AppCompatActivity {
     private ContactInfo contactInfo;
     private speechBubbleAdaptor speechBubbleAdaptor;
     private LocalBroadcastManager bManager;
+    private String contactName;
+    private int contactID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contactInfo = (ContactInfo) getIntent().getParcelableExtra(CONTACT_PARCEL);
-
-        ArrayList<String> messages = getMessages(contactInfo.getName());
+        contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
+        //contactID = contactInfo.getID();
+        //contactName = contactInfo.getName();
+        ArrayList<String> messages = getMessages(contactName);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("\t\t" + contactInfo.getName()); // Cheat fix for name and logo distance
-        actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
+        actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
+        //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
 
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);

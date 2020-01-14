@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.Blob;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DBManager {
@@ -45,11 +46,11 @@ public class DBManager {
     }
 
     //Messages belonging to 1 user only
-    public Cursor fetchMessages(String userID)
+    public Cursor fetchMessages(String userName)
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID +
-                " = '" + userID + "'", null);
+                " = '" + userName + "'", null);
         c.moveToFirst();
 
         return c;
@@ -78,9 +79,16 @@ public class DBManager {
     /***************************/
     public void insertContact(String name)
     {
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.CONTACT_NAME, name);
-        database.insert(DatabaseHelper.contactsTableName, null, contentValue);
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_NAME +
+                " FROM " + DatabaseHelper.contactsTableName
+                + " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + name + "';", null);
+
+        if (!c.moveToFirst())
+        {
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(DatabaseHelper.CONTACT_NAME, name);
+            database.insert(DatabaseHelper.contactsTableName, null, contentValue);
+        }
     }
 
     public Cursor fetchAllContacts()
@@ -90,6 +98,34 @@ public class DBManager {
         c.moveToFirst();
 
         return c;
+    }
+
+    public ArrayList<String> fetchAllContactNames()
+    {
+        Cursor c = fetchAllContacts();
+        ArrayList<String> contactNames = new ArrayList<String>();
+        if (c.moveToFirst())
+        {
+            do {
+                contactNames.add(c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)));
+            } while (c.moveToNext());
+        }
+
+        return contactNames;
+    }
+
+    public ArrayList<Integer> fetchAllContactIDs()
+    {
+        Cursor c = fetchAllContacts();
+        ArrayList<Integer> contactNames = new ArrayList<Integer>();
+        if (c.moveToFirst())
+        {
+            do {
+                contactNames.add(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)));
+            } while (c.moveToNext());
+        }
+
+        return contactNames;
     }
 
     public Cursor fetchContact(int contactID)

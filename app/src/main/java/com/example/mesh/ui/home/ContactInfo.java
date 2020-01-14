@@ -8,7 +8,7 @@ public class ContactInfo implements Parcelable { // Parcelable is an efficient v
     protected String name;
     protected Bitmap icon;
     protected String content;
-    protected int ID;
+    protected int id;
     protected static final String NAME_PREFIX = "Name_";
     protected static final String SURNAME_PREFIX = "Surname_";
     protected static final String EMAIL_PREFIX = "email_";
@@ -19,14 +19,20 @@ public class ContactInfo implements Parcelable { // Parcelable is an efficient v
         this.name = name;
         this.icon = icon;
         this.content = content;
-        this.ID = IDCount;
+        this.id = IDCount;
         IDCount++;
+    }
+
+    public ContactInfo(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public ContactInfo(Parcel in) {
         name = in.readString();
-        icon = in.readParcelable(Bitmap.class.getClassLoader());
-        content = in.readString();
+        //icon = in.readParcelable(Bitmap.class.getClassLoader());
+        //content = in.readString();
+        id = in.readInt();
     }
 
     public static final Creator<ContactInfo> CREATOR = new Creator<ContactInfo>() {
@@ -49,8 +55,9 @@ public class ContactInfo implements Parcelable { // Parcelable is an efficient v
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
-        dest.writeParcelable(icon, flags);
-        dest.writeString(content);
+        //dest.writeParcelable(icon, flags);
+        //dest.writeString(content);
+        dest.writeInt(id);
     }
 
     public String getName() {
@@ -60,4 +67,6 @@ public class ContactInfo implements Parcelable { // Parcelable is an efficient v
     public Bitmap getBitmap() {
         return this.icon;
     }
+
+    public int getID() {return this.id;}
 }

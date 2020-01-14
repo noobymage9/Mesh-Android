@@ -12,9 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.mesh.message.MessageActivity;
 import com.example.mesh.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+    private static List<String> contactNames;
+    private static List<ContactInfo> contactList;
 
     /* This class is to serve as a mechanism to produce the "cards" for the recyclerView. Cards that are scrolled out of screen
         are reused for the next card that is entering the screen. This sorts of save resources.
@@ -34,28 +37,32 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                    intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                    intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));
                     v.getContext().startActivity(intent);
                 }
             });
         }
     }
 
-    private static List<ContactInfo> contactList;
+
     public ContactAdapter(List<ContactInfo> contactList) {
         ContactAdapter.contactList = contactList;
     }
 
+    public ContactAdapter(ArrayList<String> contactNames) {
+        ContactAdapter.contactNames = contactNames;
+    }
+
     @Override
     public int getItemCount() {
-        return contactList.size();
+        return contactNames.size();
     }
 
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
-        ContactInfo ci = contactList.get(i);
-        contactViewHolder.name.setText(ci.name);
-        contactViewHolder.icon.setImageBitmap(ci.icon);
+        String cn = contactNames.get(i);
+        contactViewHolder.name.setText(cn);
+        //contactViewHolder.icon.setImageBitmap(ci.icon);
     }
 
     @Override
@@ -67,4 +74,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return new ContactViewHolder(itemView);
     }
 
+    public void updateById(ArrayList<ContactInfo> contactList) {
+        ContactAdapter.contactList = contactList;
+        notifyDataSetChanged();
+    }
+
+    public void updateByName(ArrayList<String> contactNames) {
+        ContactAdapter.contactNames = contactNames;
+        notifyDataSetChanged();
+    }
 }

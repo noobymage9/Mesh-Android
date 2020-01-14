@@ -77,8 +77,8 @@ public class NotificationService extends NotificationListenerService {
         }
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
+        dbManager.insertContact(title);
         dbManager.close();
-
         // Sending results to message activity
 
         Intent i = new Intent(MessageActivity.RECEIVE_JSON);
