@@ -9,6 +9,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String messageTableName = "Message";
 
     // Table columns
+    public static final String MSG_ID = "MsgID";
     public static final String MSG_USER_ID = "UserID";
     public static final String MSG_CONTENTS = "Message_Contents";
     public static final String MSG_SOURCE_APP = "SourceApp";
@@ -16,12 +17,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Database info
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 1;
+    static int databaseVersion = 2;
 
     //Database creation query
     static final String createTable = "CREATE TABLE "+ messageTableName + "(" +
-            MSG_USER_ID + "INTEGER PRIMARY KEY, " +
-            MSG_CONTENTS + " TEXT NOT NULL," +
+            MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MSG_USER_ID + " STRING, " +
+            MSG_CONTENTS + " TEXT NOT NULL, " +
             MSG_SOURCE_APP + " TEXT NOT NULL, " +
             MSG_TIMESTAMP + " DATE NOT NULL);";
 

@@ -44,12 +44,10 @@ public class DBManager {
     {
         String[] columns = new String[] {DatabaseHelper.MSG_CONTENTS, DatabaseHelper.MSG_TIMESTAMP};
         String[] selectionArgs = new String[] {userID};
-        Cursor cursor = database.query(DatabaseHelper.messageTableName, columns,
-                "DatabaseHelper.MSG_USER_ID =?", selectionArgs, null,
-                null, null);
-        if (cursor != null) {
-            cursor.moveToFirst();
-        }
+        Cursor cursor = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM Message" +
+                " where " + DatabaseHelper.MSG_USER_ID + " = '"+userID+"'", null);
+        cursor.moveToFirst();
+
         return cursor;
     }
 
