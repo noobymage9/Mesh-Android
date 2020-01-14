@@ -13,14 +13,10 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.example.mesh.Database.DBManager;
 import com.example.mesh.R;
 import com.example.mesh.Setting;
 import com.example.mesh.ui.home.ContactInfo;
@@ -86,7 +82,7 @@ public class MessageActivity extends AppCompatActivity {
         DBManager dbManager = new DBManager(this);
         dbManager.open();
         Cursor c = dbManager.fetchMessages(contactName);
-        if (c.moveToFirst())
+        if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
         {
             do
             {
