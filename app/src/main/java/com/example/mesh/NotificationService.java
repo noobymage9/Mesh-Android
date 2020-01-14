@@ -49,16 +49,19 @@ public class NotificationService extends NotificationListenerService {
 
             Log.i("Package", pack);
             info += "Package: " + pack + "\n";
+            System.out.println(info);
         }
 
         if (title != null) {
             Log.i("Title", title);
             info += "Title: " + title + "\n";
+            System.out.println(title);
         }
 
         if (text != null) {
             Log.i("Text", text);
             info += "Text: " + text + "\n";
+            System.out.println(text);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
