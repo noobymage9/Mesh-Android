@@ -30,17 +30,17 @@ public class NotificationService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) { // Reading data from notification
-        String pack = sbn.getPackageName();
+        String pack = sbn.getPackageName();                       // Message source can be obtained from here
         Bundle extras = sbn.getNotification().extras;
         String title = "";
         String text = "";
         String info = "";
 
         if (extras.containsKey("android.title")) {
-            title = extras.getString("android.title");
+            title = extras.getString("android.title");      // Mostly is contact name. "Whatsapp" and "Telegram" must be thrown
         }
 
-        if (extras.containsKey("android.text")) {
+        if (extras.containsKey("android.text")) {               // Retrieve message content
             if (extras.getCharSequence("android.text") != null) {
                 text = extras.getCharSequence("android.text").toString();
             }
