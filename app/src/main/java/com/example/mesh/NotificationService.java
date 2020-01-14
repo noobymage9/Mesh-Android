@@ -23,8 +23,15 @@ import java.util.Date;
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
 
+    private final String ANDROID_TITLE_KEY = "android.title";
+    private final String ANDROID_TEXT_KEY = "android.text";
+    private final String DATE_FORMAT = "MM/dd/yyyy";
+    private final String WHATSAPP_PACKAGE = "com.whatsapp";
+    private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
     private Context context;
-
+    private String pack, title, text, sourceApp;
+    private Date currentDate;
+    private DBManager dbManager;
 
     @Override
     public void onCreate() {
@@ -36,57 +43,36 @@ public class NotificationService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) { // Reading data from notification
-        String pack = sbn.getPackageName();              // Message source can be obtained from here
+        pack = sbn.getPackageName();                              // Message source can be obtained from here
+
         Bundle extras = sbn.getNotification().extras;
-        String title = "";
-        String text = "";
-        String info = "";
-        String sourceApp = "";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        title = "";
+        text = "";
+        sourceApp = "";
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
         Date currentDate = null;
 
-        DBManager dbManager = new DBManager(this);
+        dbManager = new DBManager(this);
         dbManager.open();
 
-        if (pack.equals("com.whatsapp"))
+        if (pack.equals(WHATSAPP_PACKAGE))
             sourceApp = "WhatsApp";
-        else if (pack.equals("org.telegram.messenger"))
+        else if (pack.equals(TELEGRAM_PACKAGE))
             sourceApp = "Telegram";
 
-        if (extras.containsKey("android.title")) {
-            title = extras.getString("android.title");
+        if (extras.containsKey(ANDROID_TITLE_KEY)) {
+            title = extras.getString(ANDROID_TITLE_KEY);
             // Mostly is contact name. "Whatsapp" and "Telegram" must be thrown
         }
 
         if (title.equals("WhatApp") || title.equals("Line") || title.equals(("Telegram")))
             return;
 
-        if (extras.containsKey("android.text")) {               // Retrieve message content
-            if (extras.getCharSequence("android.text") != null) {
-                text = extras.getCharSequence("android.text").toString();
+        if (extras.containsKey(ANDROID_TEXT_KEY)) {               // Retrieve message content
+            if (extras.getCharSequence(ANDROID_TEXT_KEY) != null) {
+                text = extras.getCharSequence(ANDROID_TEXT_KEY).toString();
             }
         }
-        if (pack != null) {
-
-            Log.i("Package", pack);
-            //info += "Package: " + pack + "\n";
-        }
-
-        if (title != null) {
-            Log.i("Title", title);
-            //info += "Title: " + title + "\n";
-        }
-
-        if (text != null) {
-            Log.i("Text", text);
-            //info += "Text: " + text + "\n";
-        }
-
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            info += "\n" + Calendar.getInstance().getTime();
-        }
-        */
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             currentDate = Calendar.getInstance().getTime();

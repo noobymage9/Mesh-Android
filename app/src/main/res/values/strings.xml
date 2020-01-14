@@ -17,4 +17,7 @@
     <string name="timestamp">31 December 23:59</string>
     <string name="sideBarName">Kimbelyn</string>
     <string name="sideBarAddress">\@bubbletehgahdai</string>
+    <string name="enable_notification_warning">Please enable the notification listener for our application to work</string>
+    <string name="positive_warning_button">Ok</string>
+    <string name="negative_warning_button">Cancel</string>
 </resources>
