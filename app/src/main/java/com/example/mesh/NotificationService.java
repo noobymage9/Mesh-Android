@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
@@ -13,9 +12,8 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import com.example.mesh.message.DBManager;
+import com.example.mesh.Database.DBManager;
 import com.example.mesh.message.MessageActivity;
-import com.example.mesh.message.speechBubbleAdaptor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
