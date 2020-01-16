@@ -3,15 +3,12 @@ package com.example.mesh.message;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,65 +16,36 @@ import android.view.MenuItem;
 import com.example.mesh.Database.DBManager;
 import com.example.mesh.R;
 import com.example.mesh.Setting;
-import com.example.mesh.ui.home.ContactInfo;
 
 import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
     public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
-    private final String CONTACT_PARCEL = "Contact Parcel"; // from ContactAdapter
-    private ContactInfo contactInfo;
+    private final String CONTACT_PARCEL = "Contact Parcel";         // from ContactAdapter
     private speechBubbleAdaptor speechBubbleAdaptor;
-    private LocalBroadcastManager bManager;
+    private LocalBroadcastManager localBroadcastManager;
+    private ActionBar actionBar;
+    private RecyclerView recyclerView;
     private String contactName;
-    private int contactID;
+    private ArrayList<String> messages;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            speechBubbleAdaptor.update(getMessages());
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
-        //contactID = contactInfo.getID();
-        //contactName = contactInfo.getName();
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        ArrayList<String> messages = dbManager.getMessages(contactName);
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
-        //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
-
-        actionBar.setDisplayUseLogoEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-
-        // Recycler View
-        RecyclerView recList = findViewById(R.id.messageList);
-        recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
-
-        speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
-        recList.setAdapter(speechBubbleAdaptor);
-
-        bManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(RECEIVE_JSON);
-        bManager.registerReceiver(bReceiver, intentFilter);
-
-        dbManager.close();
+        messages = getMessages();
+        initialiseActionBar();
+        initialiseRecyclerView();
+        initialiseLocalBroadcastManager();
     }
 
-    private BroadcastReceiver bReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            DBManager dbManager = new DBManager(context);
-            dbManager.open();
-            speechBubbleAdaptor.update(dbManager.getMessages(contactInfo.getName()));
-            dbManager.close();
-        }
-    };
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -85,6 +53,7 @@ public class MessageActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {  // Back button
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -100,5 +69,35 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
+    private ArrayList<String> getMessages() {
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        ArrayList<String> temp = dbManager.getMessages(contactName);
+        dbManager.close();
+        return temp;
+    }
+
+    private void initialiseActionBar() {
+        actionBar = getSupportActionBar();
+        actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
+        //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
+        actionBar.setDisplayUseLogoEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
+    }
+
+    private void initialiseLocalBroadcastManager() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(RECEIVE_JSON);
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private void initialiseRecyclerView() {
+        recyclerView = findViewById(R.id.messageList);
+        recyclerView.setHasFixedSize(true);
+        speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
+        recyclerView.setAdapter(speechBubbleAdaptor);
+    }
 
 }

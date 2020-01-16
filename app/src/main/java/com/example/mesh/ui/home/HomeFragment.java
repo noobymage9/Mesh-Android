@@ -44,17 +44,6 @@ public class HomeFragment extends Fragment {
         contactNames = getContactNames();
         initialiseRecyclerView(root);
         initialiseLocalBroadcastManager();
-
-        /*
-        for (int i = 0; i < 15; i++) { // Generating sample contacts
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.default_icon);
-            if (i == 0)
-                contactList.add(new ContactInfo("SIM Han Wei", bm, "(Text Here)"));
-            else
-                contactList.add(new ContactInfo("Contact " + i, bm, "(Text Here)"));
-        }
-        */
-
         return root;
     }
 
