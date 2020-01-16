@@ -18,6 +18,8 @@
     <string name="sideBarName">Kimbelyn</string>
     <string name="sideBarAddress">\@bubbletehgahdai</string>
     <string name="enable_notification_warning">Please enable the notification listener for our application to work</string>
-    <string name="positive_warning_button">Ok</string>
+    <string name="positive_warning_button">OK</string>
     <string name="negative_warning_button">Cancel</string>
+    <string name="default_text_message">This is a text message</string>
+    <string name="default_icon">This is source app icon</string>
 </resources>

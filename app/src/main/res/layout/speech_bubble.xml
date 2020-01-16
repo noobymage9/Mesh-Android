@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="@drawable/incoming_speech_bubble"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
+
+    <!-- Falling below 70dp in width will result in deformed speech bubble /-->
     <TextView
         android:id="@+id/incoming_bubble_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/incoming_speech_bubble"
-        android:lineSpacingExtra="2dp"
         android:paddingLeft="20dp"
+        android:paddingRight="20dp"
         android:paddingTop="4dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp"
-        android:text="(Notification Listener Result)"
+        android:text="@string/default_text_message"
         android:textColor="@color/Black"
-        android:textSize="13.5dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_max="wrap"
-        app:layout_constraintWidth_percent="0.8" />
+        android:textSize="13.5sp"/>
 
-    <!-- ImageView
+    <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:contentDescription="@string/default_icon"
         android:id="@+id/incoming_bubble_source"
-        android:layout_alignRight="@id/incoming_bubble_text"
-        android:layout_alignBottom="@id/incoming_bubble_text"
+        android:layout_toRightOf="@id/incoming_bubble_text"
+        android:layout_toEndOf="@id/incoming_bubble_text"
+        android:layout_below="@id/incoming_bubble_text"
         android:src="@mipmap/default_icon"
-        /-->
+        />
 </RelativeLayout>
