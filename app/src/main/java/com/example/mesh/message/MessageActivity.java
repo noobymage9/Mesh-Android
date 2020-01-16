@@ -27,7 +27,7 @@ public class MessageActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private String contactName;
-    private ArrayList<String> messages;
+    private ArrayList<String> messages, sourceApps;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,10 +41,19 @@ public class MessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
         messages = getMessages();
+        //sourceApps = getSourceApps();
         initialiseActionBar();
         initialiseRecyclerView();
         initialiseLocalBroadcastManager();
     }
+    /*
+    private ArrayList<String> getSourceApps() {
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        ArrayList<String> temp = dbManager.getSourceApp(contactName);
+        dbManager.close();
+        return temp;
+    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
