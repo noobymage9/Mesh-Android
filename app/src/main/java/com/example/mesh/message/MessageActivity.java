@@ -86,18 +86,18 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
+    private void initialiseRecyclerView() {
+        recyclerView = findViewById(R.id.messageList);
+        recyclerView.setHasFixedSize(true);
+        speechBubbleAdaptor = new speechBubbleAdaptor(messages);
+        recyclerView.setAdapter(speechBubbleAdaptor);
+    }
+
     private void initialiseLocalBroadcastManager() {
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(RECEIVE_JSON);
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
-    }
-
-    private void initialiseRecyclerView() {
-        recyclerView = findViewById(R.id.messageList);
-        recyclerView.setHasFixedSize(true);
-        speechBubbleAdaptor = new speechBubbleAdaptor(this, messages);
-        recyclerView.setAdapter(speechBubbleAdaptor);
     }
 
 }

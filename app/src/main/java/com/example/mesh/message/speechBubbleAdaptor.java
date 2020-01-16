@@ -15,44 +15,22 @@ import java.util.List;
 
 public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdaptor.speechBubbleViewHolder> {
 
-
-    public void update(ArrayList<String> messages) {
-        this.messageList = messages;
-        notifyDataSetChanged();
-    }
-
-    /* This class is to serve as a mechanism to produce the "cards" for the recyclerView. Cards that are scrolled out of screen
-            are reused for the next card that is entering the screen. This sorts of save resources.
-         */
     public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
 
         public speechBubbleViewHolder(final View v) {  //
             super(v);
-            message = (TextView) v.findViewById(R.id.incoming_bubble_text);
+            message = v.findViewById(R.id.incoming_bubble_text);
         }
     }
 
-    private int counter = 0; // index the notification
-    private List<String> messageList = new ArrayList<>();
-
+    private List<String> messageList;
+    private List<String> sourceAppList;
     //Your activity will respond to this action String
 
-
-
-    public speechBubbleAdaptor(Context c, ArrayList<String> messageList) {
-
-        // Create receiver (Temporary way to show log)
-        /*
-        bManager = LocalBroadcastManager.getInstance(c);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(RECEIVE_JSON);
-        bManager.registerReceiver(bReceiver, intentFilter);
-         */
-
+    public speechBubbleAdaptor(ArrayList<String> messageList) {
         this.messageList = messageList;
     }
-
 
     @Override
     public int getItemCount() {
@@ -72,6 +50,11 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
                 inflate(R.layout.speech_bubble, viewGroup, false);
 
         return new speechBubbleViewHolder(itemView);
+    }
+
+    public void update(ArrayList<String> messages) {
+        this.messageList = messages;
+        notifyDataSetChanged();
     }
 
 }

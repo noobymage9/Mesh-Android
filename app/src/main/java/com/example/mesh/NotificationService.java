@@ -110,11 +110,10 @@ public class NotificationService extends NotificationListenerService {
     }
 
     private boolean isContactName(String title) {
-        if (title.equals("Whatsapp") ||
-            title.equals("Line") ||
-            title.equals("Telegram"))
-            return false;
-        return true;
+        return !title.equals("WhatsApp") &&
+                !title.equals("WhatsApp Web") &&
+                !title.equals("Line") &&
+                !title.equals("Telegram");
     }
 
 }
