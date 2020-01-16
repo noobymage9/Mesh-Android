@@ -56,6 +56,16 @@ public class DBManager {
         return c;
     }
 
+    private Cursor getMessageTableEntry(int messageID)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM "
+                + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_ID +
+                " = '" + messageID + "'", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
     //Get all messages for 1 user
     public ArrayList<String> getMessages(String contactName)
     {
@@ -73,16 +83,16 @@ public class DBManager {
         return messages;
     }
 
-    public String getSourceApp(String contactName)
+    public String getSourceApp(int messageID)
     {
-        Cursor c = getMessageTableEntry(contactName);
+        Cursor c = getMessageTableEntry(messageID);
 
         return c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP));
     }
 
-    public Date getTimeStamp(String contactName)
+    public Date getTimeStamp(int messageID)
     {
-        Cursor c = getMessageTableEntry(contactName);
+        Cursor c = getMessageTableEntry(messageID);
 
         return new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)));
     }
