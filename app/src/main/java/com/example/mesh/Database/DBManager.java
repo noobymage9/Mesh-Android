@@ -45,15 +45,46 @@ public class DBManager {
         database.insert(DatabaseHelper.messageTableName, null, contentValue);
     }
 
-    //Messages belonging to 1 user only
-    public Cursor fetchMessages(String userName)
+    //Helper function that gets cursor for any entry in Mesages
+    private Cursor getMessageTableEntry(String contactName)
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID +
-                " = '" + userName + "'", null);
+                " = '" + contactName + "'", null);
         c.moveToFirst();
 
         return c;
+    }
+
+    //Get all messages for 1 user
+    public ArrayList<String> getMessages(String contactName)
+    {
+        ArrayList<String> messages = new ArrayList<>();
+        Cursor c = getMessageTableEntry(contactName);
+
+        if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
+        {
+            do
+            {
+                messages.add(c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)));
+            } while (c.moveToNext());
+        }
+
+        return messages;
+    }
+
+    public String getSourceApp(String contactName)
+    {
+        Cursor c = getMessageTableEntry(contactName);
+
+        return c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP));
+    }
+
+    public Date getTimeStamp(String contactName)
+    {
+        Cursor c = getMessageTableEntry(contactName);
+
+        return new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)));
     }
 
     //Editing existing message
@@ -79,6 +110,7 @@ public class DBManager {
     /***************************/
     public void insertContact(String name)
     {
+        //Query database for duplicate name
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_NAME +
                 " FROM " + DatabaseHelper.contactsTableName
                 + " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + name + "';", null);
@@ -91,7 +123,8 @@ public class DBManager {
         }
     }
 
-    public Cursor fetchAllContacts()
+    //Helper function to get cursor for all contacts
+    private Cursor getAllContacts()
     {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName + ";",
                 null);
@@ -100,10 +133,10 @@ public class DBManager {
         return c;
     }
 
-    public ArrayList<String> fetchAllContactNames()
+    public ArrayList<String> getAllContactNames()
     {
-        Cursor c = fetchAllContacts();
-        ArrayList<String> contactNames = new ArrayList<String>();
+        Cursor c = getAllContacts();
+        ArrayList<String> contactNames = new ArrayList<>();
         if (c.moveToFirst())
         {
             do {
@@ -114,10 +147,10 @@ public class DBManager {
         return contactNames;
     }
 
-    public ArrayList<Integer> fetchAllContactIDs()
+    public ArrayList<Integer> getAllContactIDs()
     {
-        Cursor c = fetchAllContacts();
-        ArrayList<Integer> contactNames = new ArrayList<Integer>();
+        Cursor c = getAllContacts();
+        ArrayList<Integer> contactNames = new ArrayList<>();
         if (c.moveToFirst())
         {
             do {
@@ -128,7 +161,7 @@ public class DBManager {
         return contactNames;
     }
 
-    public Cursor fetchContact(int contactID)
+    private Cursor getContactTableEntry(int contactID)
     {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName +
                 " WHERE " + DatabaseHelper.CONTACT_ID + " = " + "'" + contactID + "');",

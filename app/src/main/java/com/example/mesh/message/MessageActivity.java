@@ -39,7 +39,9 @@ public class MessageActivity extends AppCompatActivity {
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
         //contactID = contactInfo.getID();
         //contactName = contactInfo.getName();
-        ArrayList<String> messages = getMessages(contactName);
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        ArrayList<String> messages = dbManager.getMessages(contactName);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
@@ -64,39 +66,18 @@ public class MessageActivity extends AppCompatActivity {
         intentFilter.addAction(RECEIVE_JSON);
         bManager.registerReceiver(bReceiver, intentFilter);
 
-
+        dbManager.close();
     }
-
-
-
 
     private BroadcastReceiver bReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            speechBubbleAdaptor.update(getMessages(contactInfo.getName()));
+            DBManager dbManager = new DBManager(context);
+            dbManager.open();
+            speechBubbleAdaptor.update(dbManager.getMessages(contactInfo.getName()));
+            dbManager.close();
         }
     };
-
-
-    private ArrayList<String> getMessages(String contactName)
-    {
-        ArrayList<String> messages = new ArrayList<String>();
-
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        Cursor c = dbManager.fetchMessages(contactName);
-        if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
-        {
-            do
-            {
-                messages.add(c.getString(0));
-            } while (c.moveToNext());
-        }
-
-        dbManager.close();
-        return messages;
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

@@ -45,9 +45,6 @@ public class HomeFragment extends Fragment {
         initialiseRecyclerView(root);
         initialiseLocalBroadcastManager();
 
-        //contactList = getContacts();
-
-
         /*
         for (int i = 0; i < 15; i++) { // Generating sample contacts
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.default_icon);
@@ -75,7 +72,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Integer> temp;
         dbManager = new DBManager(getContext());
         dbManager.open();
-        temp = dbManager.fetchAllContactIDs();
+        temp = dbManager.getAllContactIDs();
         dbManager.close();
         return temp;
     }
@@ -85,7 +82,7 @@ public class HomeFragment extends Fragment {
         ArrayList<String> temp;
         dbManager = new DBManager(getContext());
         dbManager.open();
-        temp = dbManager.fetchAllContactNames();
+        temp = dbManager.getAllContactNames();
         dbManager.close();
         return temp;
     }
