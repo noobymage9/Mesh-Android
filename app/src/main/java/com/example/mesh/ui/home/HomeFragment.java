@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,13 +24,13 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     private ArrayList<ContactInfo> contactList;
-    private ArrayList<String> contactNames;
 
     private View root;
     private DBManager dbManager;
     private RecyclerView recyclerView;
     private ContactAdapter contactAdapter;
     private LocalBroadcastManager localBroadcastManager;
+    private HomeViewModel homeViewModel;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -41,31 +43,10 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         root = inflater.inflate(R.layout.fragment_home, container, false);
-        contactNames = getContactNames();
-        initialiseRecyclerView(root);
-        initialiseLocalBroadcastManager();
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        homeViewModel.getContactNames().observe(this, contactNames -> initialiseRecyclerView(root, contactNames));
         return root;
     }
-
-    private ArrayList<ContactInfo> getContacts(){
-        ArrayList<String> allNames = getContactNames();
-        ArrayList<Integer> allIDs = getContactIDs();
-        ArrayList<ContactInfo> allContacts = new ArrayList<>();
-        for (int i = 0; i < allNames.size(); i++) {
-            allContacts.add(new ContactInfo(allIDs.get(i), allNames.get(i)));
-        }
-        return allContacts;
-    }
-
-    private ArrayList<Integer> getContactIDs() {
-        ArrayList<Integer> temp;
-        dbManager = new DBManager(getContext());
-        dbManager.open();
-        temp = dbManager.getAllContactIDs();
-        dbManager.close();
-        return temp;
-    }
-
 
     private ArrayList<String> getContactNames() {
         ArrayList<String> temp;
@@ -76,7 +57,7 @@ public class HomeFragment extends Fragment {
         return temp;
     }
 
-    private void initialiseRecyclerView(View root) {
+    private void initialiseRecyclerView(View root, ArrayList<String> contactNames) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
         contactAdapter = new ContactAdapter(contactNames);
