@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
+    public static final String RECEIVE_JSON = "com.example.mesh.MainActivity.RECEIVE_JSON";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

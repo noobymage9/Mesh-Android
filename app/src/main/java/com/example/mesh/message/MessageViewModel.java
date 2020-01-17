@@ -1,4 +1,4 @@
-package com.example.mesh.ui.home;
+package com.example.mesh.message;
 
 import android.app.Application;
 import android.content.BroadcastReceiver;
@@ -19,32 +19,34 @@ import com.example.mesh.message.MessageActivity;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class HomeViewModel extends AndroidViewModel { // To format data for HomeFragment
-    private MutableLiveData<ArrayList<String>> contactNames;
+public class MessageViewModel extends AndroidViewModel { // To format data for HomeFragment
+    private MutableLiveData<ArrayList<String>> messages;
     private LocalBroadcastManager localBroadcastManager;
+    private String contactName;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadContactNames();
+            loadMessages();
         }
     };
 
-    public HomeViewModel(@NonNull Application application) {
+    public MessageViewModel(@NonNull Application application, String contactName) {
         super(application);
+        this.contactName = contactName;
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<String>> getContactNames(){
-        contactNames = new MutableLiveData<>();
-        loadContactNames();
-        return contactNames;
+    public LiveData<ArrayList<String>> getMessages(){
+        messages = new MutableLiveData<>();
+        loadMessages();
+        return messages;
     }
 
-    private void loadContactNames() {
+    private void loadMessages() {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            contactNames.postValue(dbManager.getAllContactNames());
+            messages.postValue(dbManager.getMessages(contactName));
             dbManager.close();
         }).start();
     }
