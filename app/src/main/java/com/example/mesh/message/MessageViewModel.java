@@ -19,7 +19,7 @@ import com.example.mesh.message.MessageActivity;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class MessageViewModel extends AndroidViewModel { // To format data for HomeFragment
+public class MessageViewModel extends AndroidViewModel { // To format data for MessageActivity
     private MutableLiveData<ArrayList<String>> messages;
     private LocalBroadcastManager localBroadcastManager;
     private String contactName;
@@ -30,14 +30,14 @@ public class MessageViewModel extends AndroidViewModel { // To format data for H
         }
     };
 
-    public MessageViewModel(@NonNull Application application, String contactName) {
+    public MessageViewModel(@NonNull Application application) {
         super(application);
-        this.contactName = contactName;
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<String>> getMessages(){
+    public LiveData<ArrayList<String>> getMessages(String contactName){
         messages = new MutableLiveData<>();
+        this.contactName = contactName;
         loadMessages();
         return messages;
     }

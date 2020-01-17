@@ -2,6 +2,8 @@ package com.example.mesh.message;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,40 +22,21 @@ import com.example.mesh.Setting;
 import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
-    public static final String RECEIVE_JSON = "com.example.mesh.ui.message.RECEIVE_JSON";
     private final String CONTACT_PARCEL = "Contact Parcel";         // from ContactAdapter
     private speechBubbleAdaptor speechBubbleAdaptor;
-    private LocalBroadcastManager localBroadcastManager;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private String contactName;
-    private ArrayList<String> messages, sourceApps;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            speechBubbleAdaptor.update(getMessages());
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
-        messages = getMessages();
-        //sourceApps = getSourceApps();
+        MessageViewModel messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
+        messageViewModel.getMessages(contactName).observe(this, this::initialiseRecyclerView) ;
         initialiseActionBar();
-        initialiseRecyclerView();
-        initialiseLocalBroadcastManager();
     }
-    /*
-    private ArrayList<String> getSourceApps() {
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        ArrayList<String> temp = dbManager.getSourceApp(contactName);
-        dbManager.close();
-        return temp;
-    }*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,14 +61,6 @@ public class MessageActivity extends AppCompatActivity {
         }
     }
 
-    private ArrayList<String> getMessages() {
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        ArrayList<String> temp = dbManager.getMessages(contactName);
-        dbManager.close();
-        return temp;
-    }
-
     private void initialiseActionBar() {
         actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
@@ -95,18 +70,11 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    private void initialiseRecyclerView() {
+    private void initialiseRecyclerView(ArrayList<String> messages) {
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
         speechBubbleAdaptor = new speechBubbleAdaptor(messages);
         recyclerView.setAdapter(speechBubbleAdaptor);
-    }
-
-    private void initialiseLocalBroadcastManager() {
-        localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(RECEIVE_JSON);
-        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
     }
 
 }
