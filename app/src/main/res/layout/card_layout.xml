@@ -13,33 +13,41 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/title"
+            android:id="@+id/contact_icon"
             android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:paddingLeft="5dp"
+            android:paddingStart="5dp"
             android:layout_centerVertical="true"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:contentDescription="@string/contact_icon_description"
             android:src="@mipmap/default_icon" />
 
 
         <TextView
-            android:id="@+id/txtName"
+            android:id="@+id/contact_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@id/title"
-            android:text="(Name Here)"
+            android:layout_marginStart="5dp"
+            android:layout_toRightOf="@id/contact_icon"
+            android:layout_toEndOf="@id/contact_icon"
+            android:text="@string/contact_name"
             android:textStyle="bold"
             android:textColor="@color/Ivory"
             android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:textSize="28sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginTop="5dp"
             android:text="@string/timestamp"
             android:textColor="@color/Ivory"
@@ -49,8 +57,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             layout="@layout/source_icon"
             />

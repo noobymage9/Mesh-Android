@@ -22,4 +22,6 @@
     <string name="negative_warning_button">Cancel</string>
     <string name="default_text_message">This is a text message</string>
     <string name="default_icon">This is source app icon</string>
+    <string name="contact_icon_description">This is a contact icon</string>
+    <string name="contact_name">This is a contact name</string>
 </resources>

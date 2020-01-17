@@ -1,12 +1,12 @@
 package com.example.mesh.message;
 
 public class Message {
-    private String messageID, userID, messageContent, sourceApp, timeStamp;
+    private String id, contactID, content, sourceApp, timeStamp;
 
-    public Message(String messageID, String userID, String messageContent, String sourceApp, String timeStamp) {
-        this.messageID = messageID;
-        this.userID = userID;
-        this.messageContent = messageContent;
+    public Message(String id, String contactID, String content, String sourceApp, String timeStamp) {
+        this.id = id;
+        this.contactID = contactID;
+        this.content = content;
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
     }

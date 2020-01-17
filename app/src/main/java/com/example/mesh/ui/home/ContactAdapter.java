@@ -25,8 +25,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
         public ContactViewHolder(final View v) {  //
             super(v);
-            name = v.findViewById(R.id.txtName);
-            icon = v.findViewById(R.id.title);
+            name = v.findViewById(R.id.contact_name);
+            icon = v.findViewById(R.id.contact_icon);
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(v.getContext(), MessageActivity.class);
                 intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));

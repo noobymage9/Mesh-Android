@@ -3,12 +3,8 @@ package com.example.mesh;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-
-import com.example.mesh.ui.home.ContactInfo;
 
 public class Setting extends AppCompatActivity {
 
