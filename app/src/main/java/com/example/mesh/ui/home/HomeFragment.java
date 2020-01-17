@@ -31,30 +31,14 @@ public class HomeFragment extends Fragment {
     private ContactAdapter contactAdapter;
     private LocalBroadcastManager localBroadcastManager;
     private HomeViewModel homeViewModel;
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            contactAdapter.updateByName(getContactNames());
-        }
-    };
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         root = inflater.inflate(R.layout.fragment_home, container, false);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         homeViewModel.getContactNames().observe(this, contactNames -> initialiseRecyclerView(root, contactNames));
         return root;
-    }
-
-    private ArrayList<String> getContactNames() {
-        ArrayList<String> temp;
-        dbManager = new DBManager(getContext());
-        dbManager.open();
-        temp = dbManager.getAllContactNames();
-        dbManager.close();
-        return temp;
     }
 
     private void initialiseRecyclerView(View root, ArrayList<String> contactNames) {
@@ -62,11 +46,6 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         contactAdapter = new ContactAdapter(contactNames);
         recyclerView.setAdapter(contactAdapter);
-    }
-
-    private void initialiseLocalBroadcastManager() {
-        localBroadcastManager = LocalBroadcastManager.getInstance(getContext());
-        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(MessageActivity.RECEIVE_JSON));
     }
 
 }

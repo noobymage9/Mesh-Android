@@ -44,9 +44,9 @@ public class HomeViewModel extends AndroidViewModel { // To format data for Home
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            contactNames.setValue(dbManager.getAllContactNames());
+            contactNames.postValue(dbManager.getAllContactNames());
             dbManager.close();
-        });
+        }).start();
     }
 
     private void initialiseLocalBroadcastManager() {
