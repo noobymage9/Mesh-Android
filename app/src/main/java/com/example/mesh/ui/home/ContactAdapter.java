@@ -17,36 +17,22 @@ import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
     private static List<String> contactNames;
-    private static List<ContactInfo> contactList;
-
-    /* This class is to serve as a mechanism to produce the "cards" for the recyclerView. Cards that are scrolled out of screen
-        are reused for the next card that is entering the screen. This sorts of save resources.
-     */
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
-        //protected TextView content;
         protected ImageView icon;
         private final String CONTACT_PARCEL = "Contact Parcel";
 
         public ContactViewHolder(final View v) {  //
             super(v);
-            name = (TextView) v.findViewById(R.id.txtName);
-            icon = (ImageView) v.findViewById(R.id.title);
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                    intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));
-                    v.getContext().startActivity(intent);
-                }
+            name = v.findViewById(R.id.txtName);
+            icon = v.findViewById(R.id.title);
+            v.setOnClickListener(view -> {
+                Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));
+                v.getContext().startActivity(intent);
             });
         }
-    }
-
-
-    public ContactAdapter(List<ContactInfo> contactList) {
-        ContactAdapter.contactList = contactList;
     }
 
     public ContactAdapter(ArrayList<String> contactNames) {
@@ -70,17 +56,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.card_layout, viewGroup, false);
-
         return new ContactViewHolder(itemView);
-    }
-
-    public void updateById(ArrayList<ContactInfo> contactList) {
-        ContactAdapter.contactList = contactList;
-        notifyDataSetChanged();
-    }
-
-    public void updateByName(ArrayList<String> contactNames) {
-        ContactAdapter.contactNames = contactNames;
-        notifyDataSetChanged();
     }
 }
