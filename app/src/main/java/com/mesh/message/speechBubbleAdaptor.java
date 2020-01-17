@@ -3,6 +3,7 @@ package com.mesh.message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,16 +17,16 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
 
     public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
+        protected ImageView sourceIcon;
 
         public speechBubbleViewHolder(final View v) {  //
             super(v);
             message = v.findViewById(R.id.incoming_bubble_text);
+            sourceIcon = v.findViewById(R.id.incoming_bubble_source);
         }
     }
 
     private List<Message> messageList;
-    private List<String> sourceAppList;
-    //Your activity will respond to this action String
 
     public speechBubbleAdaptor(ArrayList<Message> messageList) {
         this.messageList = messageList;
@@ -40,6 +41,10 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         speechBubbleViewHolder.message.setText(message.getMessageContent());
+        switch (message.getSourceApp()) {
+            case "WhatsApp": speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo);
+            case "Telegram": speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.telegram_logo);
+        }
     }
 
     @Override

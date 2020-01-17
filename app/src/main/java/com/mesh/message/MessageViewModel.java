@@ -33,7 +33,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
     }
 
     public LiveData<ArrayList<Message>> getMessages(String contactName){
-        messages = new MutableLiveData<ArrayList<Message>>();
+        messages = new MutableLiveData<>();
         this.contactName = contactName;
         loadMessages();
         return messages;
