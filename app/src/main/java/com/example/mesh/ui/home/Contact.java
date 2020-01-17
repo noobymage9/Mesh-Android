@@ -13,11 +13,6 @@ public class Contact {
         this.name = name;
     }
 
-    public Contact(int id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
     public int getID() {return this.id;}
 
     public Blob getBlob() {
