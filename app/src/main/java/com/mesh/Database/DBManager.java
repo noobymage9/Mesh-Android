@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.mesh.message.Message;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,16 +68,24 @@ public class DBManager {
     }
 
     //Get all messages for 1 user
-    public ArrayList<String> getMessages(String contactName)
+    public ArrayList<Message> getMessages(String contactName)
     {
-        ArrayList<String> messages = new ArrayList<>();
+        ArrayList<Message> messages = new ArrayList<>();
+        Message m;
         Cursor c = getMessageTableEntry(contactName);
 
         if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
         {
             do
             {
-                messages.add(c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)));
+                m = new Message(
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
+                );
+                messages.add(m);
             } while (c.moveToNext());
         }
 
@@ -115,8 +125,46 @@ public class DBManager {
     }
 
     /****************************/
-    /**Contacts table functions**/
+    /**Message Tag table functions**/
     /***************************/
+
+    public ArrayList<Integer> getTagIDs(int messageID)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TAG_ID +
+                " FROM " + DatabaseHelper.messageTagsTableName + " WHERE " + DatabaseHelper.MSG_ID
+                + " = " + messageID + ");", null);
+        c.moveToFirst();
+
+        ArrayList<Integer> tagIDs = new ArrayList<>();
+        if (c.moveToFirst())
+        {
+            do {
+                tagIDs.add(Integer.parseInt
+                        (c.getString(c.getColumnIndex(DatabaseHelper.MSG_TAG_ID))));
+            }while(c.moveToNext());
+        }
+
+        return tagIDs;
+    }
+
+    public void insertTag(int messageID, int tagID)
+    {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.MSG_ID, messageID);
+        contentValue.put(DatabaseHelper.MSG_TAG_ID, tagID);
+        database.insert(DatabaseHelper.messageTagsTableName, null, contentValue);
+    }
+
+    public void deleteTag(int messageID, int tagID)
+    {
+        database.delete(DatabaseHelper.messageTagsTableName,
+                DatabaseHelper.MSG_ID + " = " +messageID + " AND " +
+                        DatabaseHelper.MSG_TAG_ID + " = " + tagID + ");", null);
+    }
+
+    /****************************/
+    /**Contacts table functions**/
+    /****************************/
     public void insertContact(String name)
     {
         //Query database for duplicate name

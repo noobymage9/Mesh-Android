@@ -23,11 +23,11 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         }
     }
 
-    private List<String> messageList;
+    private List<Message> messageList;
     private List<String> sourceAppList;
     //Your activity will respond to this action String
 
-    public speechBubbleAdaptor(ArrayList<String> messageList) {
+    public speechBubbleAdaptor(ArrayList<Message> messageList) {
         this.messageList = messageList;
     }
 
@@ -38,8 +38,8 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
 
     @Override
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
-        String message = messageList.get(i);
-        speechBubbleViewHolder.message.setText(message);
+        Message message = messageList.get(i);
+        speechBubbleViewHolder.message.setText(message.getMessageContent());
     }
 
     @Override
@@ -51,7 +51,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         return new speechBubbleViewHolder(itemView);
     }
 
-    public void update(ArrayList<String> messages) {
+    public void update(ArrayList<Message> messages) {
         this.messageList = messages;
         notifyDataSetChanged();
     }

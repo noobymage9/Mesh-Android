@@ -17,7 +17,7 @@ import com.mesh.Database.DBManager;
 import java.util.ArrayList;
 
 public class MessageViewModel extends AndroidViewModel { // To format data for MessageActivity
-    private MutableLiveData<ArrayList<String>> messages;
+    private MutableLiveData<ArrayList<Message>> messages;
     private LocalBroadcastManager localBroadcastManager;
     private String contactName;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -32,8 +32,8 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<String>> getMessages(String contactName){
-        messages = new MutableLiveData<>();
+    public LiveData<ArrayList<Message>> getMessages(String contactName){
+        messages = new MutableLiveData<ArrayList<Message>>();
         this.contactName = contactName;
         loadMessages();
         return messages;

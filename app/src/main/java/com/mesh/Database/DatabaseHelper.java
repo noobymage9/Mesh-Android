@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database table names**/
     /************************/
     public static final String messageTableName = "Message";
+    public static final String messageTagsTableName = "Message_Tags";
     public static final String contactsTableName = "Contacts";
 
     /***************************/
@@ -24,6 +25,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String MSG_CONTENTS = "Message_Contents";
     public static final String MSG_SOURCE_APP = "SourceApp";
     public static final String MSG_TIMESTAMP = "Timestamp";
+
+    public static final String MSG_TAG_ID = "MessageTagID";
 
     public static final String CONTACT_ID = "Contact_ID";
     public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
@@ -45,6 +48,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MSG_SOURCE_APP + " TEXT NOT NULL, " +
             MSG_TIMESTAMP + " DATE NOT NULL);";
 
+    static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
+            MSG_ID + " INTEGER, " +
+            MSG_TAG_ID  + " INTEGER, " +
+            "PRIMARY KEY (" + MSG_ID + ", " + MSG_TAG_ID + "), " +
+            "FOREIGN KEY (" + MSG_ID + ") REFERENCES " + messageTableName + "(" + MSG_ID + ")" +
+            "ON DELETE CASCADE);";
+
     static final String createContactsTable = "CREATE TABLE " + contactsTableName + "(" +
             CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CONTACT_NAME + " STRING NOT NULL, " +
@@ -55,6 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         db.execSQL(createMessageTable);
         db.execSQL(createContactsTable);
+        db.execSQL(createMessageTagsTable);
     }
 
     @Override

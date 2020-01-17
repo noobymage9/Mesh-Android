@@ -27,8 +27,10 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
-        MessageViewModel messageViewModel = ViewModelProviders.of(this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contactName).observe(this, this::initialiseRecyclerView) ;
+        MessageViewModel messageViewModel = ViewModelProviders.of
+                (this).get(MessageViewModel.class);
+        messageViewModel.getMessages(contactName).observe(this, messages ->
+                initialiseRecyclerView(messages)) ;
         initialiseActionBar();
     }
 
@@ -63,7 +65,7 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    private void initialiseRecyclerView(ArrayList<String> messages) {
+    private void initialiseRecyclerView(ArrayList<Message> messages) {
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
         speechBubbleAdaptor = new speechBubbleAdaptor(messages);
