@@ -68,7 +68,7 @@ public class NotificationService extends NotificationListenerService {
         dbManager.close();
 
         // Notify HomeFragment and MessageActivity upon receiving new messages
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MessageActivity.RECEIVE_JSON));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(com.example.mesh.MainActivity.RECEIVE_JSON));
     }
 
 
