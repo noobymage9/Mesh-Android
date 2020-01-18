@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 
 import com.mesh.message.Message;
 
@@ -83,22 +84,13 @@ public class DBManager {
         {
             do
             {
-                try {
-                    m = new Message(
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                            dateFormat.parse(c.getString
-                                    (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
-                    );
+                 m = new Message(c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                         c.getLong(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)));
 
-                    messages.add(m);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                 messages.add(m);
             } while (c.moveToNext());
         }
 
@@ -145,9 +137,9 @@ public class DBManager {
                 DatabaseHelper.MSG_USER_ID + " = " + userID, null);
     }
 
-    /****************************/
+    /*******************************/
     /**Message Tag table functions**/
-    /***************************/
+    /*******************************/
 
     public ArrayList<Integer> getTagIDs(int messageID)
     {
@@ -263,5 +255,53 @@ public class DBManager {
     {
         database.delete(DatabaseHelper.contactsTableName,
                 DatabaseHelper.CONTACT_ID + " = " + contactID, null);
+    }
+
+    /****************************/
+    /**Contacts table functions**/
+    /****************************/
+
+    public void insertContactSortSetting(int setting)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, setting);
+        database.insert(DatabaseHelper.settingsTableName, null, cv);
+    }
+
+    public void insertDeleteNotificationSetting(boolean setting)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, setting);
+        database.insert(DatabaseHelper.settingsTableName, null, cv);
+    }
+
+    //Only 1 entry in settings table, so ID is always 0
+    public void updateContactSortSetting(int setting)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, setting);
+        database.update(DatabaseHelper.settingsTableName, cv, "WHERE " +
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+    }
+
+    //Only 1 entry in settings table, so ID is always 0
+    public void updateDeleteNotficationsSetting(boolean setting)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, setting);
+        database.update(DatabaseHelper.settingsTableName, cv, "WHERE " +
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+    }
+
+    //Again assuming only 1 entry in settings table
+    public void restoreDefaultSettings()
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER,
+                DatabaseHelper.defaultSortContactSetting);
+        cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP,
+                DatabaseHelper.defaultDeleteNotificationSetting);
+        database.update(DatabaseHelper.settingsTableName, cv,"WHERE " +
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
     }
 }

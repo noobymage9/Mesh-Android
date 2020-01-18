@@ -1,13 +1,15 @@
 package com.mesh.message;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
     private String id, contactName, content, sourceApp;
-    Date timeStamp;
+    long timeStamp;
 
-    public Message(String id, String contactName, String content, String sourceApp, Date timeStamp) {
+    public Message(String id, String contactName, String content, String sourceApp, long timeStamp) {
         this.id = id;
         this.contactName= contactName;
         this.content = content;
@@ -35,19 +37,14 @@ public class Message {
         return sourceApp;
     }
 
-    public Date getDate()
+    public long getDate()
     {
         return timeStamp;
     }
 
     public String getTime() {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(timeStamp);
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(cal.get(Calendar.HOUR_OF_DAY));
-        stringBuilder.append(":");
-        stringBuilder.append(cal.get(Calendar.MINUTE));
-        return stringBuilder.toString();
+        DateFormat time = new SimpleDateFormat("hh:mm a");
+        return time.format(timeStamp);
     }
 
 

@@ -1,5 +1,6 @@
 package com.mesh.Database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,6 +17,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String messageTableName = "Message";
     public static final String messageTagsTableName = "Message_Tags";
     public static final String contactsTableName = "Contacts";
+    public static final String settingsTableName = "Settings";
 
     /***************************/
     /**Database table columns**/
@@ -32,11 +34,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
     public static final String CONTACT_NAME = "Contact_Name";
 
+    public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
+    public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
+    public static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
+
+    /**************************/
+    /**Default Setting Values**/
+    /**************************/
+    public static final int defaultSortContactSetting = 0;
+    public static final boolean defaultDeleteNotificationSetting = false;
+
     /*************************/
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 4;
+    static int databaseVersion = 5;
 
     /****************************/
     /**Database table creation**/
@@ -60,12 +72,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_NAME + " STRING NOT NULL, " +
             CONTACT_PROFILE_PIC + " BLOB);";
 
+    static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
+            SETTINGS_TABLE_ID + " PRIMARY KEY AUTOINCREMENT, " +
+            SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
+            SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN);";
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
         db.execSQL(createMessageTable);
         db.execSQL(createContactsTable);
         db.execSQL(createMessageTagsTable);
+
+        db.execSQL(createSettingsTable);
+        //Initializing default settings for app
+        ContentValues cv = new ContentValues();
+        cv.put(SETTINGS_CONTACT_SORT_ORDER, defaultSortContactSetting);
+        db.insert(settingsTableName, null, cv);
+        cv = new ContentValues();
+        cv.put(SETTINGS_DELETE_NOTI_ON_STARTUP, defaultDeleteNotificationSetting);
+        db.insert(settingsTableName, null, cv);
     }
 
     @Override
