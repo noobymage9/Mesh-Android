@@ -43,6 +43,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         speechBubbleViewHolder.message.setText(message.getMessageContent());
         switch (message.getSourceApp()) {
             case "WhatsApp": speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo);
+            return;
             case "Telegram": speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.telegram_logo);
         }
     }
