@@ -29,8 +29,7 @@ public class MessageActivity extends AppCompatActivity {
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
         MessageViewModel messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contactName).observe(this, messages ->
-                initialiseRecyclerView(messages)) ;
+        messageViewModel.getMessages(contactName).observe(this, this::initialiseRecyclerView) ;
         initialiseActionBar();
     }
 
@@ -70,6 +69,7 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         speechBubbleAdaptor = new speechBubbleAdaptor(messages);
         recyclerView.setAdapter(speechBubbleAdaptor);
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 
 }
