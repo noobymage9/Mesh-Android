@@ -60,7 +60,6 @@ public class NotificationService extends NotificationListenerService {
         if(text.length() == 0) return;                        // No Message Content need to throw
 
         currentDate = getCurrentDate(statusBarNotification);
-        if(currentDate == null) return;                       // If android version do not support Calendar
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
         dbManager.insertContact(title);
@@ -103,12 +102,6 @@ public class NotificationService extends NotificationListenerService {
 
     private Date getCurrentDate(StatusBarNotification statusBarNotification) {
         return new Date(statusBarNotification.getPostTime());
-        /*
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            return Calendar.getInstance().getTime();
-        }
-        return null;
-         */
     }
 
     private boolean isContactName(String title) {
