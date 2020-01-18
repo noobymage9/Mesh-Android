@@ -13,6 +13,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mesh.Database.DBManager;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -27,6 +28,7 @@ public class NotificationService extends NotificationListenerService {
     private String packageName, title, text, sourceApp;
     private Date currentDate;
     private DBManager dbManager;
+    ArrayList<Long> time = new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -40,6 +42,14 @@ public class NotificationService extends NotificationListenerService {
     public void onNotificationPosted(StatusBarNotification statusBarNotification) { // Reading data from notification
         packageName = statusBarNotification.getPackageName();                       // Message source can be obtained from here
         Bundle extras = statusBarNotification.getNotification().extras;
+                                 // Check for duplicate notification
+        long notificationTime = statusBarNotification.getNotification().when;
+        if (System.currentTimeMillis() - notificationTime > 3000 ||
+                isInArray(time, notificationTime)) {
+            return;
+        } else {
+            time.add(notificationTime);
+        }
 
         title = "";
         text = "";
@@ -68,6 +78,7 @@ public class NotificationService extends NotificationListenerService {
         // Notify HomeFragment and MessageActivity upon receiving new messages
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(com.mesh.MainActivity.RECEIVE_JSON));
     }
+
 
 
     @Override
@@ -110,5 +121,15 @@ public class NotificationService extends NotificationListenerService {
                 !title.equals("Line") &&
                 !title.equals("Telegram");
     }
+
+    private boolean isInArray(ArrayList<Long> time, long when) {
+        for (int i = 0; i < time.size(); i++) {
+            if (time.get(i) == when) {
+                return true;
+            }
+         }
+        return false;
+    }
+
 
 }
