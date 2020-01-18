@@ -1,5 +1,6 @@
 package com.mesh.Database;
 
+import android.app.ExpandableListActivity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,13 +11,17 @@ import com.mesh.message.Message;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class DBManager {
     private DatabaseHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    SimpleDateFormat dateFormat = new SimpleDateFormat
+            ("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
 
     public DBManager(Context c) {
         context = c;
@@ -78,14 +83,22 @@ public class DBManager {
         {
             do
             {
-                m = new Message(
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                    new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
-                );
-                messages.add(m);
+                try {
+                    m = new Message(
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                            dateFormat.parse(c.getString
+                                    (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
+                    );
+
+                    messages.add(m);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
             } while (c.moveToNext());
         }
 
@@ -102,8 +115,16 @@ public class DBManager {
     public Date getTimeStamp(int messageID)
     {
         Cursor c = getMessageTableEntry(messageID);
+        Date d = null;
 
-        return new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)));
+        try {
+            d = dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return d;
     }
 
     //Editing existing message
