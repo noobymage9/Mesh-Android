@@ -57,9 +57,4 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         return new speechBubbleViewHolder(itemView);
     }
 
-    public void update(ArrayList<Message> messages) {
-        this.messageList = messages;
-        notifyDataSetChanged();
-    }
-
 }
