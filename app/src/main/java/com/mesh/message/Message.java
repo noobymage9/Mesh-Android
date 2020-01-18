@@ -1,5 +1,6 @@
 package com.mesh.message;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
@@ -34,8 +35,20 @@ public class Message {
         return sourceApp;
     }
 
-    public Date getTimeStamp()
+    public Date getDate()
     {
         return timeStamp;
     }
+
+    public String getTime() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(timeStamp);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(cal.get(Calendar.HOUR_OF_DAY));
+        stringBuilder.append(":");
+        stringBuilder.append(cal.get(Calendar.MINUTE));
+        return stringBuilder.toString();
+    }
+
+
 }

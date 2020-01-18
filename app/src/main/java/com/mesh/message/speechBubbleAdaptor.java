@@ -43,7 +43,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         speechBubbleViewHolder.message.setText(message.getMessageContent());
-        speechBubbleViewHolder.timestamp.setText((message.getTimeStamp().toString()));
+        speechBubbleViewHolder.timestamp.setText(message.getTime());
         switch (message.getSourceApp()) {
             case "WhatsApp":
                 speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo);

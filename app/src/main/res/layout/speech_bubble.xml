@@ -11,6 +11,7 @@
         android:id="@+id/incoming_bubble_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxWidth="300dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="4dp"
