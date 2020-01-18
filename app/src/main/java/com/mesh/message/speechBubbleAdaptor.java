@@ -1,9 +1,11 @@
 package com.mesh.message;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +46,12 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
         Message message = messageList.get(i);
         speechBubbleViewHolder.message.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
+        if (message.getMessageContent().length() > 100) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
+            layoutParams.addRule(RelativeLayout.BELOW, 0);
+            speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
+        }
         switch (message.getSourceApp()) {
             case "WhatsApp":
                 speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo);

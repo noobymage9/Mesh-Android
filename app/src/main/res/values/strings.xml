@@ -20,7 +20,7 @@
     <string name="enable_notification_warning">Please enable the notification listener for our application to work</string>
     <string name="positive_warning_button">OK</string>
     <string name="negative_warning_button">Cancel</string>
-    <string name="default_text_message">This is a text message</string>
+    <string name="default_text_message">This is a text message. It is very long in order to test the speech bubble. After testing, please return me to normal size</string>
     <string name="default_icon">This is source app icon</string>
     <string name="contact_icon_description">This is a contact icon</string>
     <string name="contact_name">This is a contact name</string>
