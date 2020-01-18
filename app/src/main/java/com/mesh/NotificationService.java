@@ -37,9 +37,9 @@ public class NotificationService extends NotificationListenerService {
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    public void onNotificationPosted(StatusBarNotification sbn) { // Reading data from notification
-        packageName = sbn.getPackageName();                       // Message source can be obtained from here
-        Bundle extras = sbn.getNotification().extras;
+    public void onNotificationPosted(StatusBarNotification statusBarNotification) { // Reading data from notification
+        packageName = statusBarNotification.getPackageName();                       // Message source can be obtained from here
+        Bundle extras = statusBarNotification.getNotification().extras;
 
         title = "";
         text = "";
@@ -59,7 +59,7 @@ public class NotificationService extends NotificationListenerService {
         text = getText(extras);                               // Retrieve Message Content
         if(text.length() == 0) return;                        // No Message Content need to throw
 
-        currentDate = getCurrentDate();
+        currentDate = getCurrentDate(statusBarNotification);
         if(currentDate == null) return;                       // If android version do not support Calendar
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
@@ -101,11 +101,14 @@ public class NotificationService extends NotificationListenerService {
         return "";
     }
 
-    private Date getCurrentDate() {
+    private Date getCurrentDate(StatusBarNotification statusBarNotification) {
+        return new Date(statusBarNotification.getPostTime());
+        /*
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             return Calendar.getInstance().getTime();
         }
         return null;
+         */
     }
 
     private boolean isContactName(String title) {
