@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
@@ -33,6 +34,7 @@ public class HomeFragment extends Fragment {
     private void initialiseRecyclerView(View root, ArrayList<String> contactNames) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
+        ((LinearLayoutManager) recyclerView.getLayoutManager()).setReverseLayout(true);
         contactAdapter = new ContactAdapter(contactNames);
         recyclerView.setAdapter(contactAdapter);
     }
