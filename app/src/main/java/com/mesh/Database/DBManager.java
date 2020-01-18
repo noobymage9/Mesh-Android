@@ -49,7 +49,7 @@ public class DBManager {
     //Helper function that gets cursor for any entry in Mesages
     private Cursor getMessageTableEntry(String contactName)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM "
+        Cursor c = database.rawQuery("SELECT * FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID +
                 " = '" + contactName + "'", null);
         c.moveToFirst();
@@ -59,7 +59,7 @@ public class DBManager {
 
     private Cursor getMessageTableEntry(int messageID)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_CONTENTS + " FROM "
+        Cursor c = database.rawQuery("SELECT * FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_ID +
                 " = '" + messageID + "'", null);
         c.moveToFirst();
@@ -80,7 +80,7 @@ public class DBManager {
             {
                 m = new Message(
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
                     new Date(c.getShort(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
