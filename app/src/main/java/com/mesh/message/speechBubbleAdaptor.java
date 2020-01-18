@@ -18,11 +18,13 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
         protected ImageView sourceIcon;
+        protected TextView timestamp;
 
         public speechBubbleViewHolder(final View v) {  //
             super(v);
             message = v.findViewById(R.id.incoming_bubble_text);
             sourceIcon = v.findViewById(R.id.incoming_bubble_source);
+            timestamp = v.findViewById(R.id.incoming_bubble_timestamp);
         }
     }
 
@@ -41,6 +43,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         speechBubbleViewHolder.message.setText(message.getMessageContent());
+        speechBubbleViewHolder.timestamp.setText(message.getTimeStamp().toString());
         switch (message.getSourceApp()) {
             case "WhatsApp": speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo);
             return;
