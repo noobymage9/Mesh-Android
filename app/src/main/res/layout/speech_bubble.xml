@@ -20,8 +20,8 @@
         android:textSize="16sp"/>
 
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:contentDescription="@string/default_icon"
         android:id="@+id/incoming_bubble_source"
         android:paddingRight="5dp"
