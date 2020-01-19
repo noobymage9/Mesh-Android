@@ -2,13 +2,20 @@ package com.mesh;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.mesh.message.Message;
+
+import java.util.ArrayList;
+
 public class Setting extends AppCompatActivity {
 
     private ActionBar actionBar;
+    private RecyclerView recyclerView;
+    private SettingAdapter settingAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -16,6 +23,7 @@ public class Setting extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         initialiseActionBar();
+        initialiseRecyclerView();
 
 
     }
@@ -37,6 +45,14 @@ public class Setting extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    private void initialiseRecyclerView() {
+        recyclerView = findViewById(R.id.setting_list);
+        recyclerView.setHasFixedSize(true);
+        settingAdapter = new SettingAdapter();
+        recyclerView.setAdapter(settingAdapter);
+    }
+
 }
 
 

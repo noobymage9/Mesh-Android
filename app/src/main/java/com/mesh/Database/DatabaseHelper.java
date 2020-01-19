@@ -24,6 +24,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**************************/
     public static final String MSG_ID = "MessageID";
     public static final String MSG_USER_ID = "UserID";
+    public static final String MSG_GROUP_ID = "Group_ID";
+    public static final String MSG_GROUP_NAME = "Group_Name";
     public static final String MSG_CONTENTS = "Message_Contents";
     public static final String MSG_SOURCE_APP = "SourceApp";
     public static final String MSG_TIMESTAMP = "Timestamp";
@@ -48,17 +50,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 5;
+    static int databaseVersion = 6;
 
     /****************************/
     /**Database table creation**/
     /***************************/
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MSG_GROUP_ID + "INTEGER, " +
+            MSG_GROUP_NAME + " STRING, " +
             MSG_USER_ID + " STRING, " +
             MSG_CONTENTS + " TEXT NOT NULL, " +
             MSG_SOURCE_APP + " TEXT NOT NULL, " +
-            MSG_TIMESTAMP + " DATE NOT NULL);";
+            MSG_TIMESTAMP + " DATE NOT NULL, " +
+            "FOREIGN KEY (" + MSG_USER_ID + ") REFERENCES " + contactsTableName + "(" +
+            CONTACT_ID + ") ON DELETE CASCADE);";
 
     static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
             MSG_ID + " INTEGER, " +
@@ -73,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_PROFILE_PIC + " BLOB);";
 
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
-            SETTINGS_TABLE_ID + " PRIMARY KEY AUTOINCREMENT, " +
+            SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN);";
 
