@@ -58,7 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MSG_USER_ID + " STRING, " +
             MSG_CONTENTS + " TEXT NOT NULL, " +
             MSG_SOURCE_APP + " TEXT NOT NULL, " +
-            MSG_TIMESTAMP + " DATE NOT NULL);";
+            MSG_TIMESTAMP + " DATE NOT NULL, " +
+            "FOREIGN KEY (" + MSG_USER_ID + ") REFERENCES " + contactsTableName + "(" +
+            CONTACT_ID + "));";
 
     static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
             MSG_ID + " INTEGER, " +
@@ -73,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_PROFILE_PIC + " BLOB);";
 
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
-            SETTINGS_TABLE_ID + " PRIMARY KEY AUTOINCREMENT, " +
+            SETTINGS_TABLE_ID + "INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN);";
 
