@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
+import android.util.Log;
 
 import com.mesh.message.Message;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -82,16 +84,22 @@ public class DBManager {
 
         if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
         {
-            do
-            {
-                 m = new Message(c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
-                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                         c.getLong(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)));
+            try {
+                m = new Message(
+                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                        dateFormat.parse(c.getString
+                                (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
+                );
 
-                 messages.add(m);
-            } while (c.moveToNext());
+                messages.add(m);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
 
         return messages;
@@ -99,12 +107,26 @@ public class DBManager {
 
     public long getLatestMessageTime(String contactName)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TIMESTAMP +
-                " FROM (SELECT " + DatabaseHelper.MSG_TIMESTAMP + " FROM " +
-                DatabaseHelper.messageTableName + " ORDER BY " + DatabaseHelper.MSG_TIMESTAMP +
-                " DESC LIMIT 1)", null);
+        SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
+        Date d = null;
+        long temp = 00_00;
 
-        return c.getLong(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP));
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TIMESTAMP + " FROM " +
+                DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = '" +
+                contactName + "' ORDER BY CAST(" + DatabaseHelper.MSG_TIMESTAMP +
+                " as DATE) DESC LIMIT 1;", null);
+        c.moveToFirst();
+
+        try {
+            d = dateFormat.parse(c.getString(0));
+            return d.getTime();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return temp;
     }
 
     public String getSourceApp(int messageID)
@@ -155,7 +177,7 @@ public class DBManager {
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TAG_ID +
                 " FROM " + DatabaseHelper.messageTagsTableName + " WHERE " + DatabaseHelper.MSG_ID
-                + " = " + messageID + ");", null);
+                + " = " + messageID + ";", null);
         c.moveToFirst();
 
         ArrayList<Integer> tagIDs = new ArrayList<>();
