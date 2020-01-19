@@ -1,6 +1,5 @@
 package com.mesh.message;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import com.mesh.R;
 import java.util.ArrayList;
 import java.util.List;
 
-public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdaptor.speechBubbleViewHolder> {
+public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
     public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
@@ -32,7 +31,7 @@ public class speechBubbleAdaptor extends RecyclerView.Adapter<speechBubbleAdapto
 
     private List<Message> messageList;
 
-    public speechBubbleAdaptor(ArrayList<Message> messageList) {
+    public SpeechBubbleAdaptor(ArrayList<Message> messageList) {
         this.messageList = messageList;
     }
 

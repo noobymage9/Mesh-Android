@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
     private final String CONTACT_PARCEL = "Contact Parcel";         // from ContactAdapter
-    private speechBubbleAdaptor speechBubbleAdaptor;
+    private SpeechBubbleAdaptor speechBubbleAdaptor;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private String contactName;
@@ -67,7 +67,7 @@ public class MessageActivity extends AppCompatActivity {
     private void initialiseRecyclerView(ArrayList<Message> messages) {
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
-        speechBubbleAdaptor = new speechBubbleAdaptor(messages);
+        speechBubbleAdaptor = new SpeechBubbleAdaptor(messages);
         recyclerView.setAdapter(speechBubbleAdaptor);
         recyclerView.scrollToPosition(messages.size() - 1);
     }

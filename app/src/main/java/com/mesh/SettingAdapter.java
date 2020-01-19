@@ -5,56 +5,81 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
 import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.SettingViewHolder> {
-    private static List<String> contactNames;
+public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static class SettingViewHolder extends RecyclerView.ViewHolder {
-        protected TextView name;
-        protected ImageView icon;
-        private final String CONTACT_PARCEL = "Contact Parcel";
+    public static class SortOrderViewHolder extends RecyclerView.ViewHolder {
+        protected TextView settingName;
+        protected TextView settingResult;
 
-        public SettingViewHolder(final View v) {  //
-            super(v);
-            name = v.findViewById(R.id.contact_name);
-            icon = v.findViewById(R.id.contact_icon);
-            v.setOnClickListener(view -> {
-                Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));
-                v.getContext().startActivity(intent);
+        public SortOrderViewHolder(@NonNull View itemView) {  //
+            super(itemView);
+            settingName = itemView.findViewById(R.id.sort_text);
+            settingResult = itemView.findViewById(R.id.sort_result);
+            itemView.setOnClickListener(view -> {
             });
         }
     }
 
-    public SettingAdapter(ArrayList<String> contactNames) {
-        SettingAdapter.contactNames = contactNames;
+    public static class DeleteNotificationViewHolder extends RecyclerView.ViewHolder {
+        protected TextView deleteNotificationName;
+        protected Switch deleteNotificationResult;
+        public DeleteNotificationViewHolder(@NonNull View itemView) {
+            super(itemView);
+            deleteNotificationName = itemView.findViewById(R.id.delete_notification_text);
+            deleteNotificationResult = itemView.findViewById(R.id.delete_notification_result);
+        }
+    }
+    private String[] setting;
+    public SettingAdapter(){
+        setting = new String[2];
+        setting[0] = "sort";
+        setting[1] = "deleteNotification";
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position % 2;
     }
 
     @Override
     public int getItemCount() {
-        return contactNames.size();
+        return setting.length;
     }
 
     @Override
-    public void onBindViewHolder(SettingViewHolder contactViewHolder, int i) {
-        String cn = contactNames.get(i);
-        contactViewHolder.name.setText(cn);
-        //contactViewHolder.icon.setImageBitmap(ci.icon);
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+        switch(i) {
+            case 0:
+                SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
+                break;
+            case 1:
+                DeleteNotificationViewHolder deleteNotificationViewHolder = (DeleteNotificationViewHolder) viewHolder;
+                break;
+        }
     }
 
     @Override
-    public SettingViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.card_layout, viewGroup, false);
-        return new SettingViewHolder(itemView);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        switch (i) {
+            case 0:
+                View sortOrderItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sort_card,viewGroup,false);
+                return new SortOrderViewHolder(sortOrderItemView);
+            case 1:
+                View deleteNotificationView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.delete_notification_card,viewGroup,false);
+                return new DeleteNotificationViewHolder(deleteNotificationView);
+            default: return null;
+        }
     }
 }
