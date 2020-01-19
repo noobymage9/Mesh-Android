@@ -55,12 +55,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         String contactName = contactNames.get(i);
+        contactViewHolder.timestamp.setText(getTimestamp(contactName));
         if (contactName.length() > 15) {
             contactName = contactName.substring(0, 20);
             contactName += "...";
         }
         contactViewHolder.name.setText(contactName);
-        contactViewHolder.timestamp.setText(getTimestamp(contactName));
         //contactViewHolder.icon.setImageBitmap(ci.icon);
     }
 
