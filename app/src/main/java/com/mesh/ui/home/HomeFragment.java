@@ -37,6 +37,7 @@ public class HomeFragment extends Fragment {
         ((LinearLayoutManager) recyclerView.getLayoutManager()).setReverseLayout(true);
         contactAdapter = new ContactAdapter(contactNames);
         recyclerView.setAdapter(contactAdapter);
+        recyclerView.scrollToPosition(contactNames.size() - 1);
     }
 
 }
