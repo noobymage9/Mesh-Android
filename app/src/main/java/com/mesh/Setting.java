@@ -8,16 +8,23 @@ import android.view.MenuItem;
 
 public class Setting extends AppCompatActivity {
 
+    private ActionBar actionBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
 
-        ActionBar actionBar = getSupportActionBar();
+        initialiseActionBar();
+
+
+    }
+
+    private void initialiseActionBar() {
+        actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.menu_setting);
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayUseLogoEnabled(true);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {  // Back button
