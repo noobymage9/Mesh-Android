@@ -97,6 +97,16 @@ public class DBManager {
         return messages;
     }
 
+    public long getLatestMessageTime(String contactName)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TIMESTAMP +
+                " FROM (SELECT " + DatabaseHelper.MSG_TIMESTAMP + " FROM " +
+                DatabaseHelper.messageTableName + " ORDER BY " + DatabaseHelper.MSG_TIMESTAMP +
+                " DESC LIMIT 1)", null);
+
+        return c.getLong(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP));
+    }
+
     public String getSourceApp(int messageID)
     {
         Cursor c = getMessageTableEntry(messageID);
@@ -258,7 +268,7 @@ public class DBManager {
     }
 
     /****************************/
-    /**Contacts table functions**/
+    /**Settings table functions**/
     /****************************/
 
     public void insertContactSortSetting(int setting)
