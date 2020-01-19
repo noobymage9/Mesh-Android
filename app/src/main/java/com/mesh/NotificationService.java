@@ -21,7 +21,6 @@ public class NotificationService extends NotificationListenerService {
 
     private final String ANDROID_TITLE_KEY = "android.title";
     private final String ANDROID_TEXT_KEY = "android.text";
-    private final String DATE_FORMAT = "MM/dd/yyyy";
     private final String WHATSAPP_PACKAGE = "com.whatsapp";
     private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
     private Context context;
