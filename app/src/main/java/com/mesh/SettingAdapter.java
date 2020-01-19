@@ -1,6 +1,7 @@
 package com.mesh;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,18 +36,15 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static class DeleteNotificationViewHolder extends RecyclerView.ViewHolder {
         protected TextView deleteNotificationName;
         protected Switch deleteNotificationResult;
+
         public DeleteNotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             deleteNotificationName = itemView.findViewById(R.id.delete_notification_text);
             deleteNotificationResult = itemView.findViewById(R.id.delete_notification_result);
         }
     }
-    private String[] setting;
-    public SettingAdapter(){
-        setting = new String[2];
-        setting[0] = "sort";
-        setting[1] = "deleteNotification";
-    }
+
+    public SettingAdapter(){}
 
     @Override
     public int getItemViewType(int position) {
@@ -55,12 +53,13 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemCount() {
-        return setting.length;
+
+        return 2;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
-        switch(i) {
+        switch(viewHolder.getItemViewType()) {
             case 0:
                 SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
                 break;
@@ -72,6 +71,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
         switch (i) {
             case 0:
                 View sortOrderItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sort_card,viewGroup,false);

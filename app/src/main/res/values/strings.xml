@@ -27,5 +27,6 @@
     <string name="message_timestamp">23:59:59</string>
     <string name="sort">Sort</string>
     <string name="sort_default">Recency</string>
+    <string name="sort_text">Sort</string>
     <string name="delete_notification">Delete notification on start up</string>
 </resources>
