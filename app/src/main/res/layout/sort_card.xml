@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/sort_card"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:background="@drawable/custom_border"
+    >
+
+    <TextView
+        android:id="@+id/sort_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sort"
+        android:layout_centerVertical="true"
+        android:paddingLeft="5dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/sort_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/sort_default"
+        android:paddingRight="5dp"
+        android:textSize="24sp"
+        />
+
+
+
+</RelativeLayout>
