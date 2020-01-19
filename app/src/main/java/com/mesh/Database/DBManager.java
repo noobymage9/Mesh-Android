@@ -84,22 +84,22 @@ public class DBManager {
 
         if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
         {
-            try {
-                m = new Message(
-                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
-                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                        c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                        dateFormat.parse(c.getString
-                                (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
-                );
+            do {
+                try {
+                    m = new Message(
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                            dateFormat.parse(c.getString
+                                    (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
+                    );
 
-                messages.add(m);
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+                    messages.add(m);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while(c.moveToNext());
         }
 
         return messages;
@@ -136,6 +136,7 @@ public class DBManager {
         return c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP));
     }
 
+    /*
     public Date getTimeStamp(int messageID)
     {
         Cursor c = getMessageTableEntry(messageID);
@@ -150,6 +151,7 @@ public class DBManager {
         }
         return d;
     }
+     */
 
     //Editing existing message
     public int updateMessageTable(String userID, String contents, String SourceApp, Date timeStamp)
