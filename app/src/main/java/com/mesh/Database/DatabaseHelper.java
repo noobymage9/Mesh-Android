@@ -78,7 +78,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN);";
-1
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
