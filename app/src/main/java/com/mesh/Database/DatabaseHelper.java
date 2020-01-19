@@ -50,13 +50,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 5;
+    static int databaseVersion = 6;
 
     /****************************/
     /**Database table creation**/
     /***************************/
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MSG_GROUP_ID + "INTEGER, " +
             MSG_GROUP_NAME + " STRING, " +
             MSG_USER_ID + " STRING, " +
             MSG_CONTENTS + " TEXT NOT NULL, " +

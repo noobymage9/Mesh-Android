@@ -7,9 +7,9 @@ import java.util.Date;
 
 public class Message {
     private String id, contactName, content, sourceApp;
-    long timeStamp;
+    Date timeStamp;
 
-    public Message(String id, String contactName, String content, String sourceApp, long timeStamp) {
+    public Message(String id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
         this.contactName= contactName;
         this.content = content;
@@ -37,9 +37,10 @@ public class Message {
         return sourceApp;
     }
 
-    public long getDate()
+    public String getDate()
     {
-        return timeStamp;
+        DateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+        return date.format(timeStamp);
     }
 
     public String getTime() {

@@ -2,6 +2,7 @@ package com.mesh.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         String contactName = contactNames.get(i);
         contactViewHolder.timestamp.setText(getTimestamp(contactName));
         if (contactName.length() > 15) {
-            contactName = contactName.substring(0, 20);
+            contactName = contactName.substring(0, 15);
             contactName += "...";
         }
         contactViewHolder.name.setText(contactName);
