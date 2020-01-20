@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -16,6 +17,7 @@ import com.mesh.Database.DBManager;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.time.LocalDate;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
@@ -70,6 +72,8 @@ public class NotificationService extends NotificationListenerService {
         if(text.length() == 0) return;                        // No Message Content need to throw
 
         currentDate = getCurrentDate(statusBarNotification);
+
+        //convert it to string array
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
         dbManager.insertContact(title);

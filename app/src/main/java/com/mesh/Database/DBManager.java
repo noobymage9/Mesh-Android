@@ -109,12 +109,17 @@ public class DBManager {
     {
         SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
         Date d = null;
-        Message m = new Message("", "","","", null);
+        ArrayList<Message> messageList = getMessages(contactName);
 
+        if (messageList.size() > 0)
+            return messageList.get(messageList.size() - 1);
+
+        /*
         Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = '" +
                 contactName + "' ORDER BY CAST(" + DatabaseHelper.MSG_TIMESTAMP +
                 " as DATE) DESC LIMIT 1;", null);
+
         c.moveToFirst();
 
         try {
@@ -131,8 +136,9 @@ public class DBManager {
         {
             e.printStackTrace();
         }
+         */
 
-        return m;
+        return new Message("","","","", null);
     }
 
     public String getSourceApp(int messageID)
@@ -211,7 +217,7 @@ public class DBManager {
     public void deleteTag(int messageID, int tagID)
     {
         database.delete(DatabaseHelper.messageTagsTableName,
-                DatabaseHelper.MSG_ID + " = " +messageID + " AND " +
+                DatabaseHelper.MSG_ID + " = '" + messageID + "' AND " +
                         DatabaseHelper.MSG_TAG_ID + " = " + tagID + ");", null);
     }
 
