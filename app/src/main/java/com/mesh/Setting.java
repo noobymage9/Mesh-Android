@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class Setting extends AppCompatActivity {
 
+    private final int NUMBER_OF_SETTING = 2;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private SettingAdapter settingAdapter;
@@ -50,7 +51,7 @@ public class Setting extends AppCompatActivity {
     private void initialiseRecyclerView() {
         recyclerView = findViewById(R.id.setting_list);
         recyclerView.setHasFixedSize(true);
-        settingAdapter = new SettingAdapter();
+        settingAdapter = new SettingAdapter(NUMBER_OF_SETTING);
         recyclerView.setAdapter(settingAdapter);
     }
 

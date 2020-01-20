@@ -20,6 +20,8 @@ import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private int numberOfSetting;
+
     public static class SortOrderViewHolder extends RecyclerView.ViewHolder {
         protected TextView settingName;
         protected TextView settingResult;
@@ -44,17 +46,18 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public SettingAdapter(){}
+    public SettingAdapter(int numberOfSetting){
+        this.numberOfSetting = numberOfSetting;
+    }
 
     @Override
-    public int getItemViewType(int position) {
-        return position % 2;
+    public int getItemViewType(int numberOfSetting) {
+        return numberOfSetting % 2;
     }
 
     @Override
     public int getItemCount() {
-
-        return 2;
+        return numberOfSetting;
     }
 
     @Override

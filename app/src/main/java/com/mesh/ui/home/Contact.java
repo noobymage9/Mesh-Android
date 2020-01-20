@@ -7,6 +7,7 @@ public class Contact {
     protected Blob icon;
     protected String name;
 
+
     public Contact(int id, Blob icon, String name) {
         this.id = id;
         this.icon = icon;
