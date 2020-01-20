@@ -108,6 +108,7 @@ public class DBManager {
     public String getLatestMessageTime(String contactName)
     {
         SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
+        Date d = null;
 
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TIMESTAMP + " FROM " +
                 DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = '" +
@@ -115,7 +116,15 @@ public class DBManager {
                 " as DATE) DESC LIMIT 1;", null);
         c.moveToFirst();
 
-        return time.format(c.getString(0));
+        try {
+            d = dateFormat.parse(c.getString(0));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return time.format(d);
     }
 
     public String getSourceApp(int messageID)
