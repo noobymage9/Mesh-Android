@@ -326,7 +326,7 @@ public class DBManager {
     {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, setting);
-        database.update(DatabaseHelper.settingsTableName, cv, "WHERE " +
+        database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
     }
 
@@ -343,9 +343,13 @@ public class DBManager {
     public void updateDeleteNotficationsSetting(boolean setting)
     {
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, setting);
-        database.update(DatabaseHelper.settingsTableName, cv, " WHERE " +
+        if(setting)
+            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 1);
+        else
+            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 0);
+        database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+        Log.i("TEST", getDeleteNotificationSetting() +"");
     }
 
     public boolean getDeleteNotificationSetting()
@@ -355,7 +359,7 @@ public class DBManager {
                 " FROM " + DatabaseHelper.settingsTableName + ";", null);
         c.moveToFirst();
 
-        return c.getInt(c.getColumnIndex(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP)) > 0;
+        return c.getInt(0) > 0;
     }
 
     //Again assuming only 1 entry in settings table
@@ -366,7 +370,7 @@ public class DBManager {
                 DatabaseHelper.defaultSortContactSetting);
         cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP,
                 DatabaseHelper.defaultDeleteNotificationSetting);
-        database.update(DatabaseHelper.settingsTableName, cv,"WHERE " +
+        database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
     }
 }
