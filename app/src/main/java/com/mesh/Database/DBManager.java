@@ -105,26 +105,34 @@ public class DBManager {
         return messages;
     }
 
-    public String getLatestMessageTime(String contactName)
+    public Message getLatestMessage(String contactName)
     {
         SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
         Date d = null;
+        Message m = new Message("", "","","", null);
 
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TIMESTAMP + " FROM " +
+        Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = '" +
                 contactName + "' ORDER BY CAST(" + DatabaseHelper.MSG_TIMESTAMP +
                 " as DATE) DESC LIMIT 1;", null);
         c.moveToFirst();
 
         try {
-            d = dateFormat.parse(c.getString(0));
+            m = new Message(
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    dateFormat.parse(c.getString
+                            (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
+            );
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
 
-        return time.format(d);
+        return m;
     }
 
     public String getSourceApp(int messageID)

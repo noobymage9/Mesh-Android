@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Message {
     private String id, contactName, content, sourceApp;
-    Date timeStamp;
+    private Date timeStamp;
 
     public Message(String id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
