@@ -1,6 +1,8 @@
 package com.mesh;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.p2p.WifiP2pManager;
 import android.util.Log;
@@ -37,6 +39,23 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             settingName = itemView.findViewById(R.id.sort_text);
             settingResult = itemView.findViewById(R.id.sort_result);
             itemView.setOnClickListener(view -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(R.string.sort_text);
+                builder.setItems(R.array.sort_array, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case 0:
+                                settingResult.setText("Recency");
+                                break;
+                            case 1:
+                                settingResult.setText("Frequency");
+                                break;
+                        }
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             });
         }
     }
@@ -68,6 +87,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 DBManager dbManager = new DBManager(context);
                 dbManager.open();
                 dbManager.restoreDefaultSettings();
+                notifyDataSetChanged();
                 dbManager.close();
             });
         }
@@ -120,4 +140,5 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             default: return null;
         }
     }
+
 }

@@ -30,4 +30,5 @@
     <string name="sort_text">Sort</string>
     <string name="delete_notification">Delete notification on start up</string>
     <string name="reset_to_default_text">Reset</string>
+    <string name="sort_frequency">Frequency</string>
 </resources>

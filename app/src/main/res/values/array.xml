@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="sort_array">
+        <item>@string/sort_default</item>
+        <item>@string/sort_frequency</item>
+    </array>
+</resources>

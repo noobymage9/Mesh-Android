@@ -348,8 +348,7 @@ public class DBManager {
         else
             cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 0);
         database.update(DatabaseHelper.settingsTableName, cv,
-                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
-        Log.i("TEST", getDeleteNotificationSetting() +"");
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
 
     public boolean getDeleteNotificationSetting()
@@ -371,6 +370,6 @@ public class DBManager {
         cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP,
                 DatabaseHelper.defaultDeleteNotificationSetting);
         database.update(DatabaseHelper.settingsTableName, cv,
-                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
 }
