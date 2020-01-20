@@ -330,13 +330,32 @@ public class DBManager {
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
     }
 
+    public int getContactSortSetting()
+    {
+        Cursor c =  database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER +
+                " FROM " + DatabaseHelper.settingsTableName + ";", null);
+        c.moveToFirst();
+
+        return c.getInt(0);
+    }
+
     //Only 1 entry in settings table, so ID is always 0
     public void updateDeleteNotficationsSetting(boolean setting)
     {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, setting);
-        database.update(DatabaseHelper.settingsTableName, cv, "WHERE " +
+        database.update(DatabaseHelper.settingsTableName, cv, " WHERE " +
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+    }
+
+    public boolean getDeleteNotificationSetting()
+    {
+        Cursor c =  database.rawQuery("SELECT " +
+                DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP +
+                " FROM " + DatabaseHelper.settingsTableName + ";", null);
+        c.moveToFirst();
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP)) > 0;
     }
 
     //Again assuming only 1 entry in settings table
