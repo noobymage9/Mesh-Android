@@ -58,7 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         DBManager dbManager = new DBManager(context);
         dbManager.open();
         String contactName = contactNames.get(i);
-        contactViewHolder.timestamp.setText(dbManager.getLatestMessage(contactName).getTime());
+        contactViewHolder.timestamp.setText(dbManager.getContactLatestMessageTime(contactName));
         if (contactName.length() > 15) {
             contactName = contactName.substring(0, 15);
             contactName += "...";

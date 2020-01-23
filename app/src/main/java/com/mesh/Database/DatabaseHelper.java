@@ -35,6 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_ID = "Contact_ID";
     public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
     public static final String CONTACT_NAME = "Contact_Name";
+    public static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
 
     public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
     public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
@@ -50,7 +51,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 8;
+    static int databaseVersion = 11;
 
     /****************************/
     /**Database table creation**/
@@ -76,7 +77,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String createContactsTable = "CREATE TABLE " + contactsTableName + "(" +
             CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CONTACT_NAME + " STRING NOT NULL, " +
-            CONTACT_PROFILE_PIC + " BLOB);";
+            CONTACT_PROFILE_PIC + " BLOB, " +
+            CONTACT_LATEST_TIMESTAMP + " DATE);";
 
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

@@ -25,6 +25,7 @@ public class DBManager {
     private SQLiteDatabase database;
     SimpleDateFormat dateFormat = new SimpleDateFormat
             ("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
+    SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
 
     public DBManager(Context c) {
         context = c;
@@ -105,10 +106,8 @@ public class DBManager {
         return messages;
     }
 
-    public Message getLatestMessage(String contactName)
+    public Message getLatestMessageTime(String contactName)
     {
-        SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
-        Date d = null;
         ArrayList<Message> messageList = getMessages(contactName);
 
         if (messageList.size() > 0)
@@ -224,18 +223,24 @@ public class DBManager {
     /****************************/
     /**Contacts table functions**/
     /****************************/
-    public void insertContact(String name)
+    public void insertContact(String name, Date timeStamp)
     {
         //Query database for duplicate name
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_NAME +
-                " FROM " + DatabaseHelper.contactsTableName
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
                 + " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + name + "';", null);
 
         if (!c.moveToFirst())
         {
             ContentValues contentValue = new ContentValues();
             contentValue.put(DatabaseHelper.CONTACT_NAME, name);
+            contentValue.put(DatabaseHelper.CONTACT_LATEST_TIMESTAMP, dateFormat.format(timeStamp));
             database.insert(DatabaseHelper.contactsTableName, null, contentValue);
+        }
+        else
+        {
+            c.moveToFirst();
+            updateContactsTable(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
+                    name, timeStamp);
         }
     }
 
@@ -266,38 +271,70 @@ public class DBManager {
     public ArrayList<Integer> getAllContactIDs()
     {
         Cursor c = getAllContacts();
-        ArrayList<Integer> contactNames = new ArrayList<>();
+        ArrayList<Integer> contactIDs = new ArrayList<>();
         if (c.moveToFirst())
         {
             do {
-                contactNames.add(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)));
+                contactIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)));
             } while (c.moveToNext());
         }
 
-        return contactNames;
+        return contactIDs;
     }
 
-    private Cursor getContactTableEntry(int contactID)
+    public ArrayList<Integer> getAllContactLatestTimestamps()
+    {
+        Cursor c = getAllContacts();
+        ArrayList<Integer> contactTimestamps = new ArrayList<>();
+        if (c.moveToFirst())
+        {
+            do {
+                contactTimestamps.add(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_LATEST_TIMESTAMP)));
+            } while (c.moveToNext());
+        }
+
+        return contactTimestamps;
+    }
+
+    private Cursor getContactTableEntry(String contactName)
     {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName +
-                " WHERE " + DatabaseHelper.CONTACT_ID + " = " + "'" + contactID + "');",
+                " WHERE " + DatabaseHelper.CONTACT_NAME + " = " + "'" + contactName + "';",
                 null);
         c.moveToFirst();
 
         return c;
     }
 
-    public int updateContactsTable(String contactID, String contactName)
+    public String getContactLatestMessageTime(String contactName)
+    {
+        Cursor c = getContactTableEntry(contactName);
+
+        try {
+            return time.format(dateFormat.parse(c.getString
+                    (c.getColumnIndex(DatabaseHelper.CONTACT_LATEST_TIMESTAMP))));
+        }
+        catch (Exception e)
+        {
+
+        }
+
+        return "";
+    }
+
+    public int updateContactsTable(int contactID, String contactName, Date latestMessageDate)
     {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.CONTACT_ID, contactID);
         contentValue.put(DatabaseHelper.CONTACT_NAME, contactName);
+        contentValue.put(DatabaseHelper.CONTACT_LATEST_TIMESTAMP,
+                dateFormat.format(latestMessageDate));
         int i = database.update(DatabaseHelper.contactsTableName, contentValue,
-                DatabaseHelper.CONTACT_ID + " = " + contactID, null);
+                DatabaseHelper.CONTACT_ID + " = '" + contactID + "'", null);
         return i;
     }
 
-    public void deleteFromContactsTable(String contactID)
+    public void deleteFromContactsTable(int contactID)
     {
         database.delete(DatabaseHelper.contactsTableName,
                 DatabaseHelper.CONTACT_ID + " = " + contactID, null);
