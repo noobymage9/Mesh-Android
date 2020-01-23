@@ -76,7 +76,7 @@ public class NotificationService extends NotificationListenerService {
         //convert it to string array
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
-        dbManager.insertContact(title);
+        dbManager.insertContact(title, currentDate);
         dbManager.close();
 
         // Notify HomeFragment and MessageActivity upon receiving new messages
