@@ -197,8 +197,7 @@ public class DBManager {
         if (c.moveToFirst())
         {
             do {
-                tagIDs.add(Integer.parseInt
-                        (c.getString(c.getColumnIndex(DatabaseHelper.MSG_TAG_ID))));
+                tagIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_TAG_ID)));
             }while(c.moveToNext());
         }
 
@@ -217,7 +216,7 @@ public class DBManager {
     {
         database.delete(DatabaseHelper.messageTagsTableName,
                 DatabaseHelper.MSG_ID + " = '" + messageID + "' AND " +
-                        DatabaseHelper.MSG_TAG_ID + " = " + tagID + ");", null);
+                        DatabaseHelper.MSG_TAG_ID + " = '" + tagID + "'", null);
     }
 
     /****************************/
