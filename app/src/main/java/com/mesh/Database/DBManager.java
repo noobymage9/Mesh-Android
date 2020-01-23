@@ -172,14 +172,14 @@ public class DBManager {
         contentValue.put(DatabaseHelper.MSG_SOURCE_APP, SourceApp);
         contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
         int i = database.update(DatabaseHelper.messageTableName, contentValue,
-                DatabaseHelper.MSG_USER_ID + " = " + userID, null);
+                DatabaseHelper.MSG_USER_ID + " = '" + userID + "'", null);
         return i;
     }
 
     public void deleteFromMessageTable(String userID)
     {
         database.delete(DatabaseHelper.messageTableName,
-                DatabaseHelper.MSG_USER_ID + " = " + userID, null);
+                DatabaseHelper.MSG_USER_ID + " = '" + userID + "'", null);
     }
 
     /*******************************/
@@ -313,9 +313,8 @@ public class DBManager {
             return time.format(dateFormat.parse(c.getString
                     (c.getColumnIndex(DatabaseHelper.CONTACT_LATEST_TIMESTAMP))));
         }
-        catch (Exception e)
-        {
-
+        catch (Exception e) {
+            e.printStackTrace();
         }
 
         return "";
@@ -336,7 +335,7 @@ public class DBManager {
     public void deleteFromContactsTable(int contactID)
     {
         database.delete(DatabaseHelper.contactsTableName,
-                DatabaseHelper.CONTACT_ID + " = " + contactID, null);
+                DatabaseHelper.CONTACT_ID + " = '" + contactID + "'", null);
     }
 
     /****************************/
