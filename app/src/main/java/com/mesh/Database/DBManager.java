@@ -246,7 +246,7 @@ public class DBManager {
     //Helper function to get cursor for all contacts
     private Cursor getAllContacts()
     {
-        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName + ";",
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName + " ORDER BY " + DatabaseHelper.CONTACT_LATEST_TIMESTAMP,
                 null);
         c.moveToFirst();
 
