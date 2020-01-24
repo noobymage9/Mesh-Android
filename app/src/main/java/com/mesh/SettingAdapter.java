@@ -16,6 +16,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
@@ -53,6 +54,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 dbManager.updateContactSortSetting(SortSetting.Recency);
                                 settingResult.setText("Recency");
                                 dbManager.close();
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
                                 break;
                             case 1:
                                 DBManager dbManager1 = new DBManager(context);
@@ -60,6 +62,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                 dbManager1.updateContactSortSetting(SortSetting.Frequency);
                                 settingResult.setText("Frequency");
                                 dbManager1.close();
+                                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
                                 break;
                         }
                     }
