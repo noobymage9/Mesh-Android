@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        deleteNotification = dbManager.getDeleteNotificationSetting();
+        dbManager.close();
         if (deleteNotification)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
     }
