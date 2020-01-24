@@ -100,6 +100,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 dbManager.restoreDefaultSettings();
                 notifyDataSetChanged();
                 dbManager.close();
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
             });
         }
     }
