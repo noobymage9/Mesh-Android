@@ -67,7 +67,7 @@ public class MessageActivity extends AppCompatActivity {
     private void initialiseRecyclerView(ArrayList<Message> messages) {
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
-        speechBubbleAdaptor = new SpeechBubbleAdaptor(messages);
+        speechBubbleAdaptor = new SpeechBubbleAdaptor(messages, this);
         recyclerView.setAdapter(speechBubbleAdaptor);
         recyclerView.scrollToPosition(messages.size() - 1);
     }

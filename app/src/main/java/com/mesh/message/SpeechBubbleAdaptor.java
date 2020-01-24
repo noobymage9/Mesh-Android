@@ -1,12 +1,17 @@
 package com.mesh.message;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
@@ -16,23 +21,33 @@ import java.util.List;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
-    public static class speechBubbleViewHolder extends RecyclerView.ViewHolder {
+    public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView message;
         protected ImageView sourceIcon;
         protected TextView timestamp;
 
-        public speechBubbleViewHolder(final View v) {  //
-            super(v);
-            message = v.findViewById(R.id.incoming_bubble_text);
-            sourceIcon = v.findViewById(R.id.incoming_bubble_source);
-            timestamp = v.findViewById(R.id.incoming_bubble_timestamp);
+        public speechBubbleViewHolder(@NonNull View itemView) {  //
+            super(itemView);
+            message = itemView.findViewById(R.id.incoming_bubble_text);
+            sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
+            timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
+            itemView.setOnLongClickListener(v -> {
+                PopupMenu popup = new PopupMenu(context, itemView);
+                popup.getMenuInflater()
+                        .inflate(R.menu.message_popup, popup.getMenu());
+                popup.setOnMenuItemClickListener(item -> true);
+                popup.show(); //showing popup menu
+                return true;
+            });
         }
     }
 
     private List<Message> messageList;
+    private Context context;
 
-    public SpeechBubbleAdaptor(ArrayList<Message> messageList) {
+    public SpeechBubbleAdaptor(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;
+        this.context = context;
     }
 
     @Override
