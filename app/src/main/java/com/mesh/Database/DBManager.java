@@ -398,7 +398,7 @@ public class DBManager {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, SortSetting.getSettingID(setting));
         database.update(DatabaseHelper.settingsTableName, cv,
-                DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
 
     public SortSetting getContactSortSetting()
@@ -406,7 +406,6 @@ public class DBManager {
         Cursor c =  database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER +
                 " FROM " + DatabaseHelper.settingsTableName + ";", null);
         c.moveToFirst();
-
         return SortSetting.getSetting((c.getInt(0)));
     }
 
