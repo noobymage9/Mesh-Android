@@ -1,6 +1,8 @@
 package com.mesh;
 
+import android.app.NotificationManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,10 +15,13 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.mesh.Database.DBManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
+import android.service.notification.StatusBarNotification;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -33,12 +38,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        if (dbManager.getDeleteNotificationSetting())
+            deleteNotification();
+        dbManager.close();
         initialiseToolbar();
         initialiseSideBar();
         if (!notificationIsEnabled()) {
             initialiseAlertDialog();
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // Create Setting Button
@@ -101,5 +112,18 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void deleteNotification() {
+        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        StatusBarNotification statusBarNotification[] = notificationManager.getActiveNotifications();
+        for (int i = 0; i < statusBarNotification.length; i++) {
+            String temp = statusBarNotification[i].getPackageName();
+            Log.e("TEST", "TEST");
+            if (temp.equals(NotificationService.WHATSAPP_PACKAGE) ||
+                temp.equals(NotificationService.TELEGRAM_PACKAGE)) {
+                notificationManager.cancel(statusBarNotification[i].getId());
+            }
+        }
+    }
 
 }
