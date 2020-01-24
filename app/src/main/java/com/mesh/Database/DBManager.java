@@ -393,21 +393,21 @@ public class DBManager {
     }
 
     //Only 1 entry in settings table, so ID is always 0
-    public void updateContactSortSetting(int setting)
+    public void updateContactSortSetting(SortSetting setting)
     {
         ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, setting);
+        cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, SortSetting.getSettingID(setting));
         database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 0", null);
     }
 
-    public int getContactSortSetting()
+    public SortSetting getContactSortSetting()
     {
         Cursor c =  database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER +
                 " FROM " + DatabaseHelper.settingsTableName + ";", null);
         c.moveToFirst();
 
-        return c.getInt(0);
+        return SortSetting.getSetting((c.getInt(0)));
     }
 
     //Only 1 entry in settings table, so ID is always 0

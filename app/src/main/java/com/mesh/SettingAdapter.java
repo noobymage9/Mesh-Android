@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.Chip;
 import com.mesh.Database.DBManager;
+import com.mesh.Database.SortSetting;
 import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
@@ -41,19 +42,29 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             itemView.setOnClickListener(view -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(R.string.sort_text);
+
                 builder.setItems(R.array.sort_array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case 0:
+                                DBManager dbManager = new DBManager(context);
+                                dbManager.open();
+                                dbManager.updateContactSortSetting(SortSetting.Recency);
                                 settingResult.setText("Recency");
+                                dbManager.close();
                                 break;
                             case 1:
+                                DBManager dbManager1 = new DBManager(context);
+                                dbManager1.open();
+                                dbManager1.updateContactSortSetting(SortSetting.Frequency);
                                 settingResult.setText("Frequency");
+                                dbManager1.close();
                                 break;
                         }
                     }
                 });
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
             });
@@ -110,16 +121,31 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int i) {
+
         switch(viewHolder.getItemViewType()){
             case 0:
-                SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
-                return;
-            case 1:
-                DeleteNotificationViewHolder deleteNotificationViewHolder = (DeleteNotificationViewHolder) viewHolder;
                 DBManager dbManager = new DBManager(context);
                 dbManager.open();
-                deleteNotificationViewHolder.deleteNotificationResult.setChecked(dbManager.getDeleteNotificationSetting());
+                SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
+                switch (dbManager.getContactSortSetting()) {
+                    case Recency:
+                        sortOrderViewHolder.settingResult.setText("Recency");
+                        break;
+                    case Frequency:
+                        sortOrderViewHolder.settingResult.setText("Frequency");
+                        break;
+                    default:
+                        sortOrderViewHolder.settingResult.setText("Unknown");
+                        break;
+                }
                 dbManager.close();
+                return;
+            case 1:
+                DBManager dbManager1 = new DBManager(context);
+                dbManager1.open();
+                DeleteNotificationViewHolder deleteNotificationViewHolder = (DeleteNotificationViewHolder) viewHolder;
+                deleteNotificationViewHolder.deleteNotificationResult.setChecked(dbManager1.getDeleteNotificationSetting());
+                dbManager1.close();
                 return;
         }
     }
