@@ -18,6 +18,7 @@ import com.mesh.Database.DBManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.time.LocalDate;
+import java.util.regex.Pattern;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
@@ -42,16 +43,9 @@ public class NotificationService extends NotificationListenerService {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification statusBarNotification) { // Reading data from notification
-        packageName = statusBarNotification.getPackageName();                       // Message source can be obtained from here
+        // Message source can be obtained from here
+        packageName = statusBarNotification.getPackageName();
         Bundle extras = statusBarNotification.getNotification().extras;
-                                 // Check for duplicate notification
-        long notificationTime = statusBarNotification.getNotification().when;
-        if (System.currentTimeMillis() - notificationTime > 3000 ||
-                isInArray(time, notificationTime)) {
-            return;
-        } else {
-            time.add(notificationTime);
-        }
 
         title = "";
         text = "";
@@ -62,32 +56,41 @@ public class NotificationService extends NotificationListenerService {
         dbManager.open();
 
         sourceApp = getSourceApp(packageName);
-        if (sourceApp.length() == 0) return;                   // Source Application is not a Chat Application
+        // Source Application is not a Chat Application
+        if (sourceApp.length() == 0) return;
 
-        title = getTitle(extras);                             // Retrieve Contact Name
-        if(!isContactName(title)) return;                     // Mostly is contact name. "Whatsapp" and "Telegram" must be thrown
-        if(title.length() == 0) return;                       // No contact name need to throw
+        // Remove initial duplicate and "New Messages" duplicate
+        if (sourceApp.equals("WhatsApp") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            String[] temp = statusBarNotification.getKey().split(Pattern.quote("|"));
+            if (temp[3].equals("null")) return;
+        }
 
-        text = getText(extras);                               // Retrieve Message Content
-        if(text.length() == 0) return;                        // No Message Content need to throw
+        // Retrieve Contact Name
+        title = getTitle(extras);
+        // Mostly is contact name. "Whatsapp" and "Telegram" must be thrown
+        if(!isContactName(title)) return;
+        // No contact name need to throw
+        if(title.length() == 0) return;
+
+        // Retrieve Message Content
+        text = getText(extras);
+        // No Message Content need to throw
+        if(text.length() == 0) return;
 
         currentDate = getCurrentDate(statusBarNotification);
-
-        //convert it to string array
 
         dbManager.insertMessage(title, text, sourceApp, currentDate);
         dbManager.insertContact(title, currentDate);
         dbManager.close();
 
         // Notify HomeFragment and MessageActivity upon receiving new messages
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(com.mesh.MainActivity.RECEIVE_JSON));
+        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
     }
 
 
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-
     }
 
     private String getSourceApp(String pack) {
@@ -126,14 +129,16 @@ public class NotificationService extends NotificationListenerService {
                 !title.equals("Telegram");
     }
 
-    private boolean isInArray(ArrayList<Long> time, long when) {
-        for (int i = 0; i < time.size(); i++) {
-            if (time.get(i) == when) {
-                return true;
-            }
-         }
-        return false;
+    public void notificationDetails(StatusBarNotification statusBarNotification, Bundle extras){
+        String TAG = "Test";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+            Log.e(TAG, "Notification Key : " + statusBarNotification.getKey());
+        }
+        Log.e(TAG, "Notification Id : " + statusBarNotification.getId());
+        Log.e(TAG, "Notification postTime : " + statusBarNotification.getPostTime());
+        Log.e(TAG, "Notification When : " + statusBarNotification.getNotification().when);
+        Log.e(TAG, "Notification From : " + statusBarNotification.getPackageName());
+        Log.e(TAG, "Notification Title : " + getTitle(extras));
+        Log.e(TAG, "Notification Text : " + getText(extras));
     }
-
-
 }
