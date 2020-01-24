@@ -176,10 +176,11 @@ public class DBManager {
         return i;
     }
 
-    public void deleteFromMessageTable(String userID)
+    public void deleteFromMessageTable(String userID, int messageID)
     {
         database.delete(DatabaseHelper.messageTableName,
-                DatabaseHelper.MSG_USER_ID + " = '" + userID + "'", null);
+                DatabaseHelper.MSG_USER_ID + " = '" + userID + "' AND " +
+                DatabaseHelper.MSG_ID + " = " + messageID, null);
     }
 
     /*******************************/
@@ -243,19 +244,54 @@ public class DBManager {
         }
     }
 
-    //Helper function to get cursor for all contacts
     private Cursor getAllContacts()
     {
-        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName + " ORDER BY " + DatabaseHelper.CONTACT_LATEST_TIMESTAMP + " DESC ",
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName,
                 null);
         c.moveToFirst();
 
         return c;
     }
 
-    public ArrayList<String> getAllContactNames()
+    //Helper function to get cursor for all contacts
+    private Cursor getAllContactsSortByRecency()
     {
-        Cursor c = getAllContacts();
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
+                        + " ORDER BY " + DatabaseHelper.CONTACT_LATEST_TIMESTAMP + " DESC ",
+                null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    private Cursor getAllContactsSortByFrequency()
+    {
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
+                        + " ORDER BY (SELECT COUNT(*) FROM " + DatabaseHelper.messageTableName +
+                        " WHERE " + DatabaseHelper.messageTableName + "." + DatabaseHelper.MSG_USER_ID
+                        + " = " + DatabaseHelper.contactsTableName + "." + DatabaseHelper.CONTACT_NAME
+                        +") DESC ",null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    public ArrayList<String> getAllContactNames(SortSetting setting)
+    {
+        Cursor c;
+        switch (setting)
+        {
+            case Recency:
+                c = getAllContactsSortByRecency();
+                break;
+            case Frequency:
+                c = getAllContactsSortByFrequency();
+                break;
+             default:
+                 c = getAllContacts();
+                 break;
+        }
+
         ArrayList<String> contactNames = new ArrayList<>();
         if (c.moveToFirst())
         {
