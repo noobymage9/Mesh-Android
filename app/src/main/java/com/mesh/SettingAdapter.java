@@ -44,27 +44,24 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(R.string.sort_text);
 
-                builder.setItems(R.array.sort_array, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                DBManager dbManager = new DBManager(context);
-                                dbManager.open();
-                                dbManager.updateContactSortSetting(SortSetting.Recency);
-                                settingResult.setText("Recency");
-                                dbManager.close();
-                                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
-                                break;
-                            case 1:
-                                DBManager dbManager1 = new DBManager(context);
-                                dbManager1.open();
-                                dbManager1.updateContactSortSetting(SortSetting.Frequency);
-                                settingResult.setText("Frequency");
-                                dbManager1.close();
-                                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
-                                break;
-                        }
+                builder.setItems(R.array.sort_array, (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            DBManager dbManager = new DBManager(context);
+                            dbManager.open();
+                            dbManager.updateContactSortSetting(SortSetting.Recency);
+                            settingResult.setText(R.string.sort_default);
+                            dbManager.close();
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+                            break;
+                        case 1:
+                            DBManager dbManager1 = new DBManager(context);
+                            dbManager1.open();
+                            dbManager1.updateContactSortSetting(SortSetting.Frequency);
+                            settingResult.setText(R.string.sort_frequency);
+                            dbManager1.close();
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+                            break;
                     }
                 });
 
@@ -132,13 +129,13 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
                 switch (dbManager.getContactSortSetting()) {
                     case Recency:
-                        sortOrderViewHolder.settingResult.setText("Recency");
+                        sortOrderViewHolder.settingResult.setText(R.string.sort_default);
                         break;
                     case Frequency:
-                        sortOrderViewHolder.settingResult.setText("Frequency");
+                        sortOrderViewHolder.settingResult.setText(R.string.sort_frequency);
                         break;
                     default:
-                        sortOrderViewHolder.settingResult.setText("Unknown");
+                        sortOrderViewHolder.settingResult.setText(R.string.sort_unknown);
                         break;
                 }
                 dbManager.close();

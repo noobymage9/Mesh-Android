@@ -31,5 +31,6 @@
     <string name="delete_notification">Delete notification on start up</string>
     <string name="reset_to_default_text">Reset</string>
     <string name="sort_frequency">Frequency</string>
+    <string name="sort_unknown">Unknown</string>
     <string name="message_popup_item1">Save</string>
 </resources>
