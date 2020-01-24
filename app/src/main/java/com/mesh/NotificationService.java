@@ -25,8 +25,8 @@ public class NotificationService extends NotificationListenerService {
 
     private final String ANDROID_TITLE_KEY = "android.title";
     private final String ANDROID_TEXT_KEY = "android.text";
-    private final String WHATSAPP_PACKAGE = "com.whatsapp";
-    private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static final String WHATSAPP_PACKAGE = "com.whatsapp";
+    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
     private Context context;
     private String packageName, title, text, sourceApp;
     private Date currentDate;
@@ -46,6 +46,15 @@ public class NotificationService extends NotificationListenerService {
         // Message source can be obtained from here
         packageName = statusBarNotification.getPackageName();
         Bundle extras = statusBarNotification.getNotification().extras;
+
+        // Important code. Don't Delete. Ensures that we don't reread the same notification that is already active
+        long notificationTime = statusBarNotification.getNotification().when;
+        if (System.currentTimeMillis() - notificationTime > 3000 ||
+                isInArray(time, notificationTime)) {
+            return;
+        } else {
+            time.add(notificationTime);
+        }
 
         title = "";
         text = "";
@@ -78,7 +87,7 @@ public class NotificationService extends NotificationListenerService {
         if(text.length() == 0) return;
 
         currentDate = getCurrentDate(statusBarNotification);
-
+        Log.e("TEST", "TEST");
         dbManager.insertMessage(title, text, sourceApp, currentDate);
         dbManager.insertContact(title, currentDate);
         dbManager.close();
@@ -127,6 +136,15 @@ public class NotificationService extends NotificationListenerService {
                 !title.equals("WhatsApp Web") &&
                 !title.equals("Line") &&
                 !title.equals("Telegram");
+    }
+
+    private boolean isInArray(ArrayList<Long> time, long when) {
+        for (int i = 0; i < time.size(); i++) {
+            if (time.get(i) == when) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void notificationDetails(StatusBarNotification statusBarNotification, Bundle extras){
