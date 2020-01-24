@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,11 +28,12 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private NavController navController;
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
+    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
+    private boolean deleteNotification;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -40,9 +42,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         DBManager dbManager = new DBManager(this);
         dbManager.open();
-        if (dbManager.getDeleteNotificationSetting())
-            deleteNotification();
+        deleteNotification = dbManager.getDeleteNotificationSetting();
         dbManager.close();
+        if (deleteNotification)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
         initialiseToolbar();
         initialiseSideBar();
         if (!notificationIsEnabled()) {
@@ -72,6 +75,14 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (deleteNotification)
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
     }
 
     private void initialiseToolbar() {
@@ -112,18 +123,6 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private void deleteNotification() {
-        NotificationManager notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        StatusBarNotification statusBarNotification[] = notificationManager.getActiveNotifications();
-        for (int i = 0; i < statusBarNotification.length; i++) {
-            String temp = statusBarNotification[i].getPackageName();
-            Log.e("TEST", "TEST");
-            if (temp.equals(NotificationService.WHATSAPP_PACKAGE) ||
-                temp.equals(NotificationService.TELEGRAM_PACKAGE)) {
-                notificationManager.cancel(statusBarNotification[i].getId());
-            }
-        }
-    }
+
 
 }

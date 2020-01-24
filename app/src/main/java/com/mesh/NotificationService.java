@@ -1,7 +1,10 @@
 package com.mesh;
 
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,21 +26,32 @@ import java.util.regex.Pattern;
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
 
+    private final String WHATSAPP_PACKAGE = "com.whatsapp";
+    private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    public static final String RECEIVE_JSON = "NotificationService.RECEIVE_JSON";
     private final String ANDROID_TITLE_KEY = "android.title";
     private final String ANDROID_TEXT_KEY = "android.text";
-    public static final String WHATSAPP_PACKAGE = "com.whatsapp";
-    public static final String TELEGRAM_PACKAGE = "org.telegram.messenger";
     private Context context;
     private String packageName, title, text, sourceApp;
     private Date currentDate;
     private DBManager dbManager;
-    ArrayList<Long> time = new ArrayList<>();
+    private ArrayList<Long> time = new ArrayList<>();
+    private boolean listenerConnected = false;
+    private LocalBroadcastManager localBroadcastManager;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.M)
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (listenerConnected)
+                deleteAllNotification();
+        }
+    };
 
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-
+        initialiseLocalBroadcastManager();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -87,7 +101,6 @@ public class NotificationService extends NotificationListenerService {
         if(text.length() == 0) return;
 
         currentDate = getCurrentDate(statusBarNotification);
-        Log.e("TEST", "TEST");
         dbManager.insertMessage(title, text, sourceApp, currentDate);
         dbManager.insertContact(title, currentDate);
         dbManager.close();
@@ -100,6 +113,17 @@ public class NotificationService extends NotificationListenerService {
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
+    }
+
+    @Override
+    public void onListenerConnected() {
+        listenerConnected = true;
+    }
+
+    @Override
+    public void onListenerDisconnected() {
+        super.onListenerDisconnected();
+        listenerConnected = false;
     }
 
     private String getSourceApp(String pack) {
@@ -158,5 +182,22 @@ public class NotificationService extends NotificationListenerService {
         Log.e(TAG, "Notification From : " + statusBarNotification.getPackageName());
         Log.e(TAG, "Notification Title : " + getTitle(extras));
         Log.e(TAG, "Notification Text : " + getText(extras));
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void deleteAllNotification() {
+        StatusBarNotification[] statusBarNotification = this.getActiveNotifications();
+        for (StatusBarNotification barNotification : statusBarNotification) {
+            String temp = barNotification.getPackageName();
+            if (temp.equals(WHATSAPP_PACKAGE) ||
+                    temp.equals(TELEGRAM_PACKAGE)) {
+                this.cancelNotification(barNotification.getKey());
+            }
+        }
+    }
+
+    private void initialiseLocalBroadcastManager() {
+        localBroadcastManager = LocalBroadcastManager.getInstance(this.getApplication());
+        localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(RECEIVE_JSON));
     }
 }
