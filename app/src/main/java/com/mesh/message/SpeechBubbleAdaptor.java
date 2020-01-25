@@ -35,7 +35,13 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
                 PopupMenu popup = new PopupMenu(context, itemView);
                 popup.getMenuInflater()
                         .inflate(R.menu.message_popup, popup.getMenu());
-                popup.setOnMenuItemClickListener(item -> true);
+                popup.setOnMenuItemClickListener(item -> {
+                    switch (item.getTitle().toString()) {
+                        case "Save":
+
+                    }
+                    return true;
+                });
                 popup.show(); //showing popup menu
                 return true;
             });
