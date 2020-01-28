@@ -6,10 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
-    private String id, contactName, content, sourceApp;
+    private int id;
+    private String contactName, content, sourceApp;
     private Date timeStamp;
 
-    public Message(String id, String contactName, String content, String sourceApp, Date timeStamp) {
+    public Message(int id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
         this.contactName= contactName;
         this.content = content;
@@ -17,7 +18,7 @@ public class Message {
         this.timeStamp = timeStamp;
     }
 
-    public String getID()
+    public int getID()
     {
         return id;
     }

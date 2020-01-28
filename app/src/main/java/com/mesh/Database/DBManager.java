@@ -88,7 +88,7 @@ public class DBManager {
             do {
                 try {
                     m = new Message(
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                            c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
                             c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
                             c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
                             c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
@@ -137,7 +137,7 @@ public class DBManager {
         }
          */
 
-        return new Message("","","","", null);
+        return new Message(0,"","","", null);
     }
 
     public String getSourceApp(int messageID)
@@ -164,7 +164,7 @@ public class DBManager {
     }
      */
 
-    //Editing existing message
+    //Editing existing content
     public int updateMessageTable(String userID, String contents, String SourceApp, Date timeStamp)
     {
         ContentValues contentValue = new ContentValues();
@@ -176,10 +176,9 @@ public class DBManager {
         return i;
     }
 
-    public void deleteFromMessageTable(String userID, int messageID)
+    public void deleteFromMessageTable(int messageID)
     {
         database.delete(DatabaseHelper.messageTableName,
-                DatabaseHelper.MSG_USER_ID + " = '" + userID + "' AND " +
                 DatabaseHelper.MSG_ID + " = " + messageID, null);
     }
 
