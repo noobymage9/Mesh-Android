@@ -3,4 +3,8 @@
     <item
         android:id="@+id/save"
         android:title="@string/message_popup_item1" />
+    <item
+        android:id="@+id/Delete"
+        android:title="@string/delete"
+        />
 </menu>

@@ -1,19 +1,21 @@
 package com.mesh.message;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mesh.Database.DBManager;
+import com.mesh.MainActivity;
 import com.mesh.R;
 
 import java.util.ArrayList;
@@ -22,26 +24,36 @@ import java.util.List;
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
-        protected TextView message;
+        protected TextView content;
         protected ImageView sourceIcon;
         protected TextView timestamp;
+        protected Message message;
 
         public speechBubbleViewHolder(@NonNull View itemView) {  //
             super(itemView);
-            message = itemView.findViewById(R.id.incoming_bubble_text);
+            content = itemView.findViewById(R.id.incoming_bubble_text);
             sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
             itemView.setOnLongClickListener(v -> {
+                itemView.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
                 PopupMenu popup = new PopupMenu(context, itemView);
                 popup.getMenuInflater()
                         .inflate(R.menu.message_popup, popup.getMenu());
+                DBManager dbManager = new DBManager(context);
+                dbManager.open();
                 popup.setOnMenuItemClickListener(item -> {
                     switch (item.getTitle().toString()) {
                         case "Save":
 
+                            break;
+                        case "Delete":
+                            dbManager.deleteFromMessageTable(message.getID());
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+                            break;
                     }
                     return true;
                 });
+                popup.setOnDismissListener(menu -> itemView.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble)));
                 popup.show(); //showing popup menu
                 return true;
             });
@@ -64,7 +76,8 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     @Override
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
-        speechBubbleViewHolder.message.setText(message.getMessageContent());
+        speechBubbleViewHolder.message = message;
+        speechBubbleViewHolder.content.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
         if (message.getMessageContent().length() > 100) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
