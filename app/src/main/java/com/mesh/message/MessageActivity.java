@@ -3,6 +3,7 @@ package com.mesh.message;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.Setting;
 
@@ -77,7 +79,7 @@ public class MessageActivity extends AppCompatActivity {
         if (speechBubbleAdaptor.snackBarUp) {
             speechBubbleAdaptor.saveDeleteSnackbar.dismiss();
             speechBubbleAdaptor.snackBarUp = false;
-            speechBubbleAdaptor.notifyDataSetChanged();
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
         } else {
             super.onBackPressed();
         }

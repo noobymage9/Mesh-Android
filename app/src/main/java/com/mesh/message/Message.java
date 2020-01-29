@@ -9,6 +9,7 @@ public class Message {
     private int id;
     private String contactName, groupName, content, sourceApp;
     private Date timeStamp;
+    private boolean selected = false;
 
     public Message(int id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
@@ -63,4 +64,12 @@ public class Message {
     }
 
 
+    public void setSelected(boolean b) {
+        this.selected = b;
+
+    }
+
+    public boolean getSelected() {
+        return selected;
+    }
 }

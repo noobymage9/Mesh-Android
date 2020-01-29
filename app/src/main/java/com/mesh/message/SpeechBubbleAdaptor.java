@@ -47,28 +47,28 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             background.setOnClickListener(v -> {
                 saveDeleteSnackbar.dismiss();
                 snackBarUp = false;
+                message.setSelected(false);
                 notifyDataSetChanged();
             });
 
-            bubble.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (snackBarUp) {
-                        bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
-                    } else if (saveDeleteSnackbar != null) {
-                        saveDeleteSnackbar.dismiss();
-                        snackBarUp = false;
-                    }
+            bubble.setOnClickListener(v -> {
+                if (snackBarUp) {
+                    message.setSelected(true);
+                    notifyDataSetChanged();
+                } else if (saveDeleteSnackbar != null) {
+                    saveDeleteSnackbar.dismiss();
+                    snackBarUp = false;
                 }
             });
 
             bubble.setOnLongClickListener(v -> {
                 if (!snackBarUp) {
-                    saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE);
+                    saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
                     snackBarUp = true;
                     saveDeleteSnackbar.show();
+                    message.setSelected(true);
                 }
-                bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
+                notifyDataSetChanged();
                 return true;
             });
         }
@@ -91,6 +91,9 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         speechBubbleViewHolder.message = message;
         speechBubbleViewHolder.content.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
+        if (message.getSelected()) {
+            speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
+        }
         if (message.getMessageContent().length() > 100) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
