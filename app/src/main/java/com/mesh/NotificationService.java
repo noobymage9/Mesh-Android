@@ -17,6 +17,7 @@ import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mesh.Database.DBManager;
+import com.mesh.Database.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -85,7 +86,10 @@ public class NotificationService extends NotificationListenerService {
         // Remove initial duplicate and "New Messages" duplicate
         if (sourceApp.equals("WhatsApp") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
             String[] temp = statusBarNotification.getKey().split(Pattern.quote("|"));
-            if (temp[3].equals("null")) return;
+            if (temp[3].equals("null") && !title.contains(":")) {
+                Log.e("TEST", "TEST");
+                return;
+            }
         }
 
         // Retrieve Contact Name
@@ -100,9 +104,28 @@ public class NotificationService extends NotificationListenerService {
         // No Message Content need to throw
         if(text.length() == 0) return;
 
+        //getting current date and time
         currentDate = getCurrentDate(statusBarNotification);
-        dbManager.insertMessage(title, text, sourceApp, currentDate);
-        dbManager.insertContact(title, currentDate);
+
+        if (isGroupName(title)) {
+            String groupName, contactName;
+            if (title.contains("("))
+                groupName = title.substring(0, title.indexOf("(") - 1);
+            else
+                groupName = title.substring(0, title.indexOf(":"));
+
+            contactName = title.substring(title.indexOf(":") + 2);
+
+            dbManager.insertGroup(groupName);
+            dbManager.insertMessage(contactName, dbManager.getGroupID(groupName),
+                    text, sourceApp, currentDate);
+            dbManager.insertContact(groupName, currentDate);
+        }
+        else {
+            dbManager.insertMessage(title, text, sourceApp, currentDate);
+            dbManager.insertContact(title, currentDate);
+        }
+
         dbManager.close();
 
         // Notify HomeFragment and MessageActivity upon receiving new messages
@@ -160,6 +183,10 @@ public class NotificationService extends NotificationListenerService {
                 !title.equals("WhatsApp Web") &&
                 !title.equals("Line") &&
                 !title.equals("Telegram");
+    }
+
+    private boolean isGroupName(String title) {
+        return title.contains(":");
     }
 
     private boolean isInArray(ArrayList<Long> time, long when) {

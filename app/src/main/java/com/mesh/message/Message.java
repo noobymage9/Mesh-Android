@@ -7,12 +7,23 @@ import java.util.Date;
 
 public class Message {
     private int id;
-    private String contactName, content, sourceApp;
+    private String contactName, groupName, content, sourceApp;
     private Date timeStamp;
 
     public Message(int id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
         this.contactName= contactName;
+        this.groupName = "";
+        this.content = content;
+        this.sourceApp = sourceApp;
+        this.timeStamp = timeStamp;
+    }
+
+    public Message(int id, String contactName, String groupName, String
+            content, String sourceApp, Date timeStamp) {
+        this.id = id;
+        this.contactName= contactName;
+        this.groupName = groupName;
         this.content = content;
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
@@ -27,6 +38,8 @@ public class Message {
     {
         return contactName;
     }
+
+    public String getGroupName() { return groupName; }
 
     public String getMessageContent()
     {
