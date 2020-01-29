@@ -34,16 +34,41 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         protected ImageView sourceIcon;
         protected TextView timestamp;
         protected Message message;
+        protected View background, bubble;
 
         public speechBubbleViewHolder(@NonNull View itemView) {  //
             super(itemView);
             content = itemView.findViewById(R.id.incoming_bubble_text);
             sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
-            itemView.setOnLongClickListener(v -> {
-                saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE);
-                snackBarUp = true;
-                saveDeleteSnackbar.show();
+            background = itemView.findViewById(R.id.speech_bubble_background);
+            bubble = itemView.findViewById(R.id.bubble);
+
+            background.setOnClickListener(v -> {
+                saveDeleteSnackbar.dismiss();
+                snackBarUp = false;
+                notifyDataSetChanged();
+            });
+
+            bubble.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (snackBarUp) {
+                        bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
+                    } else if (saveDeleteSnackbar != null) {
+                        saveDeleteSnackbar.dismiss();
+                        snackBarUp = false;
+                    }
+                }
+            });
+
+            bubble.setOnLongClickListener(v -> {
+                if (!snackBarUp) {
+                    saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE);
+                    snackBarUp = true;
+                    saveDeleteSnackbar.show();
+                }
+                bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
                 return true;
             });
         }

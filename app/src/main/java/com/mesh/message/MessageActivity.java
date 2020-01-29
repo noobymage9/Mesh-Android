@@ -77,6 +77,7 @@ public class MessageActivity extends AppCompatActivity {
         if (speechBubbleAdaptor.snackBarUp) {
             speechBubbleAdaptor.saveDeleteSnackbar.dismiss();
             speechBubbleAdaptor.snackBarUp = false;
+            speechBubbleAdaptor.notifyDataSetChanged();
         } else {
             super.onBackPressed();
         }

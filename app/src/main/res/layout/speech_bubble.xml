@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@drawable/incoming_speech_bubble"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/speech_bubble_background">
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/incoming_speech_bubble"
+        android:id="@+id/bubble">
 
     <!-- Falling below 70dp in width will result in deformed speech bubble /-->
     <TextView
@@ -46,4 +51,5 @@
         android:layout_toRightOf="@id/incoming_bubble_text"
         android:layout_toEndOf="@id/incoming_bubble_text"/>
 
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
