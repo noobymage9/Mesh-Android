@@ -1,5 +1,6 @@
 package com.mesh.message;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -23,6 +24,11 @@ import java.util.List;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
+    private List<Message> messageList;
+    private Context context;
+    public SaveDeleteSnackbar saveDeleteSnackbar;
+    public boolean snackBarUp;
+
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView content;
         protected ImageView sourceIcon;
@@ -35,33 +41,14 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
             itemView.setOnLongClickListener(v -> {
-                itemView.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
-                PopupMenu popup = new PopupMenu(context, itemView);
-                popup.getMenuInflater()
-                        .inflate(R.menu.message_popup, popup.getMenu());
-                DBManager dbManager = new DBManager(context);
-                dbManager.open();
-                popup.setOnMenuItemClickListener(item -> {
-                    switch (item.getTitle().toString()) {
-                        case "Save":
-
-                            break;
-                        case "Delete":
-                            dbManager.deleteFromMessageTable(message.getID());
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
-                            break;
-                    }
-                    return true;
-                });
-                popup.setOnDismissListener(menu -> itemView.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble)));
-                popup.show(); //showing popup menu
+                saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE);
+                snackBarUp = true;
+                saveDeleteSnackbar.show();
                 return true;
             });
         }
     }
 
-    private List<Message> messageList;
-    private Context context;
 
     public SpeechBubbleAdaptor(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;

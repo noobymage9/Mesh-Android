@@ -34,4 +34,5 @@
     <string name="sort_unknown">Unknown</string>
     <string name="message_popup_item1">Save</string>
     <string name="delete">Delete</string>
+    <string name="save">Save</string>
 </resources>

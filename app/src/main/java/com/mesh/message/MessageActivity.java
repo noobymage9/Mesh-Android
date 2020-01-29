@@ -72,4 +72,13 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.scrollToPosition(messages.size() - 1);
     }
 
+    @Override
+    public void onBackPressed() {
+        if (speechBubbleAdaptor.snackBarUp) {
+            speechBubbleAdaptor.saveDeleteSnackbar.dismiss();
+            speechBubbleAdaptor.snackBarUp = false;
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
