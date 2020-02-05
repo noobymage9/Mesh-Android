@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -43,7 +44,12 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            messages.postValue(dbManager.getMessages(contactName));
+            ArrayList<Message> temp = dbManager.getMessages(contactName);
+            if (temp.size() == 0) {
+                messages.postValue(dbManager.getMessages(dbManager.getGroupID(contactName)));
+            }
+            else
+                messages.postValue(temp);
             dbManager.close();
         }).start();
     }
