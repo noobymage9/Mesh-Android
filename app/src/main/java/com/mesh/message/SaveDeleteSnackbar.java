@@ -26,8 +26,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         super(parent, content, contentViewCallback);
     }
 
-    private static class ContentViewCallback implements
-            BaseTransientBottomBar.ContentViewCallback {
+    private static class ContentViewCallback implements com.google.android.material.snackbar.ContentViewCallback {
 
         // view inflated from custom layout
         private View content;
@@ -72,12 +71,9 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         delete.setOnClickListener(v -> {
             DBManager dbManager = new DBManager(parent.getContext());
             dbManager.open();
-            for (int i = 0; i < messageList.size(); i++) {
-                Message temp = messageList.get(i);
-                if (temp.getSelected()) {
-                    dbManager.deleteFromMessageTable(temp.getID());
-                }
-            }
+            for (Message message : messageList)
+                if (message.isSelected())
+                    dbManager.deleteFromMessageTable(message.getID());
             dbManager.close();
             saveDeleteSnackbar.dismiss();
             LocalBroadcastManager.getInstance(parent.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
@@ -89,5 +85,4 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         saveDeleteSnackbar.setDuration(duration);
         return saveDeleteSnackbar;
     }
-
 }

@@ -1,8 +1,6 @@
 package com.mesh.message;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,12 +9,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.mesh.Database.DBManager;
-import com.mesh.MainActivity;
 import com.mesh.R;
 
 import java.util.ArrayList;
@@ -45,33 +39,45 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             bubble = itemView.findViewById(R.id.bubble);
 
             background.setOnClickListener(v -> {
-                saveDeleteSnackbar.dismiss();
-                snackBarUp = false;
-                message.setSelected(false);
-                notifyDataSetChanged();
+                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                    saveDeleteSnackbar.dismiss();
+                    for (Message message : messageList)
+                        message.setSelected(false);
+                    notifyDataSetChanged();
+                }
             });
 
             bubble.setOnClickListener(v -> {
-                if (snackBarUp) {
-                    message.setSelected(true);
+                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                    message.setSelected(!message.isSelected());
+                    if (!someAreSelected()) {
+                        saveDeleteSnackbar.dismiss();
+                        saveDeleteSnackbar = null;
+                    }
                     notifyDataSetChanged();
-                } else if (saveDeleteSnackbar != null) {
-                    saveDeleteSnackbar.dismiss();
-                    snackBarUp = false;
                 }
             });
 
             bubble.setOnLongClickListener(v -> {
-                if (!snackBarUp) {
+                if (saveDeleteSnackbar == null) {
                     saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
                     snackBarUp = true;
                     saveDeleteSnackbar.show();
-                    message.setSelected(true);
+                } else {
+                    saveDeleteSnackbar.show();
                 }
+                message.setSelected(true);
                 notifyDataSetChanged();
                 return true;
             });
         }
+    }
+
+    private boolean someAreSelected() {
+        for (Message message : messageList)
+            if (message.isSelected())
+                return true;
+            return false;
     }
 
 
@@ -91,8 +97,10 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         speechBubbleViewHolder.message = message;
         speechBubbleViewHolder.content.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
-        if (message.getSelected()) {
+        if (message.isSelected()) {
             speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
+        } else {
+            speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble));
         }
         if (message.getMessageContent().length() > 100) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();

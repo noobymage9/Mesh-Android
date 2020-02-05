@@ -69,7 +69,8 @@ public class Message {
 
     }
 
-    public boolean getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 }
+
