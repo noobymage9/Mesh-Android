@@ -76,9 +76,8 @@ public class MessageActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (speechBubbleAdaptor.snackBarUp) {
+        if (speechBubbleAdaptor.saveDeleteSnackbarExist()) {
             speechBubbleAdaptor.saveDeleteSnackbar.dismiss();
-            speechBubbleAdaptor.snackBarUp = false;
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
         } else {
             super.onBackPressed();

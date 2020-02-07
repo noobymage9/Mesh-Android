@@ -21,7 +21,6 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     private List<Message> messageList;
     private Context context;
     public SaveDeleteSnackbar saveDeleteSnackbar;
-    public boolean snackBarUp;
 
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView content;
@@ -39,7 +38,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             bubble = itemView.findViewById(R.id.bubble);
 
             background.setOnClickListener(v -> {
-                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                if (saveDeleteSnackbarExist()) {
                     saveDeleteSnackbar.dismiss();
                     for (Message message : messageList)
                         message.setSelected(false);
@@ -48,7 +47,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             });
 
             bubble.setOnClickListener(v -> {
-                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                if (saveDeleteSnackbarExist()) {
                     message.setSelected(!message.isSelected());
                     if (!someAreSelected()) {
                         saveDeleteSnackbar.dismiss();
@@ -59,13 +58,9 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             });
 
             bubble.setOnLongClickListener(v -> {
-                if (saveDeleteSnackbar == null) {
+                if (saveDeleteSnackbar == null)
                     saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
-                    snackBarUp = true;
-                    saveDeleteSnackbar.show();
-                } else {
-                    saveDeleteSnackbar.show();
-                }
+                saveDeleteSnackbar.show();
                 message.setSelected(true);
                 notifyDataSetChanged();
                 return true;
@@ -125,6 +120,10 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
                 inflate(R.layout.speech_bubble, viewGroup, false);
 
         return new speechBubbleViewHolder(itemView);
+    }
+
+    public boolean saveDeleteSnackbarExist() {
+        return (saveDeleteSnackbar.isShown() || saveDeleteSnackbar != null);
     }
 
 }
