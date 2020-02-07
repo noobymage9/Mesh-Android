@@ -1,6 +1,7 @@
 package com.mesh.message;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mesh.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
     private List<Message> messageList;
     private Context context;
-    public SaveDeleteSnackbar saveDeleteSnackbar;
+    private HashMap<String, Integer> contactColor;
+    private SaveDeleteSnackbar saveDeleteSnackbar;
+    private Random random;
 
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
         protected TextView content, timestamp, title;
@@ -79,6 +84,8 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public SpeechBubbleAdaptor(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;
         this.context = context;
+        this.contactColor = new HashMap<String, Integer>();
+        this.random = new Random();
     }
 
     @Override
@@ -99,6 +106,11 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             }
             speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
             speechBubbleViewHolder.title.setText(message.getContactName());
+            if (!contactColor.containsKey(message.getContactName())){
+                contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            }
+            speechBubbleViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
+
         }
         speechBubbleViewHolder.content.setText(message.getMessageContent());
         if (message.isSelected()) {
@@ -135,4 +147,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         return saveDeleteSnackbar != null && saveDeleteSnackbar.isShown();
     }
 
+    public SaveDeleteSnackbar getSaveDeleteSnackbar() {
+        return saveDeleteSnackbar;
+    }
 }
