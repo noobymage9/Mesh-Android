@@ -50,6 +50,7 @@ public class SaveDialog extends Dialog {
                 // insert tag into db
             }
             dbManager.close();
+            editText.setText("");
             initialiseRecyclerView();
         });
     }

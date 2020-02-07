@@ -36,9 +36,7 @@
         android:textCursorDrawable="@null"
         android:textColor="@color/Ivory"
         android:textSize="16sp"
-        android:hint="@string/tag_default_name"
         android:autofillHints="@string/tag_default_name"
-        android:inputType="text"
         />
 
     <androidx.recyclerview.widget.RecyclerView
