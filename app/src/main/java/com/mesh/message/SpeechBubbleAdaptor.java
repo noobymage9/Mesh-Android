@@ -23,17 +23,17 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public SaveDeleteSnackbar saveDeleteSnackbar;
 
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
-        protected TextView content;
+        protected TextView content, timestamp, title;
         protected ImageView sourceIcon;
-        protected TextView timestamp;
         protected Message message;
         protected View background, bubble;
 
         public speechBubbleViewHolder(@NonNull View itemView) {  //
             super(itemView);
             content = itemView.findViewById(R.id.incoming_bubble_text);
-            sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
+            title = itemView.findViewById(R.id.incoming_bubble_title);
+            sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             background = itemView.findViewById(R.id.speech_bubble_background);
             bubble = itemView.findViewById(R.id.bubble);
 
@@ -59,7 +59,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
             bubble.setOnLongClickListener(v -> {
                 if (saveDeleteSnackbar == null)
-                    saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
+                    saveDeleteSnackbar = SaveDeleteSnackbar.make(((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
                 saveDeleteSnackbar.show();
                 message.setSelected(true);
                 notifyDataSetChanged();
@@ -90,8 +90,17 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         speechBubbleViewHolder.message = message;
-        speechBubbleViewHolder.content.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
+        if (((MessageActivity)context).isGroup()){
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
+            if (message.getContactName().length() > message.getMessageContent().length()) {
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
+                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
+            }
+            speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
+            speechBubbleViewHolder.title.setText(message.getContactName());
+        }
+        speechBubbleViewHolder.content.setText(message.getMessageContent());
         if (message.isSelected()) {
             speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
         } else {
@@ -123,7 +132,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     }
 
     public boolean saveDeleteSnackbarExist() {
-        return (saveDeleteSnackbar.isShown() || saveDeleteSnackbar != null);
+        return saveDeleteSnackbar != null && saveDeleteSnackbar.isShown();
     }
 
 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.Setting;
@@ -23,15 +24,20 @@ public class MessageActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private String contactName;
+    private boolean isGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        isGroup = dbManager.isGroup(contactName);
+        dbManager.close();
         MessageViewModel messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contactName).observe(this, this::initialiseRecyclerView) ;
+        messageViewModel.getMessages(contactName, isGroup).observe(this, this::initialiseRecyclerView) ;
         initialiseActionBar();
     }
 
@@ -82,5 +88,9 @@ public class MessageActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    public boolean isGroup(){
+        return isGroup;
     }
 }
