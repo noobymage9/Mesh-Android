@@ -119,11 +119,11 @@ public class NotificationService extends NotificationListenerService {
             dbManager.insertGroup(groupName);
             dbManager.insertMessage(contactName, dbManager.getGroupID(groupName),
                     text, sourceApp, currentDate);
-            dbManager.insertContact(groupName, currentDate);
+            dbManager.insertContact(groupName, currentDate, 1);
         }
         else {
             dbManager.insertMessage(title, text, sourceApp, currentDate);
-            dbManager.insertContact(title, currentDate);
+            dbManager.insertContact(title, currentDate, 0);
         }
 
         dbManager.close();

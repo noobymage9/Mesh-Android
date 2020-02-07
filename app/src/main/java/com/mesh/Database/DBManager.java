@@ -227,7 +227,7 @@ public class DBManager {
     /****************************/
     /**Contacts table functions**/
     /****************************/
-    public void insertContact(String name, Date timeStamp)
+    public void insertContact(String name, Date timeStamp, int isGroup)
     {
         //Query database for duplicate name
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
@@ -238,6 +238,7 @@ public class DBManager {
             ContentValues contentValue = new ContentValues();
             contentValue.put(DatabaseHelper.CONTACT_NAME, name);
             contentValue.put(DatabaseHelper.CONTACT_LATEST_TIMESTAMP, dateFormat.format(timeStamp));
+            contentValue.put(DatabaseHelper.CONTACT_IS_GROUP, isGroup);
             database.insert(DatabaseHelper.contactsTableName, null, contentValue);
         }
         else
@@ -358,6 +359,17 @@ public class DBManager {
         }
 
         return "";
+    }
+
+    public int isGroup(String contactName)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_IS_GROUP + " FROM " +
+                DatabaseHelper.contactsTableName + " WHERE " + DatabaseHelper.CONTACT_NAME +
+                " = " + "'" + contactName + "'", null);
+        if (c.moveToFirst())
+            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP));
+
+        return -1;
     }
 
     public int updateContactsTable(int contactID, String contactName, Date latestMessageDate)

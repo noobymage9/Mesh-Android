@@ -36,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
     public static final String CONTACT_NAME = "Contact_Name";
     public static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
+    public static final String CONTACT_IS_GROUP = "Is_Group";
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
@@ -80,7 +81,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CONTACT_NAME + " STRING NOT NULL, " +
             CONTACT_PROFILE_PIC + " BLOB, " +
-            CONTACT_LATEST_TIMESTAMP + " DATE);";
+            CONTACT_LATEST_TIMESTAMP + " DATE, " +
+            CONTACT_IS_GROUP + " INTEGER);";
 
     static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
