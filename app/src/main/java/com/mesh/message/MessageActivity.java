@@ -25,6 +25,7 @@ public class MessageActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private String contactName;
     private boolean isGroup;
+    private ArrayList<Message> messages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +74,15 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void initialiseRecyclerView(ArrayList<Message> messages) {
+        this.messages = messages;
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
+        if (speechBubbleAdaptor != null)
+            if (speechBubbleAdaptor.saveDeleteSnackbarExist())
+                speechBubbleAdaptor.getSaveDeleteSnackbar().dismiss();
         speechBubbleAdaptor = new SpeechBubbleAdaptor(messages, this);
         recyclerView.setAdapter(speechBubbleAdaptor);
-        recyclerView.scrollToPosition(messages.size() - 1);
+        resetRecyclerView();
     }
 
     @Override
@@ -92,5 +97,17 @@ public class MessageActivity extends AppCompatActivity {
 
     public boolean isGroup(){
         return isGroup;
+    }
+
+    public void setRecyclerViewAboveSnackBar(){
+        float scale = this.getResources().getDisplayMetrics().density;
+        int bottomPadding = (int) (55*scale + 0.5f);
+        recyclerView.setPadding(0, 0, 0, bottomPadding);
+        recyclerView.scrollToPosition(messages.size() - 1);
+    }
+
+    public void resetRecyclerView(){
+        recyclerView.setPadding(0, 0, 0, 0);
+        recyclerView.scrollToPosition(messages.size() - 1);
     }
 }
