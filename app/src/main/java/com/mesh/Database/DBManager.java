@@ -10,6 +10,8 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.mesh.message.Message;
+import com.mesh.message.MessageActivity;
+import com.mesh.message.UserCollection;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -102,6 +104,24 @@ public class DBManager {
         return c;
     }
 
+    private Message constructMessage(Cursor c)
+    {
+        try {
+            return new Message(
+                    c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    dateFormat.parse(c.getString
+                            (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     //Get all messages for 1 user
     public ArrayList<Message> getMessages(String contactName)
     {
@@ -113,15 +133,7 @@ public class DBManager {
         {
             do {
                 try {
-                    m = new Message(
-                            c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_USER_ID)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                            c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                            dateFormat.parse(c.getString
-                                    (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP)))
-                    );
-
+                    m = constructMessage(c);
                     messages.add(m);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -193,7 +205,7 @@ public class DBManager {
 
     public ArrayList<Integer> getTagIDs(int messageID)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_TAG_ID +
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSGTAG_ID +
                 " FROM " + DatabaseHelper.messageTagsTableName + " WHERE " + DatabaseHelper.MSG_ID
                 + " = " + messageID + ";", null);
         c.moveToFirst();
@@ -202,26 +214,88 @@ public class DBManager {
         if (c.moveToFirst())
         {
             do {
-                tagIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_TAG_ID)));
+                tagIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.MSGTAG_ID)));
             }while(c.moveToNext());
         }
 
         return tagIDs;
     }
 
-    public void insertTag(int messageID, int tagID)
+    public ArrayList<Message> getMessagesInUserCollection(int collectionID)
+    {
+        Cursor collectionsTableCursor = database.rawQuery("SELECT " +
+                DatabaseHelper.MSGTAG_MSG_ID + " FROM " + DatabaseHelper.messageTagsTableName +
+                " WHERE " + DatabaseHelper.MSGTAG_COLLECTION_ID +
+                " = " + collectionID, null);
+        collectionsTableCursor.moveToFirst();
+        ArrayList<Message> messages = new ArrayList<>();
+        Message currentMessage;
+        Cursor messageTableCursor;
+
+        if (collectionsTableCursor.moveToFirst())
+        {
+            do {
+                messageTableCursor = getMessageTableEntry
+                        (collectionsTableCursor.getInt
+                            (collectionsTableCursor.getColumnIndex(DatabaseHelper.MSGTAG_MSG_ID)));
+                currentMessage = constructMessage(messageTableCursor);
+                messages.add(currentMessage);
+            } while (collectionsTableCursor.moveToNext());
+        }
+
+        return messages;
+    }
+
+    public void insertTag(int messageID, int collectionID)
     {
         ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.MSG_ID, messageID);
-        contentValue.put(DatabaseHelper.MSG_TAG_ID, tagID);
+        contentValue.put(DatabaseHelper.MSGTAG_MSG_ID, messageID);
+        contentValue.put(DatabaseHelper.MSGTAG_COLLECTION_ID, collectionID);
         database.insert(DatabaseHelper.messageTagsTableName, null, contentValue);
     }
 
-    public void deleteTag(int messageID, int tagID)
+    public void deleteTag(int tagID)
     {
         database.delete(DatabaseHelper.messageTagsTableName,
-                DatabaseHelper.MSG_ID + " = '" + messageID + "' AND " +
-                        DatabaseHelper.MSG_TAG_ID + " = '" + tagID + "'", null);
+                    DatabaseHelper.MSGTAG_ID + " = " + tagID, null);
+    }
+
+    /************************************/
+    /**User Collections table functions**/
+    /************************************/
+
+    public void insertUserCollection(String collectionName)
+    {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.COLLECTIONS_NAME, collectionName);
+        database.insert(DatabaseHelper.userCollectionsTableName, null, contentValue);
+    }
+
+    public ArrayList<UserCollection> getAllUserCollections()
+    {
+        Cursor c = database.rawQuery("SELECT * FROM " +
+                DatabaseHelper.userCollectionsTableName, null);
+        c.moveToFirst();
+        ArrayList<UserCollection> userCollections = new ArrayList<>();
+        UserCollection currentCollection;
+
+        if (c.moveToFirst())
+        {
+            do {
+                currentCollection = new UserCollection
+                        (c.getInt(c.getColumnIndex(DatabaseHelper.COLLECTIONS_ID)),
+                         c.getString(c.getColumnIndex(DatabaseHelper.COLLECTIONS_NAME)));
+                userCollections.add(currentCollection);
+            } while(c.moveToNext());
+        }
+
+        return userCollections;
+    }
+
+    public void deleteUserCollection(int userCollectionID)
+    {
+        database.delete(DatabaseHelper.userCollectionsTableName,
+                DatabaseHelper.COLLECTIONS_ID + " = '" + userCollectionID, null);
     }
 
     /****************************/

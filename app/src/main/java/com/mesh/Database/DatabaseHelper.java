@@ -18,6 +18,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String messageTagsTableName = "Message_Tags";
     public static final String contactsTableName = "Contacts";
     public static final String groupsTableName = "Groups";
+    public static final String userCollectionsTableName = "User_Collections";
     public static final String settingsTableName = "Settings";
 
     /***************************/
@@ -30,7 +31,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String MSG_SOURCE_APP = "SourceApp";
     public static final String MSG_TIMESTAMP = "Timestamp";
 
-    public static final String MSG_TAG_ID = "MessageTagID";
+    public static final String MSGTAG_ID = "MessageTagID";
+    public static final String MSGTAG_MSG_ID = "MessageTag_Message_ID";
+    public static final String MSGTAG_COLLECTION_ID = "Group_Tag_ID";
 
     public static final String CONTACT_ID = "Contact_ID";
     public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
@@ -40,6 +43,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
+
+    public static final String COLLECTIONS_ID = "Collection_ID";
+    public static final String COLLECTIONS_NAME = "Collection_Name";
 
     public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
     public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
@@ -71,10 +77,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_NAME + ") ON DELETE CASCADE);";
 
     static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
-            MSG_ID + " INTEGER, " +
-            MSG_TAG_ID  + " INTEGER, " +
-            "PRIMARY KEY (" + MSG_ID + ", " + MSG_TAG_ID + "), " +
-            "FOREIGN KEY (" + MSG_ID + ") REFERENCES " + messageTableName + "(" + MSG_ID + ")" +
+            MSGTAG_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MSGTAG_MSG_ID + " INTEGER, " +
+            MSGTAG_COLLECTION_ID + " INTEGER, " +
+            "FOREIGN KEY (" + MSGTAG_COLLECTION_ID + ") REFERENCES " + userCollectionsTableName + "(" +
+            COLLECTIONS_ID + ")" + "ON DELETE CASCADE, " +
+            "FOREIGN KEY (" + MSGTAG_MSG_ID + ") REFERENCES " + messageTableName + "(" + MSG_ID + ")" +
             "ON DELETE CASCADE);";
 
     static final String createContactsTable = "CREATE TABLE " + contactsTableName + "(" +
@@ -88,6 +96,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             GROUPS_NAME + " STRING);";
 
+    static final String createUserCollectionsTable = "CREATE TABLE " + userCollectionsTableName + "(" +
+            COLLECTIONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLLECTIONS_NAME + " STRING);";
+
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
@@ -100,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createContactsTable);
         db.execSQL(createMessageTagsTable);
         db.execSQL(createGroupsTable);
-
+        db.execSQL(createUserCollectionsTable);
         db.execSQL(createSettingsTable);
         //Initializing default settings for app
         ContentValues cv = new ContentValues();
