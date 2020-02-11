@@ -1,6 +1,9 @@
 package com.mesh.message;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,49 +12,56 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
     private List<Message> messageList;
     private Context context;
-    public SaveDeleteSnackbar saveDeleteSnackbar;
-    public boolean snackBarUp;
+    private HashMap<String, Integer> contactColor;
+    private static SaveDeleteSnackbar saveDeleteSnackbar;
+    private Random random;
+    private MessageActivity messageActivity;
 
     public class speechBubbleViewHolder extends RecyclerView.ViewHolder {
-        protected TextView content;
+        protected TextView content, timestamp, title;
         protected ImageView sourceIcon;
-        protected TextView timestamp;
         protected Message message;
         protected View background, bubble;
 
         public speechBubbleViewHolder(@NonNull View itemView) {  //
             super(itemView);
             content = itemView.findViewById(R.id.incoming_bubble_text);
-            sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
+            title = itemView.findViewById(R.id.incoming_bubble_title);
+            sourceIcon = itemView.findViewById(R.id.incoming_bubble_source);
             background = itemView.findViewById(R.id.speech_bubble_background);
             bubble = itemView.findViewById(R.id.bubble);
 
             background.setOnClickListener(v -> {
-                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                if (saveDeleteSnackbarExist()) {
                     saveDeleteSnackbar.dismiss();
                     for (Message message : messageList)
                         message.setSelected(false);
+                    messageActivity.resetRecyclerView();
                     notifyDataSetChanged();
                 }
             });
 
             bubble.setOnClickListener(v -> {
-                if (saveDeleteSnackbar != null && saveDeleteSnackbar.isShown()) {
+                if (saveDeleteSnackbarExist()) {
                     message.setSelected(!message.isSelected());
                     if (!someAreSelected()) {
                         saveDeleteSnackbar.dismiss();
+                        messageActivity.resetRecyclerView();
                         saveDeleteSnackbar = null;
                     }
                     notifyDataSetChanged();
@@ -59,13 +69,10 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             });
 
             bubble.setOnLongClickListener(v -> {
-                if (saveDeleteSnackbar == null) {
-                    saveDeleteSnackbar = SaveDeleteSnackbar.make((ViewGroup) ((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
-                    snackBarUp = true;
-                    saveDeleteSnackbar.show();
-                } else {
-                    saveDeleteSnackbar.show();
-                }
+                if (saveDeleteSnackbar == null)
+                    saveDeleteSnackbar = SaveDeleteSnackbar.make(((MessageActivity) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
+                saveDeleteSnackbar.show();
+                messageActivity.setRecyclerViewAboveSnackBar();
                 message.setSelected(true);
                 notifyDataSetChanged();
                 return true;
@@ -84,6 +91,9 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public SpeechBubbleAdaptor(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;
         this.context = context;
+        this.contactColor = new HashMap<String, Integer>();
+        this.random = new Random();
+        messageActivity = ((MessageActivity) context);
     }
 
     @Override
@@ -91,17 +101,35 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         return messageList.size();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(speechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         speechBubbleViewHolder.message = message;
-        speechBubbleViewHolder.content.setText(message.getMessageContent());
         speechBubbleViewHolder.timestamp.setText(message.getTime());
-        if (message.isSelected()) {
-            speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble_highlighted));
-        } else {
-            speechBubbleViewHolder.bubble.setBackground(context.getResources().getDrawable(R.drawable.incoming_speech_bubble));
+        if (message.isSelected())
+            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.LightBlue));
+        else
+            speechBubbleViewHolder.bubble.getBackground().setTintList(null);
+        if (((MessageActivity)context).isGroup()){
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
+            if (message.getContactName().length() > message.getMessageContent().length()) {
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
+                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
+            } else {
+                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
+                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
+            }
+            speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
+            speechBubbleViewHolder.title.setText(message.getContactName());
+            if (!contactColor.containsKey(message.getContactName())){
+                contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+            }
+            speechBubbleViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
+
         }
+        speechBubbleViewHolder.content.setText(message.getMessageContent());
+
         if (message.getMessageContent().length() > 100) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
@@ -127,4 +155,11 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         return new speechBubbleViewHolder(itemView);
     }
 
+    public boolean saveDeleteSnackbarExist() {
+        return saveDeleteSnackbar != null && saveDeleteSnackbar.isShown();
+    }
+
+    public SaveDeleteSnackbar getSaveDeleteSnackbar() {
+        return saveDeleteSnackbar;
+    }
 }

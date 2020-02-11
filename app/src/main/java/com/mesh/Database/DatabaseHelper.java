@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 13;
+    static int databaseVersion = 14;
 
     /****************************/
     /**Database table creation**/

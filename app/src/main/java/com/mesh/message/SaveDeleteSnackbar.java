@@ -1,6 +1,8 @@
 package com.mesh.message;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +82,9 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         });
         Button save = content.findViewById(R.id.save_button);
         save.setOnClickListener(v -> {
-            ;
+            SaveDialog saveDialog = new SaveDialog(saveDeleteSnackbar.getContext());
+            saveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            saveDialog.show();
         });
         saveDeleteSnackbar.setDuration(duration);
         return saveDeleteSnackbar;

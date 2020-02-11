@@ -435,15 +435,15 @@ public class DBManager {
         return "";
     }
 
-    public int isGroup(String contactName)
+    public boolean isGroup(String contactName)
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_IS_GROUP + " FROM " +
                 DatabaseHelper.contactsTableName + " WHERE " + DatabaseHelper.CONTACT_NAME +
                 " = " + "'" + contactName + "'", null);
         if (c.moveToFirst())
-            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP));
+            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP)) == 1;
 
-        return -1;
+        return false;
     }
 
     public int updateContactsTable(int contactID, String contactName, Date latestMessageDate)
