@@ -110,4 +110,8 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setPadding(0, 0, 0, 0);
         recyclerView.scrollToPosition(messages.size() - 1);
     }
+
+    public SpeechBubbleAdaptor getSpeechBubbleAdaptor(){
+        return this.speechBubbleAdaptor;
+    }
 }

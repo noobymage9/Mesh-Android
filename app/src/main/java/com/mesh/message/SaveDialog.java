@@ -9,10 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
 import com.mesh.R;
+
+import java.util.ArrayList;
 
 public class SaveDialog extends Dialog {
 
@@ -20,6 +23,7 @@ public class SaveDialog extends Dialog {
     private Button add;
     private RecyclerView recyclerView;
     private TagAdapter tagAdapter;
+    private ArrayList<UserCollection> userCollections;
 
     public SaveDialog(@NonNull Context context) {
         super(context);
@@ -38,7 +42,6 @@ public class SaveDialog extends Dialog {
 
     private void initialiseEditText() {
         editText = findViewById(R.id.add_field);
-
     }
 
     private void initialiseButton() {
@@ -47,7 +50,7 @@ public class SaveDialog extends Dialog {
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();
             if (editText.getText().length() != 0) {
-                // insert tag into db
+                dbManager.insertUserCollection(editText.getText().toString());
             }
             dbManager.close();
             editText.setText("");
@@ -58,12 +61,18 @@ public class SaveDialog extends Dialog {
     private void initialiseRecyclerView(){
         DBManager dbManager = new DBManager(getContext());
         dbManager.open();
-        // getTags
+        userCollections = dbManager.getAllUserCollections();
         dbManager.close();
         recyclerView = findViewById(R.id.tag_list);
         recyclerView.setHasFixedSize(true);
-        tagAdapter = new TagAdapter();
+        tagAdapter = new TagAdapter(userCollections, getContext());
         recyclerView.setAdapter(tagAdapter);
     }
 
+    @Override
+    public void setOnDismissListener(@Nullable OnDismissListener listener) {
+        super.setOnDismissListener(listener);
+        ((MessageActivity) this.getContext()).resetRecyclerView();
+        ((MessageActivity) this.getContext()).getSpeechBubbleAdaptor().getSaveDeleteSnackbar().dismiss();
+    }
 }
