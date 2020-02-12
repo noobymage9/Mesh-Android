@@ -2,7 +2,6 @@ package com.mesh.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.mesh.Database.DBManager;
 import com.mesh.message.MessageActivity;
 import com.mesh.R;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     private static List<String> contactNames;
     private Context context;
 
-    public static class ContactViewHolder extends RecyclerView.ViewHolder {
+    public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected ImageView icon;
         protected TextView timestamp;
@@ -73,7 +70,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.card_layout, viewGroup, false);
+                inflate(R.layout.home_card, viewGroup, false);
         return new ContactViewHolder(itemView);
     }
 }

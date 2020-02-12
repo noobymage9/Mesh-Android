@@ -91,7 +91,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public SpeechBubbleAdaptor(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;
         this.context = context;
-        this.contactColor = new HashMap<String, Integer>();
+        this.contactColor = new HashMap<>();
         this.random = new Random();
         messageActivity = ((MessageActivity) context);
     }
@@ -108,7 +108,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         speechBubbleViewHolder.message = message;
         speechBubbleViewHolder.timestamp.setText(message.getTime());
         if (message.isSelected())
-            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.LightBlue));
+            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.Tiger));
         else
             speechBubbleViewHolder.bubble.getBackground().setTintList(null);
         if (((MessageActivity)context).isGroup()){
@@ -146,6 +146,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         }
     }
 
+    @NonNull
     @Override
     public speechBubbleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.

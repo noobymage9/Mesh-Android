@@ -4,33 +4,38 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 import com.mesh.message.UserCollection;
+import com.mesh.ui.home.ContactAdapter;
 
 import java.util.ArrayList;
 
 public class SavedFragment extends Fragment {
 
-    private SavedViewModel favouriteViewModel;
+    private SavedViewModel savedViewModel;
+    private RecyclerView recyclerView;
+    private UserGroupAdapter userGroupAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        favouriteViewModel =
+        savedViewModel =
                 ViewModelProviders.of(this).get(SavedViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_favourite, container, false);
-        favouriteViewModel.getUserCollectons().observe(this, this::initialiseRecyclerView);
+        View root = inflater.inflate(R.layout.fragment_saved, container, false);
+        savedViewModel.getUserCollectons().observe(this, userCollections -> initialiseRecyclerView(root, userCollections));
         return root;
     }
 
-    private void initialiseRecyclerView(ArrayList<UserCollection> s) {
+    private void initialiseRecyclerView(View root, ArrayList<UserCollection> userCollections) {
+        recyclerView = root.findViewById(R.id.userCollectionList);
+        recyclerView.setHasFixedSize(true);
+        userGroupAdapter = new UserGroupAdapter(userCollections, this.getContext());
+        recyclerView.setAdapter(userGroupAdapter);
 
     }
 }
