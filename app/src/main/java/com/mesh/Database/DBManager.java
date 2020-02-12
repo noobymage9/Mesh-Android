@@ -45,11 +45,23 @@ public class DBManager {
         dbHelper.close();
     }
 
+    //This table is only for contacts that exist only in groups and are not actual contacts on the
+    //user's phone.
+    /*************************/
+    /**User table functions**/
+    /************************/
+
     public void insertUser(String userName)
     {
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.USER_NAME, userName);
-        database.insert(DatabaseHelper.usersTableName, null, contentValue);
+        //Query database for duplicate name
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.usersTableName
+                + " WHERE " + DatabaseHelper.USER_NAME + " = '" + userName + "';", null);
+
+        if (!c.moveToFirst()) {
+            ContentValues contentValue = new ContentValues();
+            contentValue.put(DatabaseHelper.USER_NAME, userName);
+            database.insert(DatabaseHelper.usersTableName, null, contentValue);
+        }
     }
 
     private Cursor getLatestUserEntry()
@@ -78,11 +90,28 @@ public class DBManager {
         return c;
     }
 
+    private Cursor getUserEntry(String userName)
+    {
+        Cursor c = database.rawQuery("SELECT * FROM " +
+                DatabaseHelper.usersTableName + " WHERE " + DatabaseHelper.USER_NAME + " = '" +
+                userName + "'", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
     public String getUserName(int userID)
     {
         Cursor c = getUserEntry(userID);
 
         return c.getString(c.getColumnIndex(DatabaseHelper.USER_NAME));
+    }
+
+    public int getUserID(String userName)
+    {
+        Cursor c = getUserEntry(userName);
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.USER_ID));
     }
 
     /****************************/
@@ -161,7 +190,6 @@ public class DBManager {
 
         if (isGroupMessage(messageID))
         {
-
             try {
                 return new Message(
                         c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
@@ -180,7 +208,7 @@ public class DBManager {
             try {
                 return new Message(
                         c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                        getUserName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
+                        getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
                         c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
                         dateFormat.parse(c.getString
@@ -398,6 +426,22 @@ public class DBManager {
         return c;
     }
 
+    private Cursor getContactDB(String contactName)
+    {
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName +
+                " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + contactName + "'",  null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    public int getContactID(String contactName)
+    {
+        Cursor c = getContactDB(contactName);
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
+    }
+
     private Cursor getLatestContactEntry()
     {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName +
@@ -586,18 +630,35 @@ public class DBManager {
     private Cursor getGroupEntry(int groupID)
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.GROUPS_NAME + " FROM " +
-                DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_ID + " = '" +
-                groupID + "'", null);
+                DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_ID + " = " +
+                groupID, null);
         c.moveToFirst();
 
         return c;
     }
 
-    public int getGroupName(int groupID)
+    private Cursor getGroupEntry(String groupName)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.GROUPS_NAME + " FROM " +
+                DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_NAME + " = '" +
+                groupName + "'", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    public String getGroupName(int groupID)
     {
         Cursor c = getGroupEntry(groupID);
 
-        return c.getInt(c.getColumnIndex(DatabaseHelper.GROUPS_NAME));
+        return c.getString(c.getColumnIndex(DatabaseHelper.GROUPS_NAME));
+    }
+
+    public int getGroupID(String groupName)
+    {
+        Cursor c = getGroupEntry(groupName);
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.GROUPS_ID));
     }
 
     private Cursor getLatestGroupEntry()

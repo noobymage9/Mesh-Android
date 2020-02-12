@@ -120,14 +120,14 @@ public class NotificationService extends NotificationListenerService {
             dbManager.insertUser(contactName);
             dbManager.insertGroup(groupName);
             dbManager.insertContact(groupName, currentDate, 1);
-            dbManager.insertMessage(dbManager.getLatestUserID(), dbManager.getLatestGroupID(),
+            dbManager.insertMessage(dbManager.getUserID(contactName), dbManager.getContactID(groupName),
                     text, sourceApp, currentDate);
         }
         else {
             contactName = title;
             dbManager.insertUser(contactName);
             dbManager.insertContact(contactName, currentDate, 0);
-            dbManager.insertMessage(dbManager.getLatestContactID(), text, sourceApp, currentDate);
+            dbManager.insertMessage(dbManager.getContactID(contactName), text, sourceApp, currentDate);
         }
 
         dbManager.close();
