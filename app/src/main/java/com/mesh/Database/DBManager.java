@@ -45,6 +45,29 @@ public class DBManager {
         dbHelper.close();
     }
 
+    public void insertUser(String userName)
+    {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.USER_NAME, userName);
+        database.insert(DatabaseHelper.usersTableName, null, contentValue);
+    }
+
+    private Cursor getLatestUserEntry()
+    {
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.usersTableName +
+                " ORDER BY " + DatabaseHelper.USER_ID + " DESC LIMIT 1", null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    public int getLatestUserID()
+    {
+        Cursor c = getLatestUserEntry();
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.USER_ID));
+    }
+
     /****************************/
     /**Message table functions**/
     /***************************/
@@ -546,14 +569,20 @@ public class DBManager {
         return c.getInt(c.getColumnIndex(DatabaseHelper.GROUPS_ID));
     }
 
-    public String getGroupName(int groupID)
+    private Cursor getLatestGroupEntry()
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.GROUPS_NAME + " FROM " +
-                DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_ID + " = '" +
-                groupID + "'", null);
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.groupsTableName +
+                " ORDER BY " + DatabaseHelper.GROUPS_ID + " DESC LIMIT 1", null);
         c.moveToFirst();
 
-        return c.getString(c.getColumnIndex(DatabaseHelper.GROUPS_NAME));
+        return c;
+    }
+
+    public int getLatestGroupID()
+    {
+        Cursor c = getLatestGroupEntry();
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.GROUPS_ID));
     }
 
     /****************************/

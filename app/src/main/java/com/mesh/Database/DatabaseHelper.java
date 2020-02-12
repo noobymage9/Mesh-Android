@@ -14,6 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /************************/
     /**Database table names**/
     /************************/
+    public static final String usersTableName = "User_Table";
     public static final String messageTableName = "Message";
     public static final String messageTagsTableName = "Message_Tags";
     public static final String contactsTableName = "Contacts";
@@ -24,6 +25,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /***************************/
     /**Database table columns**/
     /**************************/
+    public static final String USER_ID = "User_ID";
+    public static final String USER_NAME = "User_Name";
+
     public static final String MSG_ID = "MessageID";
     public static final String MSG_USER_ID = "UserID";
     public static final String MSG_GROUP_ID = "Group_ID";
@@ -61,11 +65,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 16;
+    static int databaseVersion = 17;
 
     /****************************/
     /**Database table creation**/
     /***************************/
+    static final String createUserTable = "CREATE TABLE " + usersTableName + "(" +
+            USER_ID + " PRIMARY KEY AUTOINCREMENT, " +
+            USER_NAME + " STRING);";
+
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MSG_GROUP_ID + " INTEGER DEFAULT -1, " +
@@ -108,6 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+        db.execSQL(createUserTable);
         db.execSQL(createMessageTable);
         db.execSQL(createContactsTable);
         db.execSQL(createMessageTagsTable);
