@@ -1,10 +1,12 @@
 package com.mesh.message;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,9 +22,12 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     public class TagViewHolder extends RecyclerView.ViewHolder{
         private CheckBox tags;
+        private UserCollection userCollection;
+
         public TagViewHolder(@NonNull View itemView) {
             super(itemView);
             tags = itemView.findViewById(R.id.tag_items);
+            tags.setOnCheckedChangeListener((buttonView, isChecked) -> userCollection.setSelected(isChecked));
         }
     }
 
@@ -44,6 +49,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TagViewHolder holder, int position) {
+        holder.userCollection = userCollections.get(position);
         holder.tags.setText(userCollections.get(position).getName());
     }
 

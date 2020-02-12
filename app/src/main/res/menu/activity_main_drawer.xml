@@ -18,8 +18,8 @@
             android:title="@string/menu_favourite" />
         <item
             android:id="@+id/nav_saved"
-            android:icon="@drawable/dialog_add"
-            android:title="Saved" />
+            android:icon="@drawable/ic_menu_saved"
+            android:title="@string/saved" />
         <item
             android:id="@+id/nav_contact"
             android:icon="@drawable/ic_menu_contact"

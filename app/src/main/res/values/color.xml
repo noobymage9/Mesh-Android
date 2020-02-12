@@ -145,6 +145,6 @@
     <color name="WinterSoldierBlue">#232F34</color>
     <color name="Montfort">#344955</color>
     <color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">@color/Ivory</color>
     <color name="colorPrimaryDark">@color/Black</color>
 </resources>

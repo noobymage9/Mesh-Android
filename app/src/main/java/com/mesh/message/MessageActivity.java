@@ -73,7 +73,7 @@ public class MessageActivity extends AppCompatActivity {
         actionBar.setDisplayShowHomeEnabled(true);
     }
 
-    private void initialiseRecyclerView(ArrayList<Message> messages) {
+    public void initialiseRecyclerView(ArrayList<Message> messages) {
         this.messages = messages;
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);

@@ -13,6 +13,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.mesh.R;
+import com.mesh.message.UserCollection;
+
+import java.util.ArrayList;
 
 public class SavedFragment extends Fragment {
 
@@ -23,8 +26,11 @@ public class SavedFragment extends Fragment {
         favouriteViewModel =
                 ViewModelProviders.of(this).get(SavedViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favourite, container, false);
-        final TextView textView = root.findViewById(R.id.text_favourite);
-        favouriteViewModel.getText().observe(this, s -> textView.setText(s));
+        favouriteViewModel.getUserCollectons().observe(this, this::initialiseRecyclerView);
         return root;
+    }
+
+    private void initialiseRecyclerView(ArrayList<UserCollection> s) {
+
     }
 }

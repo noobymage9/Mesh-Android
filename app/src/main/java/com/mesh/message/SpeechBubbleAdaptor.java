@@ -24,10 +24,10 @@ import java.util.Random;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
 
-    private List<Message> messageList;
+    private ArrayList<Message> messageList;
     private Context context;
     private HashMap<String, Integer> contactColor;
-    private static SaveDeleteSnackbar saveDeleteSnackbar;
+    private SaveDeleteSnackbar saveDeleteSnackbar;
     private Random random;
     private MessageActivity messageActivity;
 
@@ -161,5 +161,9 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
     public SaveDeleteSnackbar getSaveDeleteSnackbar() {
         return saveDeleteSnackbar;
+    }
+
+    public ArrayList<Message> getMessageList(){
+        return this.messageList;
     }
 }
