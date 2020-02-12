@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -15,6 +16,7 @@ import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.Setting;
+import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
 
@@ -23,7 +25,7 @@ public class MessageActivity extends AppCompatActivity {
     private SpeechBubbleAdaptor speechBubbleAdaptor;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
-    private int contactID;
+    private Contact contact;
     private boolean isGroup;
     private ArrayList<Message> messages;
 
@@ -31,11 +33,11 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contactID = getIntent().getExtras().getInt(CONTACT_PARCEL);
+        contact = getIntent().getExtras().getParcelable(CONTACT_PARCEL);
         DBManager dbManager = new DBManager(this);
         MessageViewModel messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contactID).observe(this, this::initialiseRecyclerView) ;
+        messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView) ;
         initialiseActionBar();
     }
 
@@ -63,7 +65,7 @@ public class MessageActivity extends AppCompatActivity {
 
     private void initialiseActionBar() {
         actionBar = getSupportActionBar();
-        actionBar.setTitle("\t\t" + contactName); // Cheat fix for name and logo distance
+        actionBar.setTitle("\t\t" + contact); // Cheat fix for name and logo distance
         //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
         actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -72,6 +74,8 @@ public class MessageActivity extends AppCompatActivity {
 
     public void initialiseRecyclerView(ArrayList<Message> messages) {
         this.messages = messages;
+        Log.e("NUMBER", "" +
+                messages.size());
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
         if (speechBubbleAdaptor != null)

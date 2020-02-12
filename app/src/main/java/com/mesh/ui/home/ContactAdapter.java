@@ -34,7 +34,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             timestamp = v.findViewById(R.id.contact_timestamp);
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()).getID());
+                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
                 v.getContext().startActivity(intent);
             });
         }

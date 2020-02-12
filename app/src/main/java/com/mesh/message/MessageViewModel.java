@@ -14,13 +14,14 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mesh.Database.DBManager;
+import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
 
 public class MessageViewModel extends AndroidViewModel { // To format data for MessageActivity
     private MutableLiveData<ArrayList<Message>> messages;
     private LocalBroadcastManager localBroadcastManager;
-    private int contactID;
+    private Contact contact;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -33,8 +34,8 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<Message>> getMessages(int contactID){
-        this.contactID = contactID;
+    public LiveData<ArrayList<Message>> getMessages(Contact contact){
+        this.contact = contact;
         messages = new MutableLiveData<>();
         loadMessages();
         return messages;
@@ -44,11 +45,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            boolean isGroup = dbManager.isGroup(contactID);
-            if (isGroup)
-                messages.postValue(dbManager.getMessages(dbManager.getGroupID(contactName)));
-            else
-                messages.postValue(dbManager.getMessages(contactName));
+            messages.postValue(dbManager.getMessages(contact.getID()));
             dbManager.close();
         }).start();
     }
