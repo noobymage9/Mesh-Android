@@ -153,32 +153,15 @@ public class DBManager {
     }
 
     //Get all messages for 1 user
-    public ArrayList<Message> getMessagesFromUser(int contactID)
+    public ArrayList<Message> getMessages(int contactID)
     {
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
-        Cursor c = getAllMessagesFromUserDB(contactID);
-
-        if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
-        {
-            do {
-                try {
-                    m = constructMessage(c);
-                    messages.add(m);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } while(c.moveToNext());
-        }
-
-        return messages;
-    }
-
-    public ArrayList<Message> getMessagesFromGroup(int groupID)
-    {
-        ArrayList<Message> messages = new ArrayList<>();
-        Message m;
-        Cursor c = getAllMessagesFromGroupDB(groupID);
+        Cursor c;
+        if (isGroup(contactID))
+            c = getAllMessagesFromGroupDB(contactID);
+        else
+            c = getAllMessagesFromUserDB(contactID);
 
         if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
         {
