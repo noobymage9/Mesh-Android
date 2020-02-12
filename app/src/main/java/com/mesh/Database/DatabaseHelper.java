@@ -61,7 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 14;
+    static int databaseVersion = 16;
 
     /****************************/
     /**Database table creation**/
@@ -69,12 +69,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MSG_GROUP_ID + " INTEGER DEFAULT -1, " +
-            MSG_USER_ID + " STRING, " +
+            MSG_USER_ID + " INTEGER, " +
             MSG_CONTENTS + " TEXT NOT NULL, " +
             MSG_SOURCE_APP + " TEXT NOT NULL, " +
             MSG_TIMESTAMP + " DATE NOT NULL, " +
             "FOREIGN KEY (" + MSG_USER_ID + ") REFERENCES " + contactsTableName + "(" +
-            CONTACT_NAME + ") ON DELETE CASCADE);";
+            CONTACT_ID + ") ON DELETE CASCADE);";
 
     static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
             MSGTAG_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
