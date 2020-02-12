@@ -422,7 +422,7 @@ public class DBManager {
         return c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME));
     }
 
-    public ArrayList<Contact> getAllContactNames(SortSetting setting)
+    public ArrayList<Contact> getAllContacts(SortSetting setting)
     {
         Cursor c;
         switch (setting)
