@@ -4,11 +4,11 @@ import java.sql.Blob;
 
 public class Contact {
     protected int id;
-    protected Blob icon;
+    protected byte[] icon;
     protected String name;
 
 
-    public Contact(int id, Blob icon, String name) {
+    public Contact(int id, byte[] icon, String name) {
         this.id = id;
         this.icon = icon;
         this.name = name;
@@ -16,7 +16,7 @@ public class Contact {
 
     public int getID() {return this.id;}
 
-    public Blob getBlob() {
+    public byte[] getProfilePic() {
         return this.icon;
     }
 

@@ -20,8 +20,7 @@ import java.util.ArrayList;
 public class MessageViewModel extends AndroidViewModel { // To format data for MessageActivity
     private MutableLiveData<ArrayList<Message>> messages;
     private LocalBroadcastManager localBroadcastManager;
-    private String contactName;
-    boolean isGroup;
+    private int contactID;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -34,9 +33,8 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<Message>> getMessages(String contactName, boolean isGroup){
-        this.isGroup = isGroup;
-        this.contactName = contactName;
+    public LiveData<ArrayList<Message>> getMessages(int contactID){
+        this.contactID = contactID;
         messages = new MutableLiveData<>();
         loadMessages();
         return messages;
@@ -46,7 +44,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            isGroup = dbManager.isGroup(contactName);
+            boolean isGroup = dbManager.isGroup(contactID);
             if (isGroup)
                 messages.postValue(dbManager.getMessages(dbManager.getGroupID(contactName)));
             else

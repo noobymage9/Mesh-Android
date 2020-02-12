@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
-    private static List<String> contactNames;
+    private ArrayList<Contact> contactList;
     private Context context;
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -34,28 +34,29 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             timestamp = v.findViewById(R.id.contact_timestamp);
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                intent.putExtra(CONTACT_PARCEL, contactNames.get(getAdapterPosition()));
+                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()).getID());
                 v.getContext().startActivity(intent);
             });
         }
     }
 
-    public ContactAdapter(ArrayList<String> contactNames, Context context) {
-        ContactAdapter.contactNames = contactNames;
+    public ContactAdapter(ArrayList<Contact> contactList, Context context) {
+        this.contactList = contactList;
         this.context = context;
     }
 
     @Override
     public int getItemCount() {
-        return contactNames.size();
+        return contactList.size();
     }
 
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         DBManager dbManager = new DBManager(context);
         dbManager.open();
-        String contactName = contactNames.get(i);
-        contactViewHolder.timestamp.setText(dbManager.getContactLatestMessageTime(contactName));
+        Contact contact = contactList.get(i);
+        String contactName = contact.getName();
+        contactViewHolder.timestamp.setText(dbManager.getContactLatestMessageTime(contact.getID()));
         if (contactName.length() > 15) {
             contactName = contactName.substring(0, 15);
             contactName += "...";

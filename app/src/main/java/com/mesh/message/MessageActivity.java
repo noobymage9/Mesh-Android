@@ -23,7 +23,7 @@ public class MessageActivity extends AppCompatActivity {
     private SpeechBubbleAdaptor speechBubbleAdaptor;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
-    private String contactName;
+    private int contactID;
     private boolean isGroup;
     private ArrayList<Message> messages;
 
@@ -31,14 +31,11 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contactName = getIntent().getExtras().getString(CONTACT_PARCEL);
+        contactID = getIntent().getExtras().getInt(CONTACT_PARCEL);
         DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        isGroup = dbManager.isGroup(contactName);
-        dbManager.close();
         MessageViewModel messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contactName, isGroup).observe(this, this::initialiseRecyclerView) ;
+        messageViewModel.getMessages(contactID).observe(this, this::initialiseRecyclerView) ;
         initialiseActionBar();
     }
 

@@ -40,6 +40,8 @@ public class Message {
         return contactName;
     }
 
+    public boolean isFromGroup() { return !groupName.equals(""); }
+
     public String getGroupName() { return groupName; }
 
     public String getMessageContent()

@@ -17,7 +17,7 @@ import com.mesh.Database.DBManager;
 import java.util.ArrayList;
 
 public class HomeViewModel extends AndroidViewModel { // To format data for HomeFragment
-    private MutableLiveData<ArrayList<String>> contactNames;
+    private MutableLiveData<ArrayList<Contact>> contactList;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -31,17 +31,17 @@ public class HomeViewModel extends AndroidViewModel { // To format data for Home
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<String>> getContactNames(){
-        contactNames = new MutableLiveData<>();
+    public LiveData<ArrayList<Contact>> getContactNames(){
+        contactList = new MutableLiveData<>();
         loadContactNames();
-        return contactNames;
+        return contactList;
     }
 
     private void loadContactNames() {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            contactNames.postValue(dbManager.getAllContactNames(dbManager.getContactSortSetting()));
+            contactList.postValue(dbManager.getAllContacts(dbManager.getContactSortSetting()));
             dbManager.close();
         }).start();
     }

@@ -27,14 +27,14 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
-        homeViewModel.getContactNames().observe(this, contactNames -> initialiseRecyclerView(root, contactNames));
+        homeViewModel.getContactNames().observe(this, contactList -> initialiseRecyclerView(root, contactList));
         return root;
     }
 
-    private void initialiseRecyclerView(View root, ArrayList<String> contactNames) {
+    private void initialiseRecyclerView(View root, ArrayList<Contact> contactList) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
-        contactAdapter = new ContactAdapter(contactNames, this.getContext());
+        contactAdapter = new ContactAdapter(contactList, this.getContext());
         recyclerView.setAdapter(contactAdapter);
     }
 
