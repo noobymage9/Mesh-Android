@@ -114,11 +114,11 @@ public class DBManager {
     }
 
     //All messages from individual
-    private Cursor getAllMessagesFromUserDB(int id)
+    private Cursor getAllMessagesFromUserDB(int userID)
     {
         Cursor c = database.rawQuery("SELECT * FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID +
-                " = '" + id + "'", null);
+                " = " + userID , null);
         c.moveToFirst();
 
         return c;
@@ -128,7 +128,7 @@ public class DBManager {
     private Cursor getAllMessagesFromGroupDB(int groupID) {
         Cursor c = database.rawQuery("SELECT * FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_GROUP_ID +
-                " = '" + groupID + "'", null);
+                " = " + groupID, null);
         c.moveToFirst();
 
         return c;
@@ -138,7 +138,7 @@ public class DBManager {
     {
         Cursor c = database.rawQuery("SELECT * FROM "
                 + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_ID +
-                " = '" + messageID + "'", null);
+                " = " + messageID, null);
         c.moveToFirst();
 
         return c;
@@ -161,6 +161,7 @@ public class DBManager {
 
         if (isGroupMessage(messageID))
         {
+
             try {
                 return new Message(
                         c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
@@ -571,9 +572,15 @@ public class DBManager {
 
     public void insertGroup(String groupName)
     {
-        ContentValues cv = new ContentValues();
-        cv.put(DatabaseHelper.GROUPS_NAME, groupName);
-        database.insert(DatabaseHelper.groupsTableName, null, cv);
+        //Query database for duplicate name
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.groupsTableName
+                + " WHERE " + DatabaseHelper.GROUPS_NAME + " = '" + groupName + "';", null);
+
+        if (!c.moveToFirst()) {
+            ContentValues cv = new ContentValues();
+            cv.put(DatabaseHelper.GROUPS_NAME, groupName);
+            database.insert(DatabaseHelper.groupsTableName, null, cv);
+        }
     }
 
     private Cursor getGroupEntry(int groupID)

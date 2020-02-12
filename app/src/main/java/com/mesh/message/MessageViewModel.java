@@ -45,6 +45,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
+            Log.e("NUMBER OF MESSAGES", "" + dbManager.getMessages(contact.getID()).size());
             messages.postValue(dbManager.getMessages(contact.getID()));
             dbManager.close();
         }).start();
