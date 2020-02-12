@@ -71,7 +71,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database table creation**/
     /***************************/
     static final String createUserTable = "CREATE TABLE " + usersTableName + "(" +
-            USER_ID + " PRIMARY KEY AUTOINCREMENT, " +
+            USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             USER_NAME + " STRING);";
 
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
