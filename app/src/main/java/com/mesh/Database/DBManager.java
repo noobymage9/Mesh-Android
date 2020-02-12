@@ -513,11 +513,11 @@ public class DBManager {
         return "";
     }
 
-    public boolean isGroup(String contactID)
+    public boolean isGroup(int contactID)
     {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_IS_GROUP + " FROM " +
                 DatabaseHelper.contactsTableName + " WHERE " + DatabaseHelper.CONTACT_ID +
-                " = " + "'" + contactID + "'", null);
+                " = " + contactID, null);
         if (c.moveToFirst())
             return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP)) == 1;
 
