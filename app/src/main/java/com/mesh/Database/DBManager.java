@@ -425,7 +425,7 @@ public class DBManager {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
                 + " ORDER BY (SELECT COUNT(*) FROM " + DatabaseHelper.messageTableName +
                 " WHERE " + DatabaseHelper.messageTableName + "." + DatabaseHelper.MSG_USER_ID
-                + " = " + DatabaseHelper.contactsTableName + "." + DatabaseHelper.CONTACT_NAME
+                + " = " + DatabaseHelper.contactsTableName + "." + DatabaseHelper.CONTACT_ID
                 + ") DESC ", null);
         c.moveToFirst();
 
@@ -461,7 +461,7 @@ public class DBManager {
                         c.getBlob(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
                         c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)));
                 isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
-                if (isGroupUser != 0)
+                if (isGroupUser == 0)
                     contacts.add(currentContact);
             } while (c.moveToNext());
         }
