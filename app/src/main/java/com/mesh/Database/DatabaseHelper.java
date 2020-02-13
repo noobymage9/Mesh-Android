@@ -25,9 +25,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /***************************/
     /**Database table columns**/
     /**************************/
-    public static final String USER_ID = "User_ID";
-    public static final String USER_NAME = "User_Name";
-
     public static final String MSG_ID = "MessageID";
     public static final String MSG_USER_ID = "UserID";
     public static final String MSG_GROUP_ID = "Group_ID";
@@ -44,6 +41,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_NAME = "Contact_Name";
     public static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
     public static final String CONTACT_IS_GROUP = "Is_Group";
+    public static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
@@ -65,14 +63,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 17;
+    static int databaseVersion = 18;
 
     /****************************/
     /**Database table creation**/
     /***************************/
+    /*
     static final String createUserTable = "CREATE TABLE " + usersTableName + "(" +
             USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             USER_NAME + " STRING);";
+     */
 
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -98,7 +98,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_NAME + " STRING NOT NULL, " +
             CONTACT_PROFILE_PIC + " BLOB, " +
             CONTACT_LATEST_TIMESTAMP + " DATE, " +
-            CONTACT_IS_GROUP + " INTEGER);";
+            CONTACT_IS_GROUP + " INTEGER, " +
+            CONTACT_IS_GROUP_USER + " INTEGER);";
 
     static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -116,7 +117,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-        db.execSQL(createUserTable);
         db.execSQL(createMessageTable);
         db.execSQL(createContactsTable);
         db.execSQL(createMessageTagsTable);
