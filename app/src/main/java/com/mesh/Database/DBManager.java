@@ -360,13 +360,12 @@ public class DBManager {
             contentValue.put(DatabaseHelper.CONTACT_IS_GROUP_USER, isGroupUser);
             database.insert(DatabaseHelper.contactsTableName, null, contentValue);
 
-            Cursor c2 = getLatestContactEntry();
-            return c2.getInt(c2.getColumnIndex(DatabaseHelper.CONTACT_ID));
+            c = getLatestContactEntry();
+            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
         } else {
             c.moveToFirst();
             updateContactsTable(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
                     name, timeStamp);
-            Log.e("contact ID", c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)) +"");
             return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
         }
     }
