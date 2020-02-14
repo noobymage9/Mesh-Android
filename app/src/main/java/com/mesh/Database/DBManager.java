@@ -201,8 +201,10 @@ public class DBManager {
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
         Cursor c;
-        if (isGroup(contactID))
-            c = getAllMessagesFromGroupDB(contactID);
+        if (isGroup(contactID)) {
+            String groupName = getContactName(contactID);
+            c = getAllMessagesFromGroupDB(getGroupID(groupName));
+        }
         else
             c = getAllMessagesFromUserDB(contactID);
 
@@ -335,10 +337,20 @@ public class DBManager {
     /****************************/
     /**Contacts table functions**/
     /****************************/
-    public void insertContact(String name, Date timeStamp, int isGroup, int isGroupUser) {
-        //Query database for duplicate name
+
+    //Theres 2 types of contact with the same name:
+    //1.Contact that messages you directly
+    //2.Contact that only messages in one or more of your group chats
+    //if contact's name exists in table, check for whether its type 1 or type 2. if
+    //the inserted type does not exist for that name, insert new contact and return
+    //new created id.
+    //If contact name of the inserted type both match a record in the table, return
+    //the ID of that matching record instead
+    public int insertContact(String name, Date timeStamp, int isGroup, int isGroupUser) {
+        //Query database for duplicate name and whether that name is a group user or actual contact
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
-                + " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + name + "';", null);
+                + " WHERE " + DatabaseHelper.CONTACT_NAME + " = '" + name + "' AND " +
+                DatabaseHelper.CONTACT_IS_GROUP_USER + " = " + isGroupUser, null);
 
         if (!c.moveToFirst()) {
             ContentValues contentValue = new ContentValues();
@@ -347,10 +359,15 @@ public class DBManager {
             contentValue.put(DatabaseHelper.CONTACT_IS_GROUP, isGroup);
             contentValue.put(DatabaseHelper.CONTACT_IS_GROUP_USER, isGroupUser);
             database.insert(DatabaseHelper.contactsTableName, null, contentValue);
+
+            Cursor c2 = getLatestContactEntry();
+            return c2.getInt(c2.getColumnIndex(DatabaseHelper.CONTACT_ID));
         } else {
             c.moveToFirst();
             updateContactsTable(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
                     name, timeStamp);
+            Log.e("contact ID", c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)) +"");
+            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
         }
     }
 
@@ -564,7 +581,7 @@ public class DBManager {
     }
 
     private Cursor getGroupEntry(int groupID) {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.GROUPS_NAME + " FROM " +
+        Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_ID + " = " +
                 groupID, null);
         c.moveToFirst();
@@ -573,7 +590,7 @@ public class DBManager {
     }
 
     private Cursor getGroupEntry(String groupName) {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.GROUPS_NAME + " FROM " +
+        Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.groupsTableName + " WHERE " + DatabaseHelper.GROUPS_NAME + " = '" +
                 groupName + "'", null);
         c.moveToFirst();

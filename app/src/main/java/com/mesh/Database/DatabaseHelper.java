@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 18;
+    static int databaseVersion = 19;
 
     /****************************/
     /**Database table creation**/
@@ -99,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_PROFILE_PIC + " BLOB, " +
             CONTACT_LATEST_TIMESTAMP + " DATE, " +
             CONTACT_IS_GROUP + " INTEGER, " +
-            CONTACT_IS_GROUP_USER + " INTEGER);";
+            CONTACT_IS_GROUP_USER + " INTEGER DEFAULT 0);";
 
     static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

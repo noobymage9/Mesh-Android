@@ -108,6 +108,7 @@ public class NotificationService extends NotificationListenerService {
         currentDate = getCurrentDate(statusBarNotification);
 
         String groupName, contactName;
+        int contactID;
 
         if (isGroupName(title)) {
             if (title.contains("("))
@@ -119,14 +120,14 @@ public class NotificationService extends NotificationListenerService {
 
             dbManager.insertGroup(groupName);
             dbManager.insertContact(groupName, currentDate, 1, 0);
-            dbManager.insertContact(contactName, currentDate, 0, 1);
-            dbManager.insertMessage(dbManager.getContactID(contactName), dbManager.getContactID(groupName),
+            contactID = dbManager.insertContact(contactName, currentDate, 0, 1);
+            dbManager.insertMessage(contactID, dbManager.getGroupID(groupName),
                     text, sourceApp, currentDate);
         }
         else {
             contactName = title;
-            dbManager.insertContact(contactName, currentDate, 0, 0);
-            dbManager.insertMessage(dbManager.getContactID(contactName), text, sourceApp, currentDate);
+            contactID = dbManager.insertContact(contactName, currentDate, 0, 0);
+            dbManager.insertMessage(contactID, text, sourceApp, currentDate);
         }
 
         dbManager.close();
