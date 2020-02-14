@@ -35,6 +35,9 @@ public class MessageActivity extends AppCompatActivity {
         setContentView(R.layout.activity_message);
         contact = getIntent().getExtras().getParcelable(CONTACT_PARCEL);
         DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        isGroup = dbManager.isGroup(contact.getID());
+        dbManager.close();
         MessageViewModel messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
         messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView) ;
