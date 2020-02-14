@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:background="@color/WinterSoldierBlue"
+        android:background="@color/app_bar"
         android:layout_height="match_parent">
 
         <TextView
@@ -20,7 +20,7 @@
             android:layout_centerInParent="true"
             android:text="@string/usercollection_name"
             android:textStyle="bold"
-            android:textColor="@color/Ivory"
+            android:textColor="@color/text"
             android:textSize="24sp" />
 
         <!--TextView

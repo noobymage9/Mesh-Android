@@ -2,7 +2,6 @@ package com.mesh.message;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.mesh.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Random;
 
 public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdaptor.speechBubbleViewHolder> {
@@ -108,7 +106,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         speechBubbleViewHolder.message = message;
         speechBubbleViewHolder.timestamp.setText(message.getTime());
         if (message.isSelected())
-            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.Tiger));
+            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.accent));
         else
             speechBubbleViewHolder.bubble.getBackground().setTintList(null);
         if (((MessageActivity)context).isGroup()){

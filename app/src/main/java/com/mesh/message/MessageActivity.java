@@ -67,10 +67,11 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void initialiseActionBar() {
+        setSupportActionBar(findViewById(R.id.toolbar_message));
         actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + contact); // Cheat fix for name and logo distance
         //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
-        actionBar.setDisplayUseLogoEnabled(true);
+        //actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
     }

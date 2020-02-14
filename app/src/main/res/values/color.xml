@@ -140,11 +140,19 @@
     <color name="Navy">#000080</color>
     <color name="Black">#000000</color>
     <color name="Ivory">#ECE5DD</color>
-    <color name="Tiger">#F9AA33</color>
     <color name="BritishBlue">#4A6595</color>
-    <color name="WinterSoldierBlue">#232F34</color>
     <color name="Montfort">#344955</color>
-    <color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
-    <color name="colorAccent">@color/Ivory</color>
-    <color name="colorPrimaryDark">@color/Black</color>
+    <color name="WinterSoldierBlue">#232F34</color>
+    <color name="Tiger">#F9AA33</color>
+    <color name="DarkTurquois">#4F9A94</color>
+    <color name="cyan">#4F9A94</color>
+    <color name="turquois">#80CBC4</color>
+
+    <color name="accent">@color/Tiger</color>
+    <color name="app_bar">@color/DarkTurquois</color>
+    <color name="background">@color/White</color>
+    <color name="text">@color/Black</color>
+    <color name="colorPrimary">@color/turquois</color> <!-- Original: #008577 -->
+    <color name="colorAccent">@color/turquois</color>
+    <color name="colorPrimaryDark">@color/DarkTurquois</color>
 </resources>

@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/setting_reset_custom_border"
-    android:backgroundTint="@color/Montfort"
+    android:backgroundTint="@color/background"
     android:padding="10dp">
 
     <Button
@@ -17,6 +17,7 @@
         android:paddingRight="5dp"
         android:paddingEnd="5dp"
         android:background="@drawable/dialog_add"
+        android:backgroundTint="@color/app_bar"
         />
 
     <EditText
@@ -30,13 +31,13 @@
         android:layout_toRightOf="@id/add_button"
         android:layout_toEndOf="@id/add_button"
         android:background="@drawable/setting_reset_custom_border"
-        android:backgroundTint="@color/BritishBlue"
+        android:backgroundTint="@color/colorPrimary"
         android:textCursorDrawable="@null"
-        android:textColor="@color/Ivory"
+        android:textColor="@color/text"
         android:textSize="16sp"
         android:hint="@string/tag_default_name"
         android:autofillHints="@string/tag_default_name"
-        android:textColorHint="@color/Ivory"
+        android:textColorHint="@color/text"
         android:inputType="text"
         />
 
@@ -68,7 +69,7 @@
         android:background="@drawable/setting_reset_custom_border"
         android:textColor="@color/Black"
         android:text="@string/save"
-        android:backgroundTint="@color/Ivory"
+        android:backgroundTint="@color/colorPrimary"
         />
 
 </RelativeLayout>
