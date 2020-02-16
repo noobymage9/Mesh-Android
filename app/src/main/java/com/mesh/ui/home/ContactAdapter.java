@@ -20,12 +20,12 @@ import java.util.List;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
     private ArrayList<Contact> contactList;
     private Context context;
+    public static final String CONTACT_PARCEL = "Contact Parcel";
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
         protected ImageView icon;
         protected TextView timestamp;
-        private final String CONTACT_PARCEL = "Contact Parcel";
 
         public ContactViewHolder(final View v) {  //
             super(v);

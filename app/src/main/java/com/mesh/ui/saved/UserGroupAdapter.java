@@ -1,6 +1,7 @@
 package com.mesh.ui.saved;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.User
 
     private ArrayList<UserCollection> userCollectionList;
     private Context context;
+    public static final String USER_COLLECTION_PARCEL = "User Collection";
 
     public class UserGroupViewHolder extends RecyclerView.ViewHolder{
         private TextView name;
@@ -27,11 +29,10 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.User
         public UserGroupViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.usercollection_name);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
+            itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(v.getContext(), SavedMessageActivity.class);
+                intent.putExtra(USER_COLLECTION_PARCEL, userCollectionList.get(getAdapterPosition()));
+                v.getContext().startActivity(intent);
             });
         }
     }

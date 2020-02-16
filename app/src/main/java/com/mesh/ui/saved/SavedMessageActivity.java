@@ -1,46 +1,40 @@
-package com.mesh.message;
-
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.mesh.ui.saved;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.mesh.Database.DBManager;
-import com.mesh.MainActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mesh.R;
 import com.mesh.Setting;
-import com.mesh.ui.home.Contact;
-import com.mesh.ui.home.ContactAdapter;
+import com.mesh.message.Message;
+import com.mesh.message.SpeechBubbleAdaptor;
+import com.mesh.message.UserCollection;
 
 import java.util.ArrayList;
 
-public class MessageActivity extends AppCompatActivity {
-    private SpeechBubbleAdaptor speechBubbleAdaptor;
+public class SavedMessageActivity extends AppCompatActivity {
+
     private ActionBar actionBar;
     private RecyclerView recyclerView;
-    private Contact contact;
-    private boolean isGroup;
+    private UserCollection userCollection;
     private ArrayList<Message> messages;
+    private SavedMessageAdapter savedMessageAdapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contact = getIntent().getExtras().getParcelable(ContactAdapter.CONTACT_PARCEL);
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        isGroup = dbManager.isGroup(contact.getID());
-        dbManager.close();
-        MessageViewModel messageViewModel = ViewModelProviders.of
-                (this).get(MessageViewModel.class);
-        messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView);
+        userCollection = getIntent().getParcelableExtra(UserGroupAdapter.USER_COLLECTION_PARCEL);
+        SavedMessageViewModel messageViewModel = ViewModelProviders.of
+                (this).get(SavedMessageViewModel.class);
+        messageViewModel.getMessages(userCollection).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
     }
 
@@ -69,7 +63,7 @@ public class MessageActivity extends AppCompatActivity {
     private void initialiseActionBar() {
         setSupportActionBar(findViewById(R.id.toolbar_message));
         actionBar = getSupportActionBar();
-        actionBar.setTitle("\t\t" + contact); // Cheat fix for name and logo distance
+        actionBar.setTitle("\t\t" + userCollection); // Cheat fix for name and logo distance
         //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
         //actionBar.setDisplayUseLogoEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -80,26 +74,12 @@ public class MessageActivity extends AppCompatActivity {
         this.messages = messages;
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
-        if (speechBubbleAdaptor != null)
-            if (speechBubbleAdaptor.saveDeleteSnackbarExist())
-                speechBubbleAdaptor.getSaveDeleteSnackbar().dismiss();
-        speechBubbleAdaptor = new SpeechBubbleAdaptor(messages, this);
-        recyclerView.setAdapter(speechBubbleAdaptor);
+        if (savedMessageAdapter != null)
+            if (savedMessageAdapter.saveDeleteSnackbarExist())
+                savedMessageAdapter.getSaveDeleteSnackbar().dismiss();
+        savedMessageAdapter = new SavedMessageAdapter(messages, this);
+        recyclerView.setAdapter(savedMessageAdapter);
         resetRecyclerView();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (speechBubbleAdaptor.saveDeleteSnackbarExist()) {
-            speechBubbleAdaptor.getSaveDeleteSnackbar().dismiss();
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    public boolean isGroup(){
-        return isGroup;
     }
 
     public void setRecyclerViewAboveSnackBar(){
@@ -112,9 +92,5 @@ public class MessageActivity extends AppCompatActivity {
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
         recyclerView.scrollToPosition(messages.size() - 1);
-    }
-
-    public SpeechBubbleAdaptor getSpeechBubbleAdaptor(){
-        return this.speechBubbleAdaptor;
     }
 }

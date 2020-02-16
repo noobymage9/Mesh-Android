@@ -54,14 +54,14 @@ public class SaveDialog extends Dialog {
             boolean selectedSome = false;
             for (UserCollection userCollection : userCollections) {
                 if (userCollection.isSelected()) {
-                    for (Message message : messageActivity.getSpeechBubbleAdaptor().getMessageList())
+                    for (Message message : messageActivity.getSpeechBubbleAdaptor().getMessageList()) {
                         if (message.isSelected()) {
                             selectedSome = true;
                             DBManager dbManager = new DBManager(getContext());
                             dbManager.open();
                             dbManager.insertTag(message.getID(), userCollection.getID());
-                            message.setSelected(false);
                         }
+                    }
                     userCollection.setSelected(false);
                 }
             }
