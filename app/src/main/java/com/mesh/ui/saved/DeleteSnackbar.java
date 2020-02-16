@@ -21,6 +21,7 @@ import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.message.Message;
+import com.mesh.message.UserCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar>
         }
     }
 
-    public static DeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList) {
+    public static DeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList, UserCollection userCollection) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View content = inflater.inflate(R.layout.save_delete_bar, parent, false);
@@ -80,7 +81,7 @@ public final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar>
             dbManager.open();
             for (Message message : messageList)
                 if (message.isSelected())
-                    // TODO: 16/2/2020 delete message from userCollectionGroup
+                    dbManager.delete(message.getTagID(), message.getID());
             dbManager.close();
             DeleteSnackbar.dismiss();
             LocalBroadcastManager.getInstance(parent.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));

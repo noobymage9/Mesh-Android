@@ -70,7 +70,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
 
             bubble.setOnLongClickListener(v -> {
                 if (deleteSnackbar == null)
-                    deleteSnackbar = DeleteSnackbar.make(((SavedMessageActivity ) context).findViewById(R.id.snackBar_location), DeleteSnackbar.LENGTH_INDEFINITE, messageList);
+                    deleteSnackbar = DeleteSnackbar.make(savedMessageActivity.findViewById(R.id.snackBar_location), DeleteSnackbar.LENGTH_INDEFINITE, messageList, savedMessageActivity.getUserCollection());
                 deleteSnackbar.show();
                 savedMessageActivity.setRecyclerViewAboveSnackBar();
                 message.setSelected(true);

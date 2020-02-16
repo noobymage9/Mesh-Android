@@ -93,4 +93,8 @@ public class SavedMessageActivity extends AppCompatActivity {
         recyclerView.setPadding(0, 0, 0, 0);
         recyclerView.scrollToPosition(messages.size() - 1);
     }
+
+    public UserCollection getUserCollection() {
+        return userCollection;
+    }
 }
