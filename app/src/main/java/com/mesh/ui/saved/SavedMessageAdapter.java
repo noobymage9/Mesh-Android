@@ -113,7 +113,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
             savedMessageViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.accent));
         else
             savedMessageViewHolder.bubble.getBackground().setTintList(null);
-        if (false){ // If message is group
+        if (message.isFromGroup()){ // If message is group
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) savedMessageViewHolder.timestamp.getLayoutParams();
             if (message.getContactName().length() > message.getMessageContent().length()) {
                 layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
