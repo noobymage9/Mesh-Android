@@ -67,7 +67,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void initialiseActionBar() {
-        setSupportActionBar(findViewById(R.id.toolbar_message));
+        setSupportActionBar(findViewById(R.id.toolbar));
         actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + contact); // Cheat fix for name and logo distance
         //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));

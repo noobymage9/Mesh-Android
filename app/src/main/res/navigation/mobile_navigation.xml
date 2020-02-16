@@ -33,9 +33,4 @@
         android:label="@string/menu_contact"
         tools:layout="@layout/fragment_contact" />
 
-    <activity
-        android:id="@+id/nav_setting"
-        android:name="com.mesh.Setting"
-        android:label="@string/menu_setting"
-        tools:layout="@layout/activity_setting" />
 </navigation>

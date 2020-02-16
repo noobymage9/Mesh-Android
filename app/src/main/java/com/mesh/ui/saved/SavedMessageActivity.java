@@ -61,7 +61,7 @@ public class SavedMessageActivity extends AppCompatActivity {
     }
 
     private void initialiseActionBar() {
-        setSupportActionBar(findViewById(R.id.toolbar_message));
+        setSupportActionBar(findViewById(R.id.toolbar));
         actionBar = getSupportActionBar();
         actionBar.setTitle("\t\t" + userCollection); // Cheat fix for name and logo distance
         //actionBar.setLogo(new BitmapDrawable(getResources(), contactInfo.getBitmap()));
@@ -75,8 +75,8 @@ public class SavedMessageActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
         if (savedMessageAdapter != null)
-            if (savedMessageAdapter.saveDeleteSnackbarExist())
-                savedMessageAdapter.getSaveDeleteSnackbar().dismiss();
+            if (savedMessageAdapter.deleteSnackbarExist())
+                savedMessageAdapter.getDeleteSnackbar().dismiss();
         savedMessageAdapter = new SavedMessageAdapter(messages, this);
         recyclerView.setAdapter(savedMessageAdapter);
         resetRecyclerView();

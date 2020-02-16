@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 import com.mesh.message.Message;
-import com.mesh.message.SaveDeleteSnackbar;
 import com.mesh.message.SpeechBubbleAdaptor;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
     private ArrayList<Message> messageList;
     private Context context;
     private HashMap<String, Integer> contactColor;
-    private SaveDeleteSnackbar saveDeleteSnackbar;
+    private DeleteSnackbar deleteSnackbar;
     private Random random;
     private SavedMessageActivity savedMessageActivity;
 
@@ -48,8 +47,8 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
             bubble = itemView.findViewById(R.id.bubble);
 
             background.setOnClickListener(v -> {
-                if (saveDeleteSnackbarExist()) {
-                    saveDeleteSnackbar.dismiss();
+                if (deleteSnackbarExist()) {
+                    deleteSnackbar.dismiss();
                     for (Message message : messageList)
                         message.setSelected(false);
                     savedMessageActivity.resetRecyclerView();
@@ -58,21 +57,21 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
             });
 
             bubble.setOnClickListener(v -> {
-                if (saveDeleteSnackbarExist()) {
+                if (deleteSnackbarExist()) {
                     message.setSelected(!message.isSelected());
                     if (!someAreSelected()) {
-                        saveDeleteSnackbar.dismiss();
+                        deleteSnackbar.dismiss();
                         savedMessageActivity.resetRecyclerView();
-                        saveDeleteSnackbar = null;
+                        deleteSnackbar = null;
                     }
                     notifyDataSetChanged();
                 }
             });
 
             bubble.setOnLongClickListener(v -> {
-                if (saveDeleteSnackbar == null)
-                    saveDeleteSnackbar = SaveDeleteSnackbar.make(((SavedMessageActivity ) context).findViewById(R.id.snackBar_location), SaveDeleteSnackbar.LENGTH_INDEFINITE, messageList);
-                saveDeleteSnackbar.show();
+                if (deleteSnackbar == null)
+                    deleteSnackbar = DeleteSnackbar.make(((SavedMessageActivity ) context).findViewById(R.id.snackBar_location), DeleteSnackbar.LENGTH_INDEFINITE, messageList);
+                deleteSnackbar.show();
                 savedMessageActivity.setRecyclerViewAboveSnackBar();
                 message.setSelected(true);
                 notifyDataSetChanged();
@@ -156,12 +155,12 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
         return false;
     }
 
-    public boolean saveDeleteSnackbarExist() {
-        return saveDeleteSnackbar != null && saveDeleteSnackbar.isShown();
+    public boolean deleteSnackbarExist() {
+        return deleteSnackbar != null && deleteSnackbar.isShown();
     }
 
-    public SaveDeleteSnackbar getSaveDeleteSnackbar() {
-        return saveDeleteSnackbar;
+    public DeleteSnackbar getDeleteSnackbar() {
+        return deleteSnackbar;
     }
 
     public ArrayList<Message> getMessageList(){

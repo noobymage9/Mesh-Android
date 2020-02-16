@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
     private void initialiseSideBar() {
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_search, R.id.nav_favourite,
-                R.id.nav_saved, R.id.nav_contact, R.id.nav_setting)
+                R.id.nav_saved, R.id.nav_contact)
                 .setDrawerLayout(findViewById(R.id.drawer_layout))
                 .build();
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
