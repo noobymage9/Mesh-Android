@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
-    private int id;
+    private int id, tag = -1;
     private String contactName, groupName, content, sourceApp;
     private Date timeStamp;
     private boolean selected = false;
@@ -28,6 +28,17 @@ public class Message {
         this.content = content;
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
+    }
+
+    public Message(int id, String contactName, String groupName, String
+            content, String sourceApp, Date timeStamp, int tag) {
+        this.id = id;
+        this.contactName= contactName;
+        this.groupName = groupName;
+        this.content = content;
+        this.sourceApp = sourceApp;
+        this.timeStamp = timeStamp;
+        this.tag = tag;
     }
 
     public int getID()
@@ -65,6 +76,7 @@ public class Message {
         return time.format(timeStamp);
     }
 
+    public int getTag() { return tag; }
 
     public void setSelected(boolean b) {
         this.selected = b;

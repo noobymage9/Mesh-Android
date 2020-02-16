@@ -169,16 +169,6 @@ public class DBManager {
         return c;
     }
 
-    private boolean isGroupMessage(int messageID) {
-        Cursor c = getMessageTableEntry(messageID);
-
-        if (c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)) > 0)
-            return true;
-
-        return false;
-    }
-
-
     private Message constructMessage(Cursor c) {
         try {
             return new Message(
@@ -189,6 +179,24 @@ public class DBManager {
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
                     dateFormat.parse(c.getString
                             (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private Message constructMessageWithTag(Cursor c, int tag) {
+        try {
+            return new Message(
+                    c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    dateFormat.parse(c.getString
+                            (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))),
+                    tag);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -266,23 +274,24 @@ public class DBManager {
     }
 
     public ArrayList<Message> getMessagesInUserCollection(int collectionID) {
-        Cursor collectionsTableCursor = database.rawQuery("SELECT " +
-                DatabaseHelper.MSGTAG_MSG_ID + " FROM " + DatabaseHelper.messageTagsTableName +
-                " WHERE " + DatabaseHelper.MSGTAG_COLLECTION_ID +
-                " = " + collectionID, null);
-        collectionsTableCursor.moveToFirst();
+        Cursor messageTagsTableCursor = database.rawQuery("SELECT * FROM "
+                + DatabaseHelper.messageTagsTableName + " WHERE " +
+                DatabaseHelper.MSGTAG_COLLECTION_ID + " = " + collectionID, null);
+        messageTagsTableCursor.moveToFirst();
         ArrayList<Message> messages = new ArrayList<>();
         Message currentMessage;
         Cursor messageTableCursor;
 
-        if (collectionsTableCursor.moveToFirst()) {
+        if (messageTagsTableCursor.moveToFirst()) {
             do {
                 messageTableCursor = getMessageTableEntry
-                        (collectionsTableCursor.getInt
-                                (collectionsTableCursor.getColumnIndex(DatabaseHelper.MSGTAG_MSG_ID)));
-                currentMessage = constructMessage(messageTableCursor);
+                        (messageTagsTableCursor.getInt
+                                (messageTagsTableCursor.getColumnIndex(DatabaseHelper.MSGTAG_MSG_ID)));
+                currentMessage = constructMessageWithTag(messageTableCursor,
+                        messageTagsTableCursor.getInt(messageTableCursor.getColumnIndex(
+                        DatabaseHelper.MSGTAG_ID)));
                 messages.add(currentMessage);
-            } while (collectionsTableCursor.moveToNext());
+            } while (messageTagsTableCursor.moveToNext());
         }
 
         return messages;
@@ -298,6 +307,12 @@ public class DBManager {
     public void deleteTag(int tagID) {
         database.delete(DatabaseHelper.messageTagsTableName,
                 DatabaseHelper.MSGTAG_ID + " = " + tagID, null);
+    }
+
+    public void delete(int tagID, int messageID) {
+        database.delete(DatabaseHelper.messageTagsTableName,
+                DatabaseHelper.MSGTAG_ID + " = " + tagID + " AND " +
+                        DatabaseHelper.MSGTAG_MSG_ID + " = " + messageID, null);
     }
 
     /************************************/
