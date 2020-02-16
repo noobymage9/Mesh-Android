@@ -288,7 +288,7 @@ public class DBManager {
                         (messageTagsTableCursor.getInt
                                 (messageTagsTableCursor.getColumnIndex(DatabaseHelper.MSGTAG_MSG_ID)));
                 currentMessage = constructMessageWithTag(messageTableCursor,
-                        messageTagsTableCursor.getInt(messageTableCursor.getColumnIndex(
+                        messageTagsTableCursor.getInt(messageTagsTableCursor.getColumnIndex(
                         DatabaseHelper.MSGTAG_ID)));
                 messages.add(currentMessage);
             } while (messageTagsTableCursor.moveToNext());
