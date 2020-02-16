@@ -29,6 +29,8 @@ public class MessageActivity extends AppCompatActivity {
     private boolean isGroup;
     private ArrayList<Message> messages;
 
+    // TODO: 16/2/2020 Replace refreshing of adapter with INSTANCE
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
