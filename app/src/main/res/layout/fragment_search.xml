@@ -4,4 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:hint="@string/search_fragment_default_search"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
+        android:paddingRight="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="@color/text"
+        android:textCursorDrawable="@null"
+        android:background="@color/app_bar_items"
+        />
 </RelativeLayout>

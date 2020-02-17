@@ -38,4 +38,5 @@
     <string name="tag_default_name">Enter Tag Name</string>
     <string name="saved">Saved</string>
     <string name="usercollection_name">This is a user collection name</string>
+    <string name="search_fragment_default_search">Filter</string>
 </resources>
