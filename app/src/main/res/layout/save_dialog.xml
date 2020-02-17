@@ -34,6 +34,7 @@
         android:textCursorDrawable="@null"
         android:textColor="@color/app_bar_items"
         android:textSize="16sp"
+        android:imeOptions="actionDone"
         android:hint="@string/tag_default_name"
         android:autofillHints="@string/tag_default_name"
         android:textColorHint="@color/app_bar_items"
