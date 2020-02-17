@@ -113,31 +113,34 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
             savedMessageViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.accent));
         else
             savedMessageViewHolder.bubble.getBackground().setTintList(null);
-        if (message.isFromGroup()){ // If message is group
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) savedMessageViewHolder.timestamp.getLayoutParams();
-            if (message.getContactName().length() > message.getMessageContent().length()) {
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
-                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
-            } else {
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
-                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
-            }
-            savedMessageViewHolder.title.setVisibility(View.VISIBLE);
-            String temp = message.getGroupName() + " : " + message.getContactName(); // debugger complained
-            savedMessageViewHolder.title.setText(temp);
-            if (!contactColor.containsKey(message.getContactName())){
-                contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-            }
-            savedMessageViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
 
+        String temp = message.getContactName();
+        if (message.isFromGroup())  // If message is group
+            temp = message.getGroupName() + " : " + temp; // debugger complained
+
+        RelativeLayout.LayoutParams timestampLayoutParams = (RelativeLayout.LayoutParams) savedMessageViewHolder.timestamp.getLayoutParams();
+        if (temp.length() > message.getMessageContent().length()) {
+            timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
+            timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
+        } else {
+            timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
+            timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
         }
+        savedMessageViewHolder.title.setVisibility(View.VISIBLE);
+        savedMessageViewHolder.title.setText(temp);
+        if (!contactColor.containsKey(message.getContactName())){
+            contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+        }
+        savedMessageViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
+
+
         savedMessageViewHolder.content.setText(message.getMessageContent());
 
         if (message.getMessageContent().length() > 100) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) savedMessageViewHolder.sourceIcon.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
-            layoutParams.addRule(RelativeLayout.BELOW, 0);
-            savedMessageViewHolder.sourceIcon.setLayoutParams(layoutParams);
+            RelativeLayout.LayoutParams sourceIconLayoutParams = (RelativeLayout.LayoutParams) savedMessageViewHolder.sourceIcon.getLayoutParams();
+            sourceIconLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
+            sourceIconLayoutParams.addRule(RelativeLayout.BELOW, 0);
+            savedMessageViewHolder.sourceIcon.setLayoutParams(sourceIconLayoutParams);
         }
         switch (message.getSourceApp()) {
             case "WhatsApp":
