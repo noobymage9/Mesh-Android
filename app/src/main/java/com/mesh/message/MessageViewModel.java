@@ -25,7 +25,8 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadMessages();
+            if (intent.getExtras().getString(MessageActivity.CONTACT_NAME).equals(contact.getName()))
+                loadMessages();
         }
     };
 
@@ -41,7 +42,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         return messages;
     }
 
-    private void loadMessages() {
+    public void loadMessages() {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
@@ -50,8 +51,12 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         }).start();
     }
 
-    private void initialiseLocalBroadcastManager() {
+    public void initialiseLocalBroadcastManager() {
         localBroadcastManager = LocalBroadcastManager.getInstance(this.getApplication());
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.mesh.MainActivity.RECEIVE_JSON));
+    }
+
+    public void deregisterReceiver(){
+        localBroadcastManager.unregisterReceiver(broadcastReceiver);
     }
 }

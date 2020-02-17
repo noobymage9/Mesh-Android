@@ -22,12 +22,14 @@ import com.mesh.ui.home.ContactAdapter;
 import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
+    public static final String CONTACT_NAME = "Contact Name";
     private SpeechBubbleAdaptor speechBubbleAdaptor;
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private Contact contact;
     private boolean isGroup;
     private ArrayList<Message> messages;
+    private MessageViewModel messageViewModel;
 
 
     @Override
@@ -39,7 +41,7 @@ public class MessageActivity extends AppCompatActivity {
         dbManager.open();
         isGroup = dbManager.isGroup(contact.getID());
         dbManager.close();
-        MessageViewModel messageViewModel = ViewModelProviders.of
+        messageViewModel = ViewModelProviders.of
                 (this).get(MessageViewModel.class);
         messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
@@ -113,6 +115,10 @@ public class MessageActivity extends AppCompatActivity {
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
         recyclerView.scrollToPosition(messages.size() - 1);
+    }
+
+    public MessageViewModel getMessageViewModel(){
+        return this.messageViewModel;
     }
 
     public SpeechBubbleAdaptor getSpeechBubbleAdaptor(){

@@ -18,6 +18,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mesh.Database.DBManager;
 import com.mesh.Database.DatabaseHelper;
+import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -133,7 +134,9 @@ public class NotificationService extends NotificationListenerService {
         dbManager.close();
 
         // Notify HomeFragment and MessageActivity upon receiving new messages
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+        Intent intent = new Intent(MainActivity.RECEIVE_JSON);
+        intent.putExtra(MessageActivity.CONTACT_NAME, contactName);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
 
