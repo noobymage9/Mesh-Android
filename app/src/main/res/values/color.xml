@@ -149,10 +149,12 @@
     <color name="turquois">#80CBC4</color>
 
     <color name="accent">@color/Tiger</color>
-    <color name="app_bar">@color/DarkTurquois</color>
-    <color name="background">@color/White</color>
+    <color name="app_bar_background">@color/BritishBlue</color>
+    <color name="background">@color/Montfort</color>
+    <color name="card_color">@color/WinterSoldierBlue</color>
+    <color name="app_bar_items">@color/Ivory</color>
     <color name="text">@color/Black</color>
-    <color name="colorPrimary">@color/turquois</color> <!-- Original: #008577 -->
-    <color name="colorAccent">@color/turquois</color>
-    <color name="colorPrimaryDark">@color/DarkTurquois</color>
+    <color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
+    <color name="colorAccent">@color/Tiger</color>
+    <color name="colorPrimaryDark">@color/WinterSoldierBlue</color>
 </resources>

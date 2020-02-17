@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- Original: #00574B -->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:itemBackground">@color/app_bar</item>
+        <item name="android:itemBackground">@color/app_bar_background</item>
         <item name="android:itemTextAppearance">@style/popUp</item>
     </style>
 
@@ -21,7 +21,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="popUp">
-        <item name="android:textColor">@color/text</item>
+        <item name="android:textColor">@color/app_bar_items</item>
     </style>
 
     <style name="overflowMenu" parent="@style/Widget.AppCompat.ActionButton.Overflow"/>

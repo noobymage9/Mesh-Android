@@ -3,13 +3,13 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
+        <item name="android:statusBarColor">@color/Black</item>
     </style>
 
     <style name="ToolBarStyle">
-        <item name="android:textColorPrimary">@color/text</item>
-        <item name="android:textColorSecondary">@color/text</item>
-        <item name="android:actionMenuTextColor">@color/text</item>
+        <item name="android:textColorPrimary">@color/app_bar_items</item>
+        <item name="android:textColorSecondary">@color/app_bar_items</item>
+        <item name="android:actionMenuTextColor">@color/app_bar_items</item>
         <item name="android:actionOverflowMenuStyle">@style/popUp</item>
     </style>
 
@@ -18,7 +18,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item> <!-- Original: #00574B -->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:itemBackground">@color/app_bar</item>
+        <item name="android:itemBackground">@color/app_bar_background</item>
         <item name="android:itemTextAppearance">@style/popUp</item>
         <item name="android:navigationBarColor">@color/Black</item>
         <item name="android:actionOverflowButtonStyle">@style/overflowMenu</item>
