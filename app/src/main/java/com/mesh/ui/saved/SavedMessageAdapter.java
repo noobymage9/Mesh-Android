@@ -123,7 +123,8 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
                 layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
             }
             savedMessageViewHolder.title.setVisibility(View.VISIBLE);
-            savedMessageViewHolder.title.setText(message.getContactName());
+            String temp = message.getGroupName() + " : " + message.getContactName(); // debugger complained
+            savedMessageViewHolder.title.setText(temp);
             if (!contactColor.containsKey(message.getContactName())){
                 contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
             }

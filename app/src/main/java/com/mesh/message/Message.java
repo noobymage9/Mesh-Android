@@ -51,7 +51,7 @@ public class Message {
         return contactName;
     }
 
-    public boolean isFromGroup() { return !groupName.equals(""); }
+    public boolean isFromGroup() { return groupName != null; }
 
     public String getGroupName() { return groupName; }
 
