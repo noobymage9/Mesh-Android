@@ -191,7 +191,7 @@ public class DBManager {
             return new Message(
                     c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
                     getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)),
+                    getGroupName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID))),
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
                     c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
                     dateFormat.parse(c.getString
@@ -613,6 +613,10 @@ public class DBManager {
     }
 
     public String getGroupName(int groupID) {
+
+        if (groupID < 1)
+            return "";
+
         Cursor c = getGroupEntry(groupID);
 
         return c.getString(c.getColumnIndex(DatabaseHelper.GROUPS_NAME));
