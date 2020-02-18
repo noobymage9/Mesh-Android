@@ -55,6 +55,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
+        contactViewHolder.setIsRecyclable(false);
+        View background = contactViewHolder.itemView.findViewById(R.id.inner_background);
         DBManager dbManager = new DBManager(context);
         dbManager.open();
         Contact contact = contactList.get(i);
@@ -65,8 +67,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             contactName += "...";
         }
         contactViewHolder.name.setText(contactName);
-        ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
+
         if (!dbManager.isGroup(contact.getID())) {
+            ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
             for (String sourceApp : sourceApps) {
                 ImageView temp = new ImageView(context);
                 temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
@@ -84,8 +87,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 ((ViewGroup) contactViewHolder.sourceApp).addView(temp);
             }
         } else {
-            View v = contactViewHolder.itemView.findViewById(R.id.inner_background);
-            v.setBackground(context.getResources().getDrawable(R.drawable.group_background));
+            background.setBackground(context.getResources().getDrawable(R.drawable.group_background));
         }
         dbManager.close();
         //contactViewHolder.icon.setImageBitmap(ci.icon);

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +37,9 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         contactAdapter = new ContactAdapter(contactList, this.getContext());
         recyclerView.setAdapter(contactAdapter);
+        ItemDragAndDropCallback itemDragAndDropCallback = new ItemDragAndDropCallback(recyclerView);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndDropCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
 }
