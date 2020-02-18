@@ -387,11 +387,10 @@ public class DBManager {
 
     //only for individual user, no point doing for group
     public ArrayList<String> getContactMostUsedSourceApps(int userID) {
-        Cursor c = database.rawQuery("SELECT * FROM " +
-                DatabaseHelper.messageTableName + " ORDER BY (SELECT COUNT(" +
-                DatabaseHelper.MSG_SOURCE_APP + ") FROM " + DatabaseHelper.messageTableName +
-                " WHERE " + DatabaseHelper.MSG_USER_ID + " = " + userID + ") DESC GROUP BY " +
-                DatabaseHelper.MSG_SOURCE_APP, null);
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_SOURCE_APP + ", COUNT(" + DatabaseHelper.MSG_SOURCE_APP + ") AS total FROM " +
+                DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = " + userID + " GROUP BY " +
+                        DatabaseHelper.MSG_SOURCE_APP + " ORDER BY total DESC", null);
+
         c.moveToFirst();
 
         ArrayList<String> userSourceApps = new ArrayList<>();

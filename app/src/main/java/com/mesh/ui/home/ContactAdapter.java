@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,14 +25,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
-        protected ImageView icon;
         protected TextView timestamp;
+        protected View sourceApp;
+        protected ImageView icon;
 
         public ContactViewHolder(final View v) {  //
             super(v);
             name = v.findViewById(R.id.contact_name);
             icon = v.findViewById(R.id.contact_icon);
             timestamp = v.findViewById(R.id.contact_timestamp);
+            sourceApp = v.findViewById(R.id.source_apps);
             v.setOnClickListener(view -> {
                 Intent intent = new Intent(v.getContext(), MessageActivity.class);
                 intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
@@ -62,6 +65,20 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             contactName += "...";
         }
         contactViewHolder.name.setText(contactName);
+        ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
+        for (String sourceApp : sourceApps) {
+            ImageView temp = new ImageView(context);
+            temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+            switch (sourceApp) {
+                case "WhatsApp": temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground));
+                break;
+                case "Telegram": temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.telegram_logo_foreground));
+                break;
+                default: break;
+            }
+            temp.setVisibility(View.VISIBLE);
+            ((ViewGroup) contactViewHolder.sourceApp).addView(temp);
+        }
         dbManager.close();
         //contactViewHolder.icon.setImageBitmap(ci.icon);
     }
