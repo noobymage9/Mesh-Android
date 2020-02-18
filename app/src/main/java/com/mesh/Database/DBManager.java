@@ -386,10 +386,26 @@ public class DBManager {
     }
 
     //only for individual user, no point doing for group
-    public ArrayList<String> getContactMostUsedSourceApps(int userID) {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_SOURCE_APP + ", COUNT(" + DatabaseHelper.MSG_SOURCE_APP + ") AS total FROM " +
-                DatabaseHelper.messageTableName + " WHERE " + DatabaseHelper.MSG_USER_ID + " = " + userID + " GROUP BY " +
-                        DatabaseHelper.MSG_SOURCE_APP + " ORDER BY total DESC", null);
+    public ArrayList<String> getContactMostUsedSourceApps(int contactID) {
+
+        //Determine whether to compare to user ID or group ID
+        String msgTableColumnToCompare;
+        int idToCompare;
+
+        if (isGroup(contactID)) {
+            msgTableColumnToCompare = DatabaseHelper.MSG_GROUP_ID;
+            idToCompare = getGroupID(getContactName(contactID));
+        }
+        else {
+            msgTableColumnToCompare = DatabaseHelper.MSG_USER_ID;
+            idToCompare = contactID;
+        }
+
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_SOURCE_APP + ", " +
+                "COUNT(" + DatabaseHelper.MSG_SOURCE_APP + ") AS total FROM " +
+                DatabaseHelper.messageTableName + " WHERE " + msgTableColumnToCompare + " = " +
+                idToCompare + " GROUP BY " + DatabaseHelper.MSG_SOURCE_APP + " ORDER BY total DESC",
+                null);
 
         c.moveToFirst();
 
