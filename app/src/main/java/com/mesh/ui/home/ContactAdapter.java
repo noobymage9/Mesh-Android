@@ -66,18 +66,26 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
         contactViewHolder.name.setText(contactName);
         ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
-        for (String sourceApp : sourceApps) {
-            ImageView temp = new ImageView(context);
-            temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-            switch (sourceApp) {
-                case "WhatsApp": temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground));
-                break;
-                case "Telegram": temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.telegram_logo_foreground));
-                break;
-                default: break;
+        if (!dbManager.isGroup(contact.getID())) {
+            for (String sourceApp : sourceApps) {
+                ImageView temp = new ImageView(context);
+                temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                switch (sourceApp) {
+                    case "WhatsApp":
+                        temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground));
+                        break;
+                    case "Telegram":
+                        temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.telegram_logo_foreground));
+                        break;
+                    default:
+                        break;
+                }
+                temp.setVisibility(View.VISIBLE);
+                ((ViewGroup) contactViewHolder.sourceApp).addView(temp);
             }
-            temp.setVisibility(View.VISIBLE);
-            ((ViewGroup) contactViewHolder.sourceApp).addView(temp);
+        } else {
+            View v = contactViewHolder.itemView.findViewById(R.id.inner_background);
+            v.setBackground(context.getResources().getDrawable(R.drawable.group_background));
         }
         dbManager.close();
         //contactViewHolder.icon.setImageBitmap(ci.icon);

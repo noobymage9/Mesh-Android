@@ -5,9 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     card_view:cardCornerRadius="20dp"
-    android:layout_margin="5dp">
+    android:layout_margin="5dp"
+    android:longClickable="false">
 
     <RelativeLayout
+        android:id="@+id/inner_background"
         android:layout_width="match_parent"
         android:background="@color/card_color"
         android:layout_height="match_parent">
