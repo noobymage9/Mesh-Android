@@ -2,11 +2,13 @@ package com.mesh.ui.home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,27 +70,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
         contactViewHolder.name.setText(contactName);
 
-        if (!dbManager.isGroup(contact.getID())) {
-            ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
-            for (String sourceApp : sourceApps) {
-                ImageView temp = new ImageView(context);
-                temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                switch (sourceApp) {
-                    case "WhatsApp":
-                        temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground));
-                        break;
-                    case "Telegram":
-                        temp.setImageDrawable(context.getResources().getDrawable(R.mipmap.telegram_logo_foreground));
-                        break;
-                    default:
-                        break;
-                }
-                temp.setVisibility(View.VISIBLE);
-                ((ViewGroup) contactViewHolder.sourceApp).addView(temp);
+        ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
+        ImageView[] tempImages = new ImageView[sourceApps.size()];
+        for (int j = 0; j < sourceApps.size(); j++) {
+
+            tempImages[j] = new ImageView(context);
+            switch (sourceApps.get(j)) {
+                case "WhatsApp":
+                    tempImages[j].setImageDrawable(context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground));
+                    break;
+                case "Telegram":
+                    tempImages[j].setImageDrawable(context.getResources().getDrawable(R.mipmap.telegram_logo_foreground));
+                    break;
+                default:
+                    break;
             }
-        } else {
-            background.setBackground(context.getResources().getDrawable(R.drawable.group_background));
+            tempImages[j].setVisibility(View.VISIBLE);
+            tempImages[j].setId(j);
+            RelativeLayout.LayoutParams tempLayout = new RelativeLayout.LayoutParams(45, 45);
+            if (j != 0) {
+                tempLayout.addRule(RelativeLayout.LEFT_OF, tempImages[j - 1].getId());
+                tempLayout.addRule(RelativeLayout.START_OF, tempImages[j - 1].getId());
+            } else {
+                tempLayout.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            }
+            ((ViewGroup) contactViewHolder.sourceApp).addView(tempImages[j], tempLayout);
+
         }
+
         dbManager.close();
         //contactViewHolder.icon.setImageBitmap(ci.icon);
     }
