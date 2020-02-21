@@ -6,9 +6,7 @@ import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -16,14 +14,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
-import com.mesh.MainActivity;
 import com.mesh.R;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -36,7 +30,7 @@ public class SaveDialog extends Dialog {
     private ArrayList<UserCollection> userCollections;
     private  MessageActivity messageActivity;
 
-    public SaveDialog(@NonNull Context context) {
+    SaveDialog(@NonNull Context context) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.save_dialog);
@@ -79,14 +73,11 @@ public class SaveDialog extends Dialog {
 
     private void initialiseEditText() {
         editText = findViewById(R.id.add_field);
-        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    add.performClick();
-                }
-                return false;
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                add.performClick();
             }
+            return false;
         });
         editText.addTextChangedListener(new TextWatcher() {
             @Override

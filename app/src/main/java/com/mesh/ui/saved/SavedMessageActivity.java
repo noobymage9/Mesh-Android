@@ -8,13 +8,13 @@ import android.view.MenuItem;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 import com.mesh.Setting;
 import com.mesh.message.Message;
-import com.mesh.message.SpeechBubbleAdaptor;
 import com.mesh.message.UserCollection;
 
 import java.util.ArrayList;
@@ -32,8 +32,7 @@ public class SavedMessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         userCollection = getIntent().getParcelableExtra(UserGroupAdapter.USER_COLLECTION_PARCEL);
-        SavedMessageViewModel messageViewModel = ViewModelProviders.of
-                (this).get(SavedMessageViewModel.class);
+        SavedMessageViewModel messageViewModel = new ViewModelProvider(this).get(SavedMessageViewModel.class);
         messageViewModel.getMessages(userCollection).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
     }

@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 import com.mesh.message.Message;
-import com.mesh.message.SpeechBubbleAdaptor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,12 +31,12 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
     private SavedMessageActivity savedMessageActivity;
 
     public class SavedMessageViewHolder extends RecyclerView.ViewHolder{
-        protected TextView content, timestamp, title;
-        protected ImageView sourceIcon;
+        TextView content, timestamp, title;
+        ImageView sourceIcon;
         protected Message message;
-        protected View background, bubble;
+        View background, bubble;
 
-        public SavedMessageViewHolder(@NonNull View itemView) {
+        SavedMessageViewHolder(@NonNull View itemView) {
             super(itemView);
             content = itemView.findViewById(R.id.incoming_bubble_text);
             timestamp = itemView.findViewById(R.id.incoming_bubble_timestamp);
@@ -80,7 +79,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
         }
     }
 
-    public SavedMessageAdapter(ArrayList<Message> messageList, Context context) {
+    SavedMessageAdapter(ArrayList<Message> messageList, Context context) {
         this.messageList = messageList;
         this.context = context;
         this.contactColor = new HashMap<>();
@@ -159,11 +158,11 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
         return false;
     }
 
-    public boolean deleteSnackbarExist() {
+    boolean deleteSnackbarExist() {
         return deleteSnackbar != null && deleteSnackbar.isShown();
     }
 
-    public DeleteSnackbar getDeleteSnackbar() {
+    DeleteSnackbar getDeleteSnackbar() {
         return deleteSnackbar;
     }
 

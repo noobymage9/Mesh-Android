@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
 import com.mesh.message.UserCollection;
-import com.mesh.ui.home.Contact;
-import com.mesh.ui.home.ContactAdapter;
 
 import java.util.ArrayList;
 
@@ -21,12 +19,12 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.User
 
     private ArrayList<UserCollection> userCollectionList;
     private Context context;
-    public static final String USER_COLLECTION_PARCEL = "User Collection";
+    static final String USER_COLLECTION_PARCEL = "User Collection";
 
-    public class UserGroupViewHolder extends RecyclerView.ViewHolder{
+    class UserGroupViewHolder extends RecyclerView.ViewHolder{
         private TextView name;
 
-        public UserGroupViewHolder(@NonNull View itemView) {
+        UserGroupViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.usercollection_name);
             itemView.setOnClickListener(v -> {
@@ -37,7 +35,7 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.User
         }
     }
 
-    public UserGroupAdapter(ArrayList<UserCollection> userCollectionList, Context context) {
+    UserGroupAdapter(ArrayList<UserCollection> userCollectionList, Context context) {
         this.userCollectionList = userCollectionList;
         this.context = context;
     }

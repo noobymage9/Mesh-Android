@@ -1,16 +1,16 @@
 package com.mesh.message;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
@@ -41,8 +41,7 @@ public class MessageActivity extends AppCompatActivity {
         dbManager.open();
         isGroup = dbManager.isGroup(contact.getID());
         dbManager.close();
-        messageViewModel = ViewModelProviders.of
-                (this).get(MessageViewModel.class);
+        messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
     }

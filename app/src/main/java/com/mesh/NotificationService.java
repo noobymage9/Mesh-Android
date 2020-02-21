@@ -1,44 +1,38 @@
 package com.mesh;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.mesh.Database.DBManager;
-import com.mesh.Database.DatabaseHelper;
 import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.time.LocalDate;
 import java.util.regex.Pattern;
 
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NotificationService extends NotificationListenerService {
 
+    public static final String RECEIVE_JSON = "NotificationService.RECEIVE_JSON";
     private final String WHATSAPP_PACKAGE = "com.whatsapp";
     private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
-    public static final String RECEIVE_JSON = "NotificationService.RECEIVE_JSON";
     private final String ANDROID_TITLE_KEY = "android.title";
     private final String ANDROID_TEXT_KEY = "android.text";
-    private Context context;
+    private boolean listenerConnected = false;
     private String packageName, title, text, sourceApp;
+    private Context context;
     private Date currentDate;
     private DBManager dbManager;
     private ArrayList<Long> time = new ArrayList<>();
-    private boolean listenerConnected = false;
     private LocalBroadcastManager localBroadcastManager;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @RequiresApi(api = Build.VERSION_CODES.M)
@@ -56,7 +50,6 @@ public class NotificationService extends NotificationListenerService {
         initialiseLocalBroadcastManager();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onNotificationPosted(StatusBarNotification statusBarNotification) { // Reading data from notification
         // Message source can be obtained from here
@@ -85,7 +78,7 @@ public class NotificationService extends NotificationListenerService {
         if (sourceApp.length() == 0) return;
 
         // Remove initial duplicate and "New Messages" duplicate
-        if (sourceApp.equals("WhatsApp") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+        if (sourceApp.equals("WhatsApp")) {
             String[] temp = statusBarNotification.getKey().split(Pattern.quote("|"));
             if (temp[3].equals("null") && !title.contains(":")) {
                 Log.e("TEST", "TEST");

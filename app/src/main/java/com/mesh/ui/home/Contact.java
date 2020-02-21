@@ -3,7 +3,7 @@ package com.mesh.ui.home;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.sql.Blob;
+import androidx.annotation.NonNull;
 
 public class Contact implements Parcelable {
     protected int id;
@@ -57,6 +57,7 @@ public class Contact implements Parcelable {
         dest.writeString(name);
     }
 
+    @NonNull
     public String toString(){
         return this.name;
     }

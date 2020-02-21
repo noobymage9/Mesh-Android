@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -35,14 +34,14 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<Message>> getMessages(Contact contact){
+    LiveData<ArrayList<Message>> getMessages(Contact contact){
         this.contact = contact;
         messages = new MutableLiveData<>();
         loadMessages();
         return messages;
     }
 
-    public void loadMessages() {
+    void loadMessages() {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
@@ -51,12 +50,12 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         }).start();
     }
 
-    public void initialiseLocalBroadcastManager() {
+    void initialiseLocalBroadcastManager() {
         localBroadcastManager = LocalBroadcastManager.getInstance(this.getApplication());
         localBroadcastManager.registerReceiver(broadcastReceiver, new IntentFilter(com.mesh.MainActivity.RECEIVE_JSON));
     }
 
-    public void deregisterReceiver(){
+    void deregisterReceiver(){
         localBroadcastManager.unregisterReceiver(broadcastReceiver);
     }
 }

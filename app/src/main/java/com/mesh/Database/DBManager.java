@@ -1,26 +1,19 @@
 package com.mesh.Database;
 
-import android.app.ExpandableListActivity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.mesh.message.Message;
-import com.mesh.message.MessageActivity;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public class DBManager {
     private DatabaseHelper dbHelper;

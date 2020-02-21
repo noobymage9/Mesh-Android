@@ -1,12 +1,10 @@
 package com.mesh.message;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,18 +18,18 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     private ArrayList<UserCollection> userCollections;
     private Context context;
 
-    public class TagViewHolder extends RecyclerView.ViewHolder{
+    class TagViewHolder extends RecyclerView.ViewHolder{
         private CheckBox tags;
         private UserCollection userCollection;
 
-        public TagViewHolder(@NonNull View itemView) {
+        TagViewHolder(@NonNull View itemView) {
             super(itemView);
             tags = itemView.findViewById(R.id.tag_items);
             tags.setOnCheckedChangeListener((buttonView, isChecked) -> userCollection.setSelected(isChecked));
         }
     }
 
-    public TagAdapter(ArrayList<UserCollection> userCollections, Context context) {
+    TagAdapter(ArrayList<UserCollection> userCollections, Context context) {
         this.userCollections = userCollections;
         this.context = context;
     }

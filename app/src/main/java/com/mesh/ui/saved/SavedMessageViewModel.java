@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -17,7 +16,6 @@ import com.mesh.Database.DBManager;
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SavedMessageViewModel extends AndroidViewModel {
@@ -36,7 +34,7 @@ public class SavedMessageViewModel extends AndroidViewModel {
         initialiseLocalBroadcastManager();
     }
 
-    public LiveData<ArrayList<Message>> getMessages(UserCollection userCollection) {
+    LiveData<ArrayList<Message>> getMessages(UserCollection userCollection) {
         this.userCollection = userCollection;
         messages = new MutableLiveData<>();
         loadMessages();

@@ -1,16 +1,11 @@
 package com.mesh;
 
+import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-
-import com.mesh.message.Message;
-
-import java.util.ArrayList;
 
 public class Setting extends AppCompatActivity {
 

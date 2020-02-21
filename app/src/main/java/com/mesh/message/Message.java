@@ -2,7 +2,6 @@ package com.mesh.message;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
@@ -67,12 +66,12 @@ public class Message {
 
     public String getDate()
     {
-        DateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+        DateFormat date = DateFormat.getDateInstance();
         return date.format(timeStamp);
     }
 
     public String getTime() {
-        DateFormat time = new SimpleDateFormat("hh:mm a");
+        DateFormat time = DateFormat.getTimeInstance();
         return time.format(timeStamp);
     }
 

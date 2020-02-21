@@ -2,16 +2,11 @@ package com.mesh;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.wifi.p2p.WifiP2pManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -19,13 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.chip.Chip;
 import com.mesh.Database.DBManager;
 import com.mesh.Database.SortSetting;
-import com.mesh.message.MessageActivity;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -33,10 +23,10 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int numberOfSetting;
 
     public class SortOrderViewHolder extends RecyclerView.ViewHolder {
-        protected TextView settingName;
-        protected TextView settingResult;
+        TextView settingName;
+        TextView settingResult;
 
-        public SortOrderViewHolder(@NonNull View itemView) {  //
+        SortOrderViewHolder(@NonNull View itemView) {  //
             super(itemView);
             settingName = itemView.findViewById(R.id.sort_text);
             settingResult = itemView.findViewById(R.id.sort_result);
@@ -72,10 +62,10 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class DeleteNotificationViewHolder extends RecyclerView.ViewHolder {
-        protected TextView deleteNotificationName;
-        protected Switch deleteNotificationResult;
+        TextView deleteNotificationName;
+        Switch deleteNotificationResult;
 
-        public DeleteNotificationViewHolder(@NonNull View itemView) {
+        DeleteNotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             deleteNotificationName = itemView.findViewById(R.id.delete_notification_text);
             deleteNotificationResult = itemView.findViewById(R.id.delete_notification_result);
@@ -89,9 +79,9 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public class ResetViewHolder extends  RecyclerView.ViewHolder {
-        protected Button resetButton;
+        Button resetButton;
 
-        public ResetViewHolder(@NonNull View itemView) {
+        ResetViewHolder(@NonNull View itemView) {
             super(itemView);
             resetButton = itemView.findViewById(R.id.reset_button);
             resetButton.setOnClickListener(v -> {
@@ -105,7 +95,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public SettingAdapter(int numberOfSetting, Context context){
+    SettingAdapter(int numberOfSetting, Context context){
         this.numberOfSetting = numberOfSetting;
         this.context = context;
     }
@@ -140,19 +130,19 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         break;
                 }
                 dbManager.close();
-                return;
+                break;
             case 1:
                 DBManager dbManager1 = new DBManager(context);
                 dbManager1.open();
                 DeleteNotificationViewHolder deleteNotificationViewHolder = (DeleteNotificationViewHolder) viewHolder;
                 deleteNotificationViewHolder.deleteNotificationResult.setChecked(dbManager1.getDeleteNotificationSetting());
                 dbManager1.close();
-                return;
+                break;
         }
     }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         switch (i) {
             case 0:

@@ -3,20 +3,18 @@ package com.mesh.ui.home;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
-import com.mesh.message.MessageActivity;
 import com.mesh.R;
+import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
 
@@ -29,11 +27,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
         protected TextView name;
-        protected TextView timestamp;
-        protected View sourceApp;
+        TextView timestamp;
+        View sourceApp;
         protected ImageView icon;
 
-        public ContactViewHolder(final View v) {  //
+        ContactViewHolder(final View v) {  //
             super(v);
             name = v.findViewById(R.id.contact_name);
             icon = v.findViewById(R.id.contact_icon);
@@ -47,7 +45,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
     }
 
-    public ContactAdapter(ArrayList<Contact> contactList, Context context) {
+    ContactAdapter(ArrayList<Contact> contactList, Context context) {
         this.contactList = contactList;
         this.context = context;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);

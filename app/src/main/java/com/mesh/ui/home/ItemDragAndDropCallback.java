@@ -5,11 +5,9 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
-import androidx.core.content.ContextCompat;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.mesh.Database.DBManager;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
 
@@ -34,7 +32,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         // You can react for swiping items here
         // Do nothing in your case
     }
@@ -81,9 +79,9 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
     // This method gets called a lot, so don't do any expensive operations here
     @Override
     public void onChildDraw(
-            Canvas c,
-            RecyclerView recyclerView,
-            RecyclerView.ViewHolder viewHolder,
+            @NonNull Canvas c,
+            @NonNull RecyclerView recyclerView,
+            @NonNull RecyclerView.ViewHolder viewHolder,
             float dX,
             float dY,
             int actionState,

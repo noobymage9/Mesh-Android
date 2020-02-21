@@ -1,34 +1,27 @@
 package com.mesh.ui.saved;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.ContentViewCallback;
 import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar> {
+final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar> {
 
-    protected DeleteSnackbar(@NonNull ViewGroup parent, @NonNull View content, @NonNull com.google.android.material.snackbar.ContentViewCallback contentViewCallback) {
+    private DeleteSnackbar(@NonNull ViewGroup parent, @NonNull View content, @NonNull com.google.android.material.snackbar.ContentViewCallback contentViewCallback) {
         super(parent, content, contentViewCallback);
     }
 
@@ -37,7 +30,7 @@ public final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar>
         // view inflated from custom layout
         private View content;
 
-        public ContentViewCallback(View content) {
+        ContentViewCallback(View content) {
             this.content = content;
         }
 
@@ -63,7 +56,7 @@ public final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar>
         }
     }
 
-    public static DeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList, UserCollection userCollection) {
+    static DeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList, UserCollection userCollection) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View content = inflater.inflate(R.layout.save_delete_bar, parent, false);

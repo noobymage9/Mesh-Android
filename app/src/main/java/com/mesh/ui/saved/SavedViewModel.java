@@ -5,7 +5,6 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.mesh.Database.DBManager;
 import com.mesh.message.UserCollection;
@@ -20,7 +19,7 @@ public class SavedViewModel extends AndroidViewModel {
         super(application);
     }
 
-    public LiveData<ArrayList<UserCollection>> getUserCollectons() {
+    LiveData<ArrayList<UserCollection>> getUserCollectons() {
         userCollections = new MutableLiveData<>();
         loadUserCollections();
         return userCollections;
