@@ -25,7 +25,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getExtras().getString(MessageActivity.CONTACT_NAME).equals(contact.getName()))
+            if (intent.getExtras() != null && intent.getExtras().getString(MessageActivity.CONTACT_NAME).equals(contact.getName()))
                 loadMessages();
         }
     };
