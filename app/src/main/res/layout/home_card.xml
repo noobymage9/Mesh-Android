@@ -18,11 +18,11 @@
             android:id="@+id/contact_icon"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:paddingLeft="5dp"
-            android:paddingStart="5dp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:layout_centerVertical="true"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:contentDescription="@string/contact_icon_description"
             android:src="@mipmap/default_icon" />
 
@@ -57,9 +57,8 @@
             />
 
         <include
-            android:id="@+id/source_apps"
             layout="@layout/source_icon"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
