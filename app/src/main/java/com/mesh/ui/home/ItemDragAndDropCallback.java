@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
+public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     private final RecyclerView recyclerView;
 
@@ -17,8 +17,13 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
         // Choose drag and swipe directions
         // Up and down is chosen for dragging
         // Nothing is chosen for swiping
-        super(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0);
         this.recyclerView = recyclerView;
+    }
+
+    @Override
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+        return makeFlag(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.UP | ItemTouchHelper.DOWN) |
+                makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
@@ -33,8 +38,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-        // You can react for swiping items here
-        // Do nothing in your case
+        // nothing
     }
 
     // An item will be dropped into this folder
@@ -119,15 +123,18 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.SimpleCallback {
                                 )
                         );
                         */
+                        /*
                         ScaleAnimation expand = new ScaleAnimation(
-                                                          0, 1.0f,
-                                                          0, 1.0f,
-                                                          Animation.RELATIVE_TO_PARENT, 0,
-                                                          Animation.RELATIVE_TO_PARENT, 0);
+                                1.0f, 1.2f,
+                                1.0f, 1.2f,
+                                Animation.RELATIVE_TO_SELF, (float)0.5,
+                                Animation.RELATIVE_TO_SELF, (float)0.5);
+
                         expand.setDuration(250);
 
                         folder.startAnimation(expand);
 
+                         */
 
                         break;
                     }
