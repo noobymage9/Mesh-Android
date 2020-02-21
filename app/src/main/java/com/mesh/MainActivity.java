@@ -1,13 +1,9 @@
 package com.mesh;
 
-import android.app.NotificationManager;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
@@ -21,8 +17,6 @@ import com.mesh.Database.DBManager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.provider.Settings;
-import android.service.notification.StatusBarNotification;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -35,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private boolean deleteNotification;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         if (deleteNotification)
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
         initialiseToolbar();
-        initialiseSideBar();
+        initialiseNavigationDrawer();
         if (!notificationIsEnabled()) {
             initialiseAlertDialog();
         }
@@ -77,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onStart() {
         super.onStart();
@@ -93,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(findViewById(R.id.toolbar));
     }
 
-    private void initialiseSideBar() {
+    private void initialiseNavigationDrawer() {
         appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.nav_home, R.id.nav_search, R.id.nav_favourite,
                 R.id.nav_saved, R.id.nav_contact)
