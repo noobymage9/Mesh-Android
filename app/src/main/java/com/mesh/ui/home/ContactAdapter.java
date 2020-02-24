@@ -1,5 +1,6 @@
 package com.mesh.ui.home;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -38,9 +39,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             timestamp = v.findViewById(R.id.contact_timestamp);
             sourceApp = v.findViewById(R.id.source_app);
             v.setOnClickListener(view -> {
-                Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
-                v.getContext().startActivity(intent);
+                if (!ItemDragAndDropCallback.mergeSnackbar.isShown()) {
+                    Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                    intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                    v.getContext().startActivity(intent);
+                } else {
+                    ItemDragAndDropCallback.mergeSnackbar.dismiss();
+                }
             });
         }
     }
@@ -115,5 +120,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     private int getSizeInDP(int size) {
         float scale = context.getResources().getDisplayMetrics().density;
         return (int) (size*scale + 0.5f);
+    }
+
+    public void merge(int from, int to) {
+        Contact dragged = contactList.get(from);
+        Contact target = contactList.get(to);
+        //TODO merge the two contact in db
+        //notifyItemRemoved(from);
     }
 }

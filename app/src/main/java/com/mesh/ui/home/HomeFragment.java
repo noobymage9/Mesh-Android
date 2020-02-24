@@ -27,6 +27,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
+
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.getContactNames().observe(getViewLifecycleOwner(), contactList -> initialiseRecyclerView(root, contactList));
         return root;
@@ -37,7 +38,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         contactAdapter = new ContactAdapter(contactList, this.getContext());
         recyclerView.setAdapter(contactAdapter);
-        ItemDragAndDropCallback itemDragAndDropCallback = new ItemDragAndDropCallback(recyclerView);
+        ItemDragAndDropCallback itemDragAndDropCallback = new ItemDragAndDropCallback(this, recyclerView);
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndDropCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }

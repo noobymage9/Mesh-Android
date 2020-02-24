@@ -1,7 +1,6 @@
 package com.mesh.ui.home;
 
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -10,20 +9,28 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.mesh.R;
+
 import java.util.HashMap;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
+    public static MergeSnackbar mergeSnackbar;
     private final RecyclerView recyclerView;
+    private HomeFragment homeFragment;
+    private View folder;
+    private int folderPosition = -1;
     private boolean first = true;
-    HashMap<View, Boolean> booleanHashMap = new HashMap<>();
-    int childPosition = 0;
+    HashMap<View, Boolean> booleanHashMap = new HashMap<>() ;
+    int draggedFolderPosition = -1;
 
-    ItemDragAndDropCallback(RecyclerView recyclerView) {
+    ItemDragAndDropCallback(HomeFragment homeFragment, RecyclerView recyclerView) {
         // Choose drag and swipe directions
         // Up and down is chosen for dragging
         // Nothing is chosen for swiping
         this.recyclerView = recyclerView;
+        this.homeFragment = homeFragment;
     }
 
     @Override
@@ -33,11 +40,11 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        int from = viewHolder.getAdapterPosition();
-        int to = target.getAdapterPosition();
+        //int from = viewHolder.getAdapterPosition();
+        //int to = target.getAdapterPosition();
         // You can reorder items here
         // Reorder items only when target is not a folder
-        recyclerView.getAdapter().notifyItemMoved(from, to);
+        //recyclerView.getAdapter().notifyItemMoved(from, to);
         return true;
     }
 
@@ -47,7 +54,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     }
 
     // An item will be dropped into this folder
-    private View folder;
+
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
@@ -58,10 +65,11 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
             // Here you are notified that the drag operation began
 
-            childPosition = viewHolder.getAdapterPosition();
+            draggedFolderPosition = viewHolder.getAdapterPosition();
             if (folder != null) {
                 //folder.setBackgroundResource(0); // Clear former folder background
                 folder = null;
+                folderPosition = -1;
             }
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
 
@@ -78,10 +86,13 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         )
                 );
                 */
-                // TODO: 24/2/2020 Merge the two contact in DB
+                mergeSnackbar = MergeSnackbar.make(homeFragment.getActivity().findViewById(R.id.snackBar_location), Snackbar.LENGTH_INDEFINITE, draggedFolderPosition, folderPosition, recyclerView);
+                mergeSnackbar.show();
+                folder = null;
+                folderPosition = -1;
                 // You can remove item from the list here and add it to the folder
                 // Remember to notify RecyclerView about it
-                //recyclerView.getAdapter().notifyItemRemoved(childPosition);
+                //recyclerView.getAdapter().notifyItemRemoved(draggedFolderPosition);
             }
         }
     }
@@ -122,6 +133,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                     if (topWithinChild || bottomWithinChild) {
 
                         folder = child;
+                        folderPosition = i;
                         if (!booleanHashMap.get(child)) {
                             expand(child);
                         }
@@ -145,6 +157,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         if (booleanHashMap.get(child)) {
                             shrink(child);
                             folder = null;
+                            folderPosition = 1;
                         }
                         //break;
                     }
@@ -152,6 +165,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             }
         } else {
             folder = null;
+            folderPosition = -1;
             for (View view : booleanHashMap.keySet()) {
                 if (booleanHashMap.get(view)) {
                     shrink(view);
