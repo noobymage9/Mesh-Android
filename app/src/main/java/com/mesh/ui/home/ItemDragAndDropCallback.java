@@ -1,6 +1,7 @@
 package com.mesh.ui.home;
 
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
@@ -9,9 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
+
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     private final RecyclerView recyclerView;
+    private boolean first = true;
+    HashMap<View, Boolean> booleanHashMap = new HashMap<>();
 
     ItemDragAndDropCallback(RecyclerView recyclerView) {
         // Choose drag and swipe directions
@@ -22,8 +27,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeFlag(ItemTouchHelper.ACTION_STATE_IDLE, ItemTouchHelper.UP | ItemTouchHelper.DOWN) |
-                makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
+        return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.UP | ItemTouchHelper.DOWN);
     }
 
     @Override
@@ -92,7 +96,12 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             boolean isCurrentlyActive
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-
+            if (first) {
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    booleanHashMap.put(recyclerView.getChildAt(i), false);
+                }
+                first = false;
+            }
             // Here you are notified that the drag operation is in progress
 
             if (folder != null) {
@@ -100,7 +109,8 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                 folder = null;
             }
 
-            float itemActualPosition = viewHolder.itemView.getTop() + dY + viewHolder.itemView.getHeight() / 2;
+            float itemTopPosition = viewHolder.itemView.getTop() + dY;
+            float itemBottomPosition = viewHolder.itemView.getBottom() + dY;
 
             // Find folder under dragged item
             for (int i = 0; i < recyclerView.getChildCount(); i++) {
@@ -110,9 +120,14 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                 if (!child.equals(viewHolder.itemView)) {
 
                     // Accept folder which encloses item position
-                    if (child.getTop() < itemActualPosition && itemActualPosition < child.getBottom()) {
+                    boolean topWithinChild = child.getTop() < itemTopPosition && itemTopPosition < child.getBottom();
+                    boolean bottomWithinChild = child.getBottom() > itemBottomPosition && itemBottomPosition > child.getTop();
+                    if (topWithinChild || bottomWithinChild) {
 
                         folder = child;
+                        if (!booleanHashMap.get(child)) {
+                            expand(child);
+                        }
                         // Set folder background to a color indicating
                         // that an item will be dropped into it upon release
                         /*
@@ -124,23 +139,56 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         );
                         */
                         /*
-                        ScaleAnimation expand = new ScaleAnimation(
-                                1.0f, 1.2f,
-                                1.0f, 1.2f,
-                                Animation.RELATIVE_TO_SELF, (float)0.5,
-                                Animation.RELATIVE_TO_SELF, (float)0.5);
 
-                        expand.setDuration(250);
-
-                        folder.startAnimation(expand);
 
                          */
 
-                        break;
+                       // break;
+                    } else {
+                        if (booleanHashMap.get(child)) {
+                            shrink(child);
+                        }
+                        //break;
                     }
+                }
+            }
+        } else {
+            for (View view : booleanHashMap.keySet()) {
+                if (booleanHashMap.get(view)) {
+                    shrink(view);
                 }
             }
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
+
+    public void shrink(View view) {
+        ScaleAnimation shrink = new ScaleAnimation(
+                1.1f, 1.0f,
+                1.1f, 1.0f,
+                Animation.RELATIVE_TO_SELF, (float) 0.5,
+                Animation.RELATIVE_TO_SELF, (float) 0.5);
+
+        shrink.setDuration(250);
+        shrink.setFillAfter(true);
+        booleanHashMap.put(view, false);
+        view.startAnimation(shrink);
+    }
+
+    public void expand(View view) {
+        ScaleAnimation expand = new ScaleAnimation(
+                1.0f, 1.1f,
+                1.0f, 1.1f,
+                Animation.RELATIVE_TO_SELF, (float) 0.5,
+                Animation.RELATIVE_TO_SELF, (float) 0.5);
+
+        expand.setDuration(250);
+        expand.setFillAfter(true);
+        booleanHashMap.put(view, true);
+        view.startAnimation(expand);
+
+    }
+
+
+
 }
