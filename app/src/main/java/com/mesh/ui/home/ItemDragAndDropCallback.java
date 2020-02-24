@@ -17,6 +17,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     private final RecyclerView recyclerView;
     private boolean first = true;
     HashMap<View, Boolean> booleanHashMap = new HashMap<>();
+    int childPosition = 0;
 
     ItemDragAndDropCallback(RecyclerView recyclerView) {
         // Choose drag and swipe directions
@@ -52,10 +53,12 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
 
+        //Log.e("TEST", viewHolder + "");
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
 
             // Here you are notified that the drag operation began
 
+            childPosition = viewHolder.getAdapterPosition();
             if (folder != null) {
                 //folder.setBackgroundResource(0); // Clear former folder background
                 folder = null;
@@ -65,6 +68,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             // Here you are notified that the last operation ended
 
             if (folder != null) {
+
                 // Set folder background to a color indicating
                 // that an item was dropped into it
                 /*
@@ -74,12 +78,10 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         )
                 );
                 */
-
+                // TODO: 24/2/2020 Merge the two contact in DB
                 // You can remove item from the list here and add it to the folder
                 // Remember to notify RecyclerView about it
-
-                if (viewHolder != null)
-                    recyclerView.getAdapter().notifyItemRemoved(viewHolder.getAdapterPosition());
+                //recyclerView.getAdapter().notifyItemRemoved(childPosition);
             }
         }
     }
@@ -103,11 +105,6 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                 first = false;
             }
             // Here you are notified that the drag operation is in progress
-
-            if (folder != null) {
-                //folder.setBackgroundResource(0); // Clear former folder background
-                folder = null;
-            }
 
             float itemTopPosition = viewHolder.itemView.getTop() + dY;
             float itemBottomPosition = viewHolder.itemView.getBottom() + dY;
@@ -147,17 +144,20 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                     } else {
                         if (booleanHashMap.get(child)) {
                             shrink(child);
+                            folder = null;
                         }
                         //break;
                     }
                 }
             }
         } else {
+            folder = null;
             for (View view : booleanHashMap.keySet()) {
                 if (booleanHashMap.get(view)) {
                     shrink(view);
                 }
             }
+
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
