@@ -39,7 +39,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             timestamp = v.findViewById(R.id.contact_timestamp);
             sourceApp = v.findViewById(R.id.source_app);
             v.setOnClickListener(view -> {
-                if (!ItemDragAndDropCallback.mergeSnackbar.isShown()) {
+                if (ItemDragAndDropCallback.mergeSnackbar == null || !ItemDragAndDropCallback.mergeSnackbar.isShown()) {
                     Intent intent = new Intent(v.getContext(), MessageActivity.class);
                     intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
                     v.getContext().startActivity(intent);

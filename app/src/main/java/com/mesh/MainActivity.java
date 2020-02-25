@@ -4,11 +4,13 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,6 +19,9 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.mesh.Database.DBManager;
+import com.mesh.ui.home.HomeFragment;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -117,6 +122,16 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
 
-
+        for (Fragment fragment : fragmentList) {
+            if (fragment != null && fragment instanceof HomeFragment) {
+                ((HomeFragment) fragment).onBackPressed();
+            } else {
+                super.onBackPressed();
+            }
+        }
+    }
 }

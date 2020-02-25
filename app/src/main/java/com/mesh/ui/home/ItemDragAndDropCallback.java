@@ -42,8 +42,8 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         //int from = viewHolder.getAdapterPosition();
         //int to = target.getAdapterPosition();
-        // You can reorder items here
-        // Reorder items only when target is not a folder
+        //You can reorder items here
+        //Reorder items only when target is not a folder
         //recyclerView.getAdapter().notifyItemMoved(from, to);
         return true;
     }
@@ -204,5 +204,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     }
 
 
-
+    public MergeSnackbar getMergebar() {
+        return mergeSnackbar;
+    }
 }
