@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toolbar;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -27,12 +29,11 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private ItemDragAndDropCallback itemDragAndDropCallback;
     private ItemTouchHelper itemTouchHelper;
-
+    public boolean merge;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_home, container, false);
-        ((MainActivity) getActivity()).getSupportActionBar();
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.getContactNames().observe(getViewLifecycleOwner(), contactList -> initialiseRecyclerView(root, contactList));
         return root;
@@ -51,8 +52,17 @@ public class HomeFragment extends Fragment {
 
     public void onBackPressed() {
         MergeSnackbar temp = itemDragAndDropCallback.getMergebar();
-        if (temp.isShown()) {
+        if (temp != null && temp.isShown()) {
                temp.dismiss();
         }
     }
+
+    public void setMerge(boolean merge){
+        this.merge = merge;
+    }
+
+    public boolean isMerge(){
+        return merge;
+    }
+
 }

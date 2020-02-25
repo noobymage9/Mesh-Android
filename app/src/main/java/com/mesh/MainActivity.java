@@ -7,12 +7,19 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
+import android.widget.ToggleButton;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -31,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private boolean deleteNotification;
+    private boolean mergeSwitchVisible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 startActivity(new Intent(this, Setting.class));
                 return true;
+            case R.id.merge_switch:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -97,6 +107,10 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.nav_view), navController);
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            mergeSwitchVisible = destination.getId() == R.id.nav_home;
+            invalidateOptionsMenu();
+        });
     }
 
     private boolean notificationIsEnabled() {
@@ -127,11 +141,35 @@ public class MainActivity extends AppCompatActivity {
         List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
 
         for (Fragment fragment : fragmentList) {
-            if (fragment != null && fragment instanceof HomeFragment) {
+            if (fragment instanceof HomeFragment) {
                 ((HomeFragment) fragment).onBackPressed();
             } else {
                 super.onBackPressed();
             }
         }
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem mergeSwitch = menu.findItem(R.id.merge_switch);
+        if (mergeSwitchVisible) {
+            mergeSwitch.setVisible(true);
+            ((Switch) mergeSwitch.getActionView()).setOnCheckedChangeListener((buttonView, isChecked) -> {
+                HomeFragment homeFragment = null;
+                List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
+                for (Fragment fragment : fragmentList)
+                    if (fragment instanceof HomeFragment)
+                        homeFragment = (HomeFragment) fragment;
+                    if (!isChecked) {
+                        homeFragment.onBackPressed();
+                    }
+                homeFragment.setMerge(isChecked);
+            });
+        } else
+            mergeSwitch.setVisible(false);
+
+
+        return super.onPrepareOptionsMenu(menu);
+    }
+
 }

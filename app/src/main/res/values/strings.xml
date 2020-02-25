@@ -39,4 +39,5 @@
     <string name="saved">Saved</string>
     <string name="usercollection_name">This is a user collection name</string>
     <string name="search_fragment_default_search">Filter</string>
+    <string name="merge_switch">merge</string>
 </resources>

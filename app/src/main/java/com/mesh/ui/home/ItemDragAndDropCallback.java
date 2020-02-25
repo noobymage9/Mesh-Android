@@ -22,7 +22,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     private View folder;
     private int folderPosition = -1;
     private boolean first = true;
-    HashMap<View, Boolean> booleanHashMap = new HashMap<>() ;
+    HashMap<View, Boolean> booleanHashMap = new HashMap<>();
     int draggedFolderPosition = -1;
 
     ItemDragAndDropCallback(HomeFragment homeFragment, RecyclerView recyclerView) {
@@ -40,11 +40,13 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        //int from = viewHolder.getAdapterPosition();
-        //int to = target.getAdapterPosition();
-        //You can reorder items here
-        //Reorder items only when target is not a folder
-        //recyclerView.getAdapter().notifyItemMoved(from, to);
+        if (!homeFragment.isMerge()) {
+            int from = viewHolder.getAdapterPosition();
+            int to = target.getAdapterPosition();
+            //You can reorder items here
+            //Reorder items only when target is not a folder
+            recyclerView.getAdapter().notifyItemMoved(from, to);
+        }
         return true;
     }
 
@@ -60,7 +62,6 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
 
-        //Log.e("TEST", viewHolder + "");
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
 
             // Here you are notified that the drag operation began
@@ -86,8 +87,11 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         )
                 );
                 */
-                mergeSnackbar = MergeSnackbar.make(homeFragment.getActivity().findViewById(R.id.snackBar_location), Snackbar.LENGTH_INDEFINITE, draggedFolderPosition, folderPosition, recyclerView);
-                mergeSnackbar.show();
+
+                if (homeFragment.isMerge()) {
+                    mergeSnackbar = MergeSnackbar.make(homeFragment.getActivity().findViewById(R.id.snackBar_location), Snackbar.LENGTH_INDEFINITE, draggedFolderPosition, folderPosition, recyclerView);
+                    mergeSnackbar.show();
+                }
                 folder = null;
                 folderPosition = -1;
                 // You can remove item from the list here and add it to the folder
@@ -108,37 +112,38 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             int actionState,
             boolean isCurrentlyActive
     ) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-            if (first) {
-                for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                    booleanHashMap.put(recyclerView.getChildAt(i), false);
+        if (homeFragment.isMerge()) {
+            if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
+                if (first) {
+                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                        booleanHashMap.put(recyclerView.getChildAt(i), false);
+                    }
+                    first = false;
                 }
-                first = false;
-            }
-            // Here you are notified that the drag operation is in progress
+                // Here you are notified that the drag operation is in progress
 
-            float itemTopPosition = viewHolder.itemView.getTop() + dY;
-            float itemBottomPosition = viewHolder.itemView.getBottom() + dY;
+                float itemTopPosition = viewHolder.itemView.getTop() + dY + viewHolder.itemView.getHeight() / 2;
+                float itemBottomPosition = viewHolder.itemView.getBottom() + dY - viewHolder.itemView.getHeight() / 2;
 
-            // Find folder under dragged item
-            for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                View child = recyclerView.getChildAt(i);
+                // Find folder under dragged item
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    View child = recyclerView.getChildAt(i);
 
-                // Exclude dragged item from detection
-                if (!child.equals(viewHolder.itemView)) {
+                    // Exclude dragged item from detection
+                    if (!child.equals(viewHolder.itemView)) {
 
-                    // Accept folder which encloses item position
-                    boolean topWithinChild = child.getTop() < itemTopPosition && itemTopPosition < child.getBottom();
-                    boolean bottomWithinChild = child.getBottom() > itemBottomPosition && itemBottomPosition > child.getTop();
-                    if (topWithinChild || bottomWithinChild) {
+                        // Accept folder which encloses item position
+                        boolean topWithinChild = child.getTop() < itemTopPosition && itemTopPosition < child.getBottom();
+                        boolean bottomWithinChild = child.getBottom() > itemBottomPosition && itemBottomPosition > child.getTop();
+                        if (topWithinChild || bottomWithinChild) {
 
-                        folder = child;
-                        folderPosition = i;
-                        if (!booleanHashMap.get(child)) {
-                            expand(child);
-                        }
-                        // Set folder background to a color indicating
-                        // that an item will be dropped into it upon release
+                            folder = child;
+                            folderPosition = i;
+                            if (booleanHashMap.containsKey(child) && !booleanHashMap.get(child)) {
+                                expand(child);
+                            }
+                            // Set folder background to a color indicating
+                            // that an item will be dropped into it upon release
                         /*
 
                         folder.setBackgroundColor(
@@ -147,31 +152,32 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                                 )
                         );
                         */
-                        /*
+                            /*
 
 
-                         */
+                             */
 
-                       // break;
-                    } else {
-                        if (booleanHashMap.get(child)) {
-                            shrink(child);
-                            folder = null;
-                            folderPosition = 1;
+                            // break;
+                        } else {
+                            if (booleanHashMap.containsKey(child) && booleanHashMap.get(child)) {
+                                shrink(child);
+                                folder = null;
+                                folderPosition = 1;
+                            }
+                            //break;
                         }
-                        //break;
                     }
                 }
-            }
-        } else {
-            folder = null;
-            folderPosition = -1;
-            for (View view : booleanHashMap.keySet()) {
-                if (booleanHashMap.get(view)) {
-                    shrink(view);
+            } else {
+                folder = null;
+                folderPosition = -1;
+                for (View view : booleanHashMap.keySet()) {
+                    if (booleanHashMap.get(view)) {
+                        shrink(view);
+                    }
                 }
-            }
 
+            }
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
