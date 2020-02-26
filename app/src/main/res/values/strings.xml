@@ -43,4 +43,5 @@
     <string name="merge_mode">Merge Mode</string>
     <string name="swap_mode">Swap Mode</string>
     <string name="search_default_message">This is a default searched message text</string>
+    <string name="search_message_contact_name">Default Name</string>
 </resources>

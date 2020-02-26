@@ -29,14 +29,14 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
 
     public class SearchBubbleViewHolder extends RecyclerView.ViewHolder {
 
-        protected TextView messageContent, messageTimeStamp;
+        protected TextView messageContent, messageTimeStamp, messageContactName;
         protected View sourceApp;
 
         public SearchBubbleViewHolder(@NonNull View itemView) {
             super(itemView);
             messageContent = itemView.findViewById(R.id.message_content);
             messageTimeStamp = itemView.findViewById(R.id.message_timestamp);
-
+            messageContactName = itemView.findViewById(R.id.message_contact_name);
 
 
         }
@@ -52,13 +52,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
 
     @Override
     public int getItemCount() {
-        return messageList.size();
+        if (messageList != null)
+            return messageList.size();
+        return 0;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(SearchBubbleViewHolder searchBubbleViewHolder, int i) {
-
+        Message message = messageList.get(i);
+        searchBubbleViewHolder.messageContent.setText(message.getMessageContent());
+        searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
+        searchBubbleViewHolder.messageContactName.setText(message.getContactName());
     }
 
     @NonNull
