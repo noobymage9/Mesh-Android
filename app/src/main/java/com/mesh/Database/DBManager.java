@@ -10,6 +10,7 @@ import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,76 +38,6 @@ public class DBManager {
         dbHelper.close();
     }
 
-    //This table is only for contacts that exist only in groups and are not actual contacts on the
-    //user's phone. ALSO CURRENTLY NOT IN USE
-    /*************************/
-    /**User table functions**/
-    /************************/
-    /*
-    public void insertUser(String userName)
-    {
-        //Query database for duplicate name
-        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.usersTableName
-                + " WHERE " + DatabaseHelper.USER_NAME + " = '" + userName + "';", null);
-
-        if (!c.moveToFirst()) {
-            ContentValues contentValue = new ContentValues();
-            contentValue.put(DatabaseHelper.USER_NAME, userName);
-            database.insert(DatabaseHelper.usersTableName, null, contentValue);
-        }
-    }
-
-    private Cursor getLatestUserEntry()
-    {
-        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.usersTableName +
-                " ORDER BY " + DatabaseHelper.USER_ID + " DESC LIMIT 1", null);
-        c.moveToFirst();
-
-        return c;
-    }
-
-    public int getLatestUserID()
-    {
-        Cursor c = getLatestUserEntry();
-
-        return c.getInt(c.getColumnIndex(DatabaseHelper.USER_ID));
-    }
-
-    private Cursor getUserEntry(int userID)
-    {
-        Cursor c = database.rawQuery("SELECT * FROM " +
-                DatabaseHelper.usersTableName + " WHERE " + DatabaseHelper.USER_ID + " = " +
-                userID, null);
-        c.moveToFirst();
-
-        return c;
-    }
-
-    private Cursor getUserEntry(String userName)
-    {
-        Cursor c = database.rawQuery("SELECT * FROM " +
-                DatabaseHelper.usersTableName + " WHERE " + DatabaseHelper.USER_NAME + " = '" +
-                userName + "'", null);
-        c.moveToFirst();
-
-        return c;
-    }
-
-    public String getUserName(int userID)
-    {
-        Cursor c = getUserEntry(userID);
-
-        return c.getString(c.getColumnIndex(DatabaseHelper.USER_NAME));
-    }
-
-    public int getUserID(String userName)
-    {
-        Cursor c = getUserEntry(userName);
-
-        return c.getInt(c.getColumnIndex(DatabaseHelper.USER_ID));
-    }
-     */
-
     /****************************/
     /**Message table functions**/
     /***************************/
@@ -119,6 +50,7 @@ public class DBManager {
         contentValue.put(DatabaseHelper.MSG_SOURCE_APP, sourceApp);
         contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
         database.insert(DatabaseHelper.messageTableName, null, contentValue);
+        insertVirtualMessage(userID, contents, sourceApp, timeStamp);
     }
 
     //Message from groups
@@ -131,6 +63,7 @@ public class DBManager {
         contentValue.put(DatabaseHelper.MSG_SOURCE_APP, sourceApp);
         contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
         database.insert(DatabaseHelper.messageTableName, null, contentValue);
+        insertVirtualMessage(userID, groupID, contents, sourceApp, timeStamp);
     }
 
     //All messages from individual
@@ -244,6 +177,47 @@ public class DBManager {
     public void deleteFromMessageTable(int messageID) {
         database.delete(DatabaseHelper.messageTableName,
                 DatabaseHelper.MSG_ID + " = " + messageID, null);
+    }
+
+    /******************************************/
+    /**Virtual Message Search table functions**/
+    /******************************************/
+
+    private void insertVirtualMessage(int userID, String contents, String sourceApp, Date timeStamp) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
+        contentValue.put(DatabaseHelper.MSG_CONTENTS, contents);
+        contentValue.put(DatabaseHelper.MSG_SOURCE_APP, sourceApp);
+        contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
+        database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
+    }
+
+    private void insertVirtualMessage(int userID, int groupID, String contents, String sourceApp, Date timeStamp) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
+        contentValue.put(DatabaseHelper.MSG_GROUP_ID, groupID);
+        contentValue.put(DatabaseHelper.MSG_CONTENTS, contents);
+        contentValue.put(DatabaseHelper.MSG_SOURCE_APP, sourceApp);
+        contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
+        database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
+    }
+
+    public ArrayList<Message> searchMessages(String searchField)
+    {
+        ArrayList<Message> messages = new ArrayList<>();
+        Message m;
+
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
+                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE %" + searchField + "%", null);
+
+        if (c.moveToFirst()) {
+            while (c.moveToNext()) {
+                m = constructMessage(c);
+                messages.add(m);
+            }
+        }
+
+        return messages;
     }
 
     /*******************************/
