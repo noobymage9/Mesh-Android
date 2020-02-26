@@ -143,7 +143,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
-                ((HomeFragment) fragment).onBackPressed();
+                if (!((HomeFragment) fragment).onBackPressed())
+                    super.onBackPressed();
             } else {
                 super.onBackPressed();
             }
@@ -156,20 +157,20 @@ public class MainActivity extends AppCompatActivity {
         if (mergeSwitchVisible) {
             mergeSwitch.setVisible(true);
             ((Switch) mergeSwitch.getActionView()).setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if (isChecked) {
-                    Toast.makeText(this, getResources().getString(R.string.swap_mode), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, getResources().getString(R.string.merge_mode), Toast.LENGTH_SHORT).show();
-                }
                 HomeFragment homeFragment = null;
                 List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
                 for (Fragment fragment : fragmentList)
                     if (fragment instanceof HomeFragment)
                         homeFragment = (HomeFragment) fragment;
-                    if (!isChecked) {
-                        homeFragment.onBackPressed();
-                    }
+                    homeFragment.onBackPressed();
                 homeFragment.setMerge(!isChecked);
+                if (isChecked) {
+                    Toast.makeText(this, getResources().getString(R.string.swap_mode), Toast.LENGTH_SHORT).show();
+                } else {
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+                    Toast.makeText(this, getResources().getString(R.string.merge_mode), Toast.LENGTH_SHORT).show();
+                }
+
             });
         } else
             mergeSwitch.setVisible(false);
