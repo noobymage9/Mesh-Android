@@ -29,7 +29,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private ItemDragAndDropCallback itemDragAndDropCallback;
     private ItemTouchHelper itemTouchHelper;
-    public boolean merge;
+    public boolean merge = true;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
     private void initialiseRecyclerView(View root, ArrayList<Contact> contactList) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
-        contactAdapter = new ContactAdapter(contactList, this.getContext());
+        contactAdapter = new ContactAdapter(contactList, this.getContext(), this);
         recyclerView.setAdapter(contactAdapter);
         itemDragAndDropCallback = new ItemDragAndDropCallback(this, recyclerView);
         itemTouchHelper = new ItemTouchHelper(itemDragAndDropCallback);
@@ -65,4 +65,7 @@ public class HomeFragment extends Fragment {
         return merge;
     }
 
+    public ItemTouchHelper getItemTouchHelper() {
+        return itemTouchHelper;
+    }
 }

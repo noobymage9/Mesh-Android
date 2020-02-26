@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     if (!isChecked) {
                         homeFragment.onBackPressed();
                     }
-                homeFragment.setMerge(isChecked);
+                homeFragment.setMerge(!isChecked);
             });
         } else
             mergeSwitch.setVisible(false);

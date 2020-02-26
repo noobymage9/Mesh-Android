@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     private Context context;
     public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
+    private HomeFragment homeFragment;
     private int imageActualSize;
 
     public class ContactViewHolder extends RecyclerView.ViewHolder {
@@ -39,20 +41,31 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             timestamp = v.findViewById(R.id.contact_timestamp);
             sourceApp = v.findViewById(R.id.source_app);
             v.setOnClickListener(view -> {
-                if (ItemDragAndDropCallback.mergeSnackbar == null || !ItemDragAndDropCallback.mergeSnackbar.isShown()) {
-                    Intent intent = new Intent(v.getContext(), MessageActivity.class);
-                    intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
-                    v.getContext().startActivity(intent);
-                } else {
-                    ItemDragAndDropCallback.mergeSnackbar.dismiss();
+                if (homeFragment.isMerge()) {
+                    if (ItemDragAndDropCallback.mergeSnackbar == null || !ItemDragAndDropCallback.mergeSnackbar.isShown()) {
+                        Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                        intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                        v.getContext().startActivity(intent);
+                    } else {
+                        ItemDragAndDropCallback.mergeSnackbar.dismiss();
+                    }
                 }
+            });
+            v.setOnTouchListener((v1, event) -> {
+                if (!homeFragment.isMerge()) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        homeFragment.getItemTouchHelper().startDrag(ContactViewHolder.this);
+                    }
+                }
+                return false;
             });
         }
     }
 
-    ContactAdapter(ArrayList<Contact> contactList, Context context) {
+    ContactAdapter(ArrayList<Contact> contactList, Context context, HomeFragment homeFragment) {
         this.contactList = contactList;
         this.context = context;
+        this.homeFragment = homeFragment;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
     }
 
@@ -78,23 +91,30 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
         ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
         int j = 0;
-        while (j <sourceApps.size()) {
+        while (j < sourceApps.size()) {
             Drawable temp = null;
-            switch (sourceApps.get(j)){
-                case "WhatsApp": temp = context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground);
-                break;
-                case "Telegram": temp = context.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
-                break;
-                default: break;
+            switch (sourceApps.get(j)) {
+                case "WhatsApp":
+                    temp = context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground);
+                    break;
+                case "Telegram":
+                    temp = context.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
+                    break;
+                default:
+                    break;
             }
             switch (j) {
-                case 0: contactViewHolder.sourceApp.findViewById(R.id.first_source_app).setBackground(temp);
-                break;
-                case 1: contactViewHolder.sourceApp.findViewById(R.id.second_source_app).setBackground(temp);
-                break;
-                case 2: contactViewHolder.sourceApp.findViewById(R.id.third_source_app).setBackground(temp);
-                break;
-                default: break;
+                case 0:
+                    contactViewHolder.sourceApp.findViewById(R.id.first_source_app).setBackground(temp);
+                    break;
+                case 1:
+                    contactViewHolder.sourceApp.findViewById(R.id.second_source_app).setBackground(temp);
+                    break;
+                case 2:
+                    contactViewHolder.sourceApp.findViewById(R.id.third_source_app).setBackground(temp);
+                    break;
+                default:
+                    break;
             }
             j++;
         }
@@ -119,7 +139,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     private int getSizeInDP(int size) {
         float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (size*scale + 0.5f);
+        return (int) (size * scale + 0.5f);
     }
 
     public void merge(int from, int to) {
