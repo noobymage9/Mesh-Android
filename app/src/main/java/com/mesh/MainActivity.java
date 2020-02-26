@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
@@ -155,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
         if (mergeSwitchVisible) {
             mergeSwitch.setVisible(true);
             ((Switch) mergeSwitch.getActionView()).setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if (isChecked) {
+                    Toast.makeText(this, getResources().getString(R.string.swap_mode), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, getResources().getString(R.string.merge_mode), Toast.LENGTH_SHORT).show();
+                }
                 HomeFragment homeFragment = null;
                 List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
                 for (Fragment fragment : fragmentList)
