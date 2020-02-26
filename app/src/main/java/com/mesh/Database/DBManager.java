@@ -204,11 +204,15 @@ public class DBManager {
 
     public ArrayList<Message> searchMessages(String searchField)
     {
+
+        if (searchField == null || searchField.equals(""))
+            return null;
+
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
 
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
-                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE %" + searchField + "%", null);
+                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"%" + searchField + "%\"", null);
 
         if (c.moveToFirst()) {
             while (c.moveToNext()) {

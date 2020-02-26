@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String userCollectionsTableName = "User_Collections";
     public static final String settingsTableName = "Settings";
     public static final String messageSearchTableName = "Message_Search";
+    public static final String contactMergeStatusTable = "Merged_Contacts";
 
     /***************************/
     /**Database table columns**/
