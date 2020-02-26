@@ -21,6 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String groupsTableName = "Groups";
     public static final String userCollectionsTableName = "User_Collections";
     public static final String settingsTableName = "Settings";
+    public static final String messageSearchTableName = "Message_Search";
 
     /***************************/
     /**Database table columns**/
@@ -107,6 +108,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLLECTIONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLLECTIONS_NAME + " STRING);";
 
+    static final String createSearchMessageTable = "CREATE VIRTUAL TABLE " + messageSearchTableName +
+            " USING fts4 (" +  MSG_ID + ", " +
+            MSG_GROUP_ID + ", " +
+            MSG_USER_ID + ", " +
+            MSG_CONTENTS + ", " +
+            MSG_SOURCE_APP + ", " +
+            MSG_TIMESTAMP + ")";
+
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
@@ -121,6 +130,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createGroupsTable);
         db.execSQL(createUserCollectionsTable);
         db.execSQL(createSettingsTable);
+        db.execSQL(createSearchMessageTable);
         //Initializing default settings for app
         ContentValues cv = new ContentValues();
         cv.put(SETTINGS_CONTACT_SORT_ORDER, defaultSortContactSetting);
