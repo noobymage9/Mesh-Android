@@ -47,7 +47,7 @@ public class SearchFragment extends Fragment {
         this.messages = messageList;
         recyclerView = root.findViewById(R.id.search_recycler_view);
         recyclerView.setHasFixedSize(true);
-        searchAdapter = new SearchAdapter(messages, getContext());
+        searchAdapter = new SearchAdapter(messages, this);
         recyclerView.setAdapter(searchAdapter);
         if (messageList != null)
             resetRecyclerView();

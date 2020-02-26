@@ -24,19 +24,20 @@ import java.util.Random;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubbleViewHolder> {
 
     private ArrayList<Message> messageList;
-    private Context context;
+    private SearchFragment searchFragment;
     private HashMap<String, Integer> contactColor;
 
     public class SearchBubbleViewHolder extends RecyclerView.ViewHolder {
 
         protected TextView messageContent, messageTimeStamp, messageContactName;
-        protected View sourceApp;
+        protected ImageView sourceApp;
 
         public SearchBubbleViewHolder(@NonNull View itemView) {
             super(itemView);
             messageContent = itemView.findViewById(R.id.message_content);
             messageTimeStamp = itemView.findViewById(R.id.message_timestamp);
             messageContactName = itemView.findViewById(R.id.message_contact_name);
+            sourceApp = itemView.findViewById(R.id.first_source_app);
 
 
         }
@@ -45,9 +46,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
 
 
 
-    public SearchAdapter(ArrayList<Message> messageList, Context context) {
+    public SearchAdapter(ArrayList<Message> messageList, SearchFragment searchFragment) {
         this.messageList = messageList;
-        this.context = context;
+        this.searchFragment = searchFragment;
     }
 
     @Override
@@ -64,6 +65,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
         searchBubbleViewHolder.messageContent.setText(message.getMessageContent());
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());
+        switch(message.getSourceApp()) {
+            case "WhatsApp": searchBubbleViewHolder.sourceApp.setImageResource(R.mipmap.whatsapp_logo_foreground);
+            break;
+            case "Telegram": searchBubbleViewHolder.sourceApp.setImageResource(R.mipmap.telegram_logo_foreground);
+            break;
+            default: break;
+        }
     }
 
     @NonNull
