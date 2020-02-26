@@ -4,23 +4,16 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.Toast;
-import android.widget.ToggleButton;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -143,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
-                if (!((HomeFragment) fragment).onBackPressed())
+                if (!((HomeFragment) fragment).dismissSnackbar())
                     super.onBackPressed();
             } else {
                 super.onBackPressed();
@@ -162,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                 for (Fragment fragment : fragmentList)
                     if (fragment instanceof HomeFragment)
                         homeFragment = (HomeFragment) fragment;
-                    homeFragment.onBackPressed();
+                    homeFragment.dismissSnackbar();
                 homeFragment.setMerge(!isChecked);
                 if (isChecked) {
                     Toast.makeText(this, getResources().getString(R.string.swap_mode), Toast.LENGTH_SHORT).show();

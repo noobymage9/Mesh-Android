@@ -33,6 +33,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         TextView timestamp;
         View sourceApp;
         protected ImageView icon;
+        boolean expanded = false;
 
         ContactViewHolder(final View v) {  //
             super(v);
@@ -42,12 +43,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             sourceApp = v.findViewById(R.id.source_app);
             v.setOnClickListener(view -> {
                 if (homeFragment.isMerge()) {
-                    if (ItemDragAndDropCallback.mergeSnackbar == null || !ItemDragAndDropCallback.mergeSnackbar.isShown()) {
+                    if (homeFragment.getItemDragAndDropCallback().getMergebar() == null || !homeFragment.getItemDragAndDropCallback().getMergebar().isShown()) {
                         Intent intent = new Intent(v.getContext(), MessageActivity.class);
                         intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
                         v.getContext().startActivity(intent);
                     } else {
-                        ItemDragAndDropCallback.mergeSnackbar.dismiss();
+                        homeFragment.getItemDragAndDropCallback().getMergebar().dismiss();
                     }
                 }
             });
@@ -64,6 +65,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 }
                 return false;
             });
+        }
+
+        public boolean getExpanded(){
+            return this.expanded;
+        }
+
+        public void setExpanded(boolean expanded) {
+            this.expanded = expanded;
         }
     }
 

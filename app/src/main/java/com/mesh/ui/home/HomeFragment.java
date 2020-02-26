@@ -50,11 +50,13 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void onBackPressed() {
+    public boolean dismissSnackbar() {
         MergeSnackbar temp = itemDragAndDropCallback.getMergebar();
         if (temp != null && temp.isShown()) {
                temp.dismiss();
+               return true;
         }
+        return false;
     }
 
     public void setMerge(boolean merge){
@@ -67,5 +69,9 @@ public class HomeFragment extends Fragment {
 
     public ItemTouchHelper getItemTouchHelper() {
         return itemTouchHelper;
+    }
+
+    public ItemDragAndDropCallback getItemDragAndDropCallback() {
+        return itemDragAndDropCallback;
     }
 }

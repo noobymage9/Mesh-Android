@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
-    public static MergeSnackbar mergeSnackbar;
+    private MergeSnackbar mergeSnackbar;
     private final RecyclerView recyclerView;
     private HomeFragment homeFragment;
     private View folder;
@@ -114,12 +114,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     ) {
         if (homeFragment.isMerge()) {
             if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-                if (first) {
-                    for (int i = 0; i < recyclerView.getChildCount(); i++) {
-                        booleanHashMap.put(recyclerView.getChildAt(i), false);
-                    }
-                    first = false;
-                }
+
                 // Here you are notified that the drag operation is in progress
 
                 float itemTopPosition = viewHolder.itemView.getTop() + dY + viewHolder.itemView.getHeight() / 2;
@@ -128,7 +123,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                 // Find folder under dragged item
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     View child = recyclerView.getChildAt(i);
-
+                    RecyclerView.ViewHolder childView = recyclerView.getChildViewHolder(child);
                     // Exclude dragged item from detection
                     if (!child.equals(viewHolder.itemView)) {
 
@@ -139,8 +134,9 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
                             folder = child;
                             folderPosition = i;
-                            if (booleanHashMap.containsKey(child) && !booleanHashMap.get(child)) {
+                            if (!((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
                                 expand(child);
+                                ((ContactAdapter.ContactViewHolder) childView).setExpanded(true);
                             }
                             // Set folder background to a color indicating
                             // that an item will be dropped into it upon release
@@ -159,9 +155,10 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
                             // break;
                         } else {
-                            if (booleanHashMap.containsKey(child) && booleanHashMap.get(child)) {
+                            if (((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
                                 shrink(child);
                                 folder = null;
+                                ((ContactAdapter.ContactViewHolder) childView).setExpanded(false);
                                 folderPosition = 1;
                             }
                             //break;
@@ -171,9 +168,12 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             } else {
                 folder = null;
                 folderPosition = -1;
-                for (View view : booleanHashMap.keySet()) {
-                    if (booleanHashMap.get(view)) {
-                        shrink(view);
+                for (int i = 0; i < recyclerView.getChildCount(); i++) {
+                    View child = recyclerView.getChildAt(i);
+                    RecyclerView.ViewHolder childView = recyclerView.getChildViewHolder(child);
+                    if (((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
+                        shrink(child);
+                        ((ContactAdapter.ContactViewHolder) childView).setExpanded(false);
                     }
                 }
 
@@ -191,7 +191,6 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
         shrink.setDuration(250);
         shrink.setFillAfter(true);
-        booleanHashMap.put(view, false);
         view.startAnimation(shrink);
     }
 
@@ -204,11 +203,14 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
         expand.setDuration(250);
         expand.setFillAfter(true);
-        booleanHashMap.put(view, true);
         view.startAnimation(expand);
 
     }
 
+    @Override
+    public int interpolateOutOfBoundsScroll(@NonNull RecyclerView recyclerView, int viewSize, int viewSizeOutOfBounds, int totalSize, long msSinceStartScroll) {
+        return super.interpolateOutOfBoundsScroll(recyclerView, viewSize * 2, viewSizeOutOfBounds, totalSize, msSinceStartScroll);
+    }
 
     public MergeSnackbar getMergebar() {
         return mergeSnackbar;
