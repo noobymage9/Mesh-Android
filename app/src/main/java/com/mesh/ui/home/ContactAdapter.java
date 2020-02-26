@@ -55,7 +55,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 if (!homeFragment.isMerge()) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         homeFragment.getItemTouchHelper().startDrag(ContactViewHolder.this);
+                        return true;
                     }
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    v.performClick();
+                    return true;
                 }
                 return false;
             });
