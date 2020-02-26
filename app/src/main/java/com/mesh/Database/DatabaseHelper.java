@@ -55,6 +55,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
     public static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
 
+    public static final String MERGE_ID = "Merge_Status_ID";
+
     /**************************/
     /**Default Setting Values**/
     /**************************/
