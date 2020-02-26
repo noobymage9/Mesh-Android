@@ -1,6 +1,7 @@
 package com.mesh.ui.home;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mesh.MainActivity;
 import com.mesh.R;
 
@@ -30,6 +33,8 @@ public class HomeFragment extends Fragment {
     private ItemDragAndDropCallback itemDragAndDropCallback;
     private ItemTouchHelper itemTouchHelper;
     public boolean merge = true;
+    private MergeSnackbar mergeSnackbar;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -50,13 +55,11 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public boolean dismissSnackbar() {
-        MergeSnackbar temp = itemDragAndDropCallback.getMergebar();
-        if (temp != null && temp.isShown()) {
-               temp.dismiss();
-               return true;
+    public void dismissSnackbar() {
+        if (mergeSnackbar != null && mergeSnackbar.isShown()) {
+            mergeSnackbar.dismiss();
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
         }
-        return false;
     }
 
     public void setMerge(boolean merge){
@@ -73,5 +76,14 @@ public class HomeFragment extends Fragment {
 
     public ItemDragAndDropCallback getItemDragAndDropCallback() {
         return itemDragAndDropCallback;
+    }
+
+    public void displaySnackBar(int draggedFolderPosition, int folderPosition) {
+        mergeSnackbar = MergeSnackbar.make(getActivity().findViewById(R.id.snackBar_location), Snackbar.LENGTH_INDEFINITE, draggedFolderPosition, folderPosition, recyclerView);
+        mergeSnackbar.show();
+    }
+
+    public MergeSnackbar getMergeSnackbar(){
+        return mergeSnackbar;
     }
 }

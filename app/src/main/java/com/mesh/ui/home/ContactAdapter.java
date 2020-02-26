@@ -43,12 +43,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             sourceApp = v.findViewById(R.id.source_app);
             v.setOnClickListener(view -> {
                 if (homeFragment.isMerge()) {
-                    if (homeFragment.getItemDragAndDropCallback().getMergebar() == null || !homeFragment.getItemDragAndDropCallback().getMergebar().isShown()) {
+                    if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
                         Intent intent = new Intent(v.getContext(), MessageActivity.class);
                         intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
                         v.getContext().startActivity(intent);
                     } else {
-                        homeFragment.getItemDragAndDropCallback().getMergebar().dismiss();
+                        homeFragment.getMergeSnackbar().dismiss();
                     }
                 }
             });

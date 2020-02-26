@@ -1,28 +1,29 @@
 package com.mesh.ui.home;
 
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
 import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mesh.MainActivity;
 import com.mesh.R;
 
 import java.util.HashMap;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
-    private MergeSnackbar mergeSnackbar;
     private final RecyclerView recyclerView;
     private HomeFragment homeFragment;
     private View folder;
     private int folderPosition = -1;
-    private boolean first = true;
-    HashMap<View, Boolean> booleanHashMap = new HashMap<>();
     int draggedFolderPosition = -1;
 
     ItemDragAndDropCallback(HomeFragment homeFragment, RecyclerView recyclerView) {
@@ -40,13 +41,13 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        if (!homeFragment.isMerge()) {
-            int from = viewHolder.getAdapterPosition();
-            int to = target.getAdapterPosition();
-            //You can reorder items here
-            //Reorder items only when target is not a folder
-            recyclerView.getAdapter().notifyItemMoved(from, to);
-        }
+
+        int from = viewHolder.getAdapterPosition();
+        int to = target.getAdapterPosition();
+        //You can reorder items here
+        //Reorder items only when target is not a folder
+        recyclerView.getAdapter().notifyItemMoved(from, to);
+
         return true;
     }
 
@@ -74,6 +75,9 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
             }
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
 
+            if (homeFragment.isMerge()) {
+                LocalBroadcastManager.getInstance(homeFragment.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+            }
             // Here you are notified that the last operation ended
 
             if (folder != null) {
@@ -89,9 +93,9 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                 */
 
                 if (homeFragment.isMerge()) {
-                    mergeSnackbar = MergeSnackbar.make(homeFragment.getActivity().findViewById(R.id.snackBar_location), Snackbar.LENGTH_INDEFINITE, draggedFolderPosition, folderPosition, recyclerView);
-                    mergeSnackbar.show();
+                    homeFragment.displaySnackBar(draggedFolderPosition, folderPosition);
                 }
+
                 folder = null;
                 folderPosition = -1;
                 // You can remove item from the list here and add it to the folder
@@ -114,7 +118,6 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     ) {
         if (homeFragment.isMerge()) {
             if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-
                 // Here you are notified that the drag operation is in progress
 
                 float itemTopPosition = viewHolder.itemView.getTop() + dY + viewHolder.itemView.getHeight() / 2;
@@ -210,9 +213,5 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     @Override
     public int interpolateOutOfBoundsScroll(@NonNull RecyclerView recyclerView, int viewSize, int viewSizeOutOfBounds, int totalSize, long msSinceStartScroll) {
         return super.interpolateOutOfBoundsScroll(recyclerView, viewSize * 2, viewSizeOutOfBounds, totalSize, msSinceStartScroll);
-    }
-
-    public MergeSnackbar getMergebar() {
-        return mergeSnackbar;
     }
 }

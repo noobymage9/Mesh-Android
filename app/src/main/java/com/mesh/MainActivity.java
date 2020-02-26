@@ -136,8 +136,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
-                if (!((HomeFragment) fragment).dismissSnackbar())
-                    super.onBackPressed();
+                ((HomeFragment) fragment).dismissSnackbar();
             } else {
                 super.onBackPressed();
             }
