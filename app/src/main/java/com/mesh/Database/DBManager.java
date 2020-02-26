@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
@@ -210,17 +211,21 @@ public class DBManager {
 
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
-        if (searchField == null || searchField.equals("")) return null;
+
+        if (searchField == null || searchField.equals(""))
+            return null;
+
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
-                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"" + searchField + "%\"", null);
+                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"%" + searchField + "%\"", null);
 
         if (c.moveToFirst()) {
-            while (c.moveToNext()) {
+            do {
                 m = constructMessage(c);
                 messages.add(m);
-            }
+            } while (c.moveToNext());
         }
 
+        Log.e("Messages", messages +"");
         return messages;
     }
 
