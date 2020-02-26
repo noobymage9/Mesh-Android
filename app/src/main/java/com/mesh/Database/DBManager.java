@@ -212,7 +212,7 @@ public class DBManager {
         Message m;
         if (searchField == null || searchField.equals("")) return null;
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
-                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"%" + searchField + "_%\"", null);
+                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"" + searchField + "%\"", null);
 
         if (c.moveToFirst()) {
             while (c.moveToNext()) {
