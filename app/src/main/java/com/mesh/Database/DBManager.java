@@ -434,7 +434,7 @@ public class DBManager {
         Cursor c;
         ArrayList<Contact> contacts = new ArrayList<>();
 
-        if (true) {
+        if (!getCustomContactSortSetting()) {
             switch (setting) {
                 case Recency:
                     c = getAllContactsSortByRecency();

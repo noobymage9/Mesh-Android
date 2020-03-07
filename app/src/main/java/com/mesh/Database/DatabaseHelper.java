@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 28;
+    static int databaseVersion = 29;
 
     /****************************/
     /**Database table creation**/
@@ -122,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN, " +
-            SETTINGS_CUSTOM_CONTACT_ORDER + " BOOLEAN)";
+            SETTINGS_CUSTOM_CONTACT_ORDER + " BOOLEAN);";
 
     @Override
     public void onCreate(SQLiteDatabase db)
