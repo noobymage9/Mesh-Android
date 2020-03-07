@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private boolean deleteNotification;
     private boolean mergeSwitchVisible;
+    private Toast switchToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         if (!notificationIsEnabled()) {
             initialiseAlertDialog();
         }
+        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
     }
 
 
@@ -154,13 +157,15 @@ public class MainActivity extends AppCompatActivity {
                 for (Fragment fragment : fragmentList)
                     if (fragment instanceof HomeFragment)
                         homeFragment = (HomeFragment) fragment;
-                    homeFragment.dismissSnackbar();
+                homeFragment.dismissSnackbar();
                 homeFragment.setMerge(!isChecked);
                 if (isChecked) {
-                    Toast.makeText(this, getResources().getString(R.string.swap_mode), Toast.LENGTH_SHORT).show();
+                    switchToast.setText(R.string.swap_mode);
+                    switchToast.show();
                 } else {
-                    LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
-                    Toast.makeText(this, getResources().getString(R.string.merge_mode), Toast.LENGTH_SHORT).show();
+                    goToHome();
+                    switchToast.setText(R.string.merge_mode);
+                    switchToast.show();
                 }
 
             });
@@ -170,5 +175,10 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onPrepareOptionsMenu(menu);
     }
+
+    public void goToHome() {
+         navController.navigate(R.id.nav_home);
+    }
+
 
 }
