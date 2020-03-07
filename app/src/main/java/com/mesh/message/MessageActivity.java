@@ -8,14 +8,13 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
-import com.mesh.Setting;
+import com.mesh.SettingActivity;
 import com.mesh.ui.home.Contact;
 import com.mesh.ui.home.ContactAdapter;
 
@@ -60,7 +59,7 @@ public class MessageActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.action_settings:
-                Intent i = new Intent(this, Setting.class);
+                Intent i = new Intent(this, SettingActivity.class);
                 startActivity(i);
                 return true;
             default:

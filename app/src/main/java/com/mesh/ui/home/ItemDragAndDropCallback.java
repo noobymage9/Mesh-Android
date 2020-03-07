@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
@@ -47,7 +49,14 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
         //You can reorder items here
         //Reorder items only when target is not a folder
         recyclerView.getAdapter().notifyItemMoved(from, to);
-
+        if (!homeFragment.isMerge()) {
+            DBManager dbManager = new DBManager(homeFragment.getContext());
+            dbManager.open();
+            ArrayList<Contact> contactList = ((ContactAdapter) recyclerView.getAdapter()).getContactList();
+            dbManager.swapContactPositions(contactList.get(from).getID(), contactList.get(to).getID());
+            dbManager.updateCustomContactOrderSetting(true);
+            dbManager.close();
+        }
         return true;
     }
 

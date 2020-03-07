@@ -34,7 +34,7 @@
             android:name=".message.MessageActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".Setting"
+        <activity android:name=".SettingActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity

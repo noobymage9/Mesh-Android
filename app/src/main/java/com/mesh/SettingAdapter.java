@@ -41,6 +41,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             dbManager.open();
                             dbManager.updateContactSortSetting(SortSetting.Recency);
                             settingResult.setText(R.string.sort_default);
+                            dbManager.updateCustomContactOrderSetting(false);
                             dbManager.close();
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
                             break;
@@ -49,6 +50,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             dbManager1.open();
                             dbManager1.updateContactSortSetting(SortSetting.Frequency);
                             settingResult.setText(R.string.sort_frequency);
+                            dbManager1.updateCustomContactOrderSetting(false);
                             dbManager1.close();
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
                             break;

@@ -9,11 +9,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.R;
-import com.mesh.Setting;
+import com.mesh.SettingActivity;
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 
@@ -51,7 +50,7 @@ public class SavedMessageActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             case R.id.action_settings:
-                Intent i = new Intent(this, Setting.class);
+                Intent i = new Intent(this, SettingActivity.class);
                 startActivity(i);
                 return true;
             default:

@@ -163,4 +163,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         //TODO merge the two contact in db
         //notifyItemRemoved(from);
     }
+
+    public ArrayList<Contact> getContactList() {
+        return contactList;
+    }
 }

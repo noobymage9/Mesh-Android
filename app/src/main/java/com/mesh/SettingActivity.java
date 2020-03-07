@@ -7,7 +7,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class Setting extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity {
 
     private final int NUMBER_OF_SETTING = 3;
     private ActionBar actionBar;

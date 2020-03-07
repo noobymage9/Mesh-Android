@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {  // Setting Button
         switch (item.getItemId()) {
             case R.id.action_settings:
-                startActivity(new Intent(this, Setting.class));
+                startActivity(new Intent(this, SettingActivity.class));
                 return true;
             case R.id.merge_switch:
                 return true;
