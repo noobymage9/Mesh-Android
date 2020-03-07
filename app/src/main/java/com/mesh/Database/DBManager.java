@@ -11,7 +11,9 @@ import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
 
+
 import java.lang.reflect.Array;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,8 +23,7 @@ public class DBManager {
     private DatabaseHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
-    SimpleDateFormat dateFormat = new SimpleDateFormat
-            ("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
     SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
 
     public DBManager(Context c) {
@@ -37,13 +38,8 @@ public class DBManager {
 
     public void close() {
         dbHelper.close();
-    }
-
-    /****************************/
-    /**Message table functions**/
-    /***************************/
-
-    //Message from individuals
+    }/****************************//**Message table functions**/
+    /***************************/ /*Message from individuals*/
     public void insertMessage(int userID, String contents, String sourceApp, Date timeStamp) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
@@ -52,11 +48,9 @@ public class DBManager {
         contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
         database.insert(DatabaseHelper.messageTableName, null, contentValue);
         insertVirtualMessage(userID, contents, sourceApp, timeStamp);
-    }
+    }/*Message from groups*/
 
-    //Message from groups
-    public void insertMessage(int userID, int groupID,
-                              String contents, String sourceApp, Date timeStamp) {
+    public void insertMessage(int userID, int groupID, String contents, String sourceApp, Date timeStamp) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.MSG_GROUP_ID, groupID);
         contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
@@ -65,73 +59,44 @@ public class DBManager {
         contentValue.put(DatabaseHelper.MSG_TIMESTAMP, dateFormat.format(timeStamp));
         database.insert(DatabaseHelper.messageTableName, null, contentValue);
         insertVirtualMessage(userID, groupID, contents, sourceApp, timeStamp);
-    }
+    }/*All messages from individual*/
 
-    //All messages from individual
     private Cursor getAllMessagesFromUserDB(int userID) {
-        Cursor c = database.rawQuery("SELECT * FROM "
-                + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID +
-                " = " + userID, null);
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_USER_ID + " = " + userID, null);
         c.moveToFirst();
-
         return c;
-    }
+    }/*All messages from group*/
 
-    //All messages from group
     private Cursor getAllMessagesFromGroupDB(int groupID) {
-        Cursor c = database.rawQuery("SELECT * FROM "
-                + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_GROUP_ID +
-                " = " + groupID, null);
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_GROUP_ID + " = " + groupID, null);
         c.moveToFirst();
-
         return c;
     }
 
     private Cursor getMessageTableEntry(int messageID) {
-        Cursor c = database.rawQuery("SELECT * FROM "
-                + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_ID +
-                " = " + messageID, null);
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageTableName + " where " + DatabaseHelper.MSG_ID + " = " + messageID, null);
         c.moveToFirst();
-
         return c;
     }
 
     private Message constructMessage(Cursor c) {
         try {
-            return new Message(
-                    c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                    getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                    dateFormat.parse(c.getString
-                            (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
+            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)), getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))), c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)), dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
     private Message constructMessageWithTag(Cursor c, int tag) {
         try {
-            return new Message(
-                    c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
-                    getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
-                    getGroupName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID))),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
-                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
-                    dateFormat.parse(c.getString
-                            (c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))),
-                    tag);
+            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)), getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))), getGroupName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID))), c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)), dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))), tag);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return null;
-    }
+    }/*Get all messages for 1 user*/
 
-    //Get all messages for 1 user
     public ArrayList<Message> getMessages(int contactID) {
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
@@ -139,22 +104,14 @@ public class DBManager {
         if (isGroup(contactID)) {
             String groupName = getContactName(contactID);
             c = getAllMessagesFromGroupDB(getGroupID(groupName));
-        }
-        else
-            c = getAllMessagesFromUserDB(contactID);
-
-        if (c.moveToFirst()) //c.getCount doesnt work, movetofirst resets cursor when view is created
-        {
-            do {
-                try {
-                    m = constructMessage(c);
-                    messages.add(m);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+        } else c = getAllMessagesFromUserDB(contactID);
+        if (c.moveToFirst()) /*c.getCount doesnt work, movetofirst resets cursor when view is created*/
+            do try {
+                m = constructMessage(c);
+                messages.add(m);
+            } catch (Exception e) {
+                e.printStackTrace();
             } while (c.moveToNext());
-        }
-
         return messages;
     }
 
@@ -203,8 +160,7 @@ public class DBManager {
         database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
     }
 
-    public ArrayList<Message> searchMessages(String searchField)
-    {
+    public ArrayList<Message> searchMessages(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
@@ -225,7 +181,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
-        Log.e("Messages", messages +"");
+        Log.e("Messages", messages + "");
         return messages;
     }
 
@@ -265,7 +221,7 @@ public class DBManager {
                                 (messageTagsTableCursor.getColumnIndex(DatabaseHelper.MSGTAG_MSG_ID)));
                 currentMessage = constructMessageWithTag(messageTableCursor,
                         messageTagsTableCursor.getInt(messageTagsTableCursor.getColumnIndex(
-                        DatabaseHelper.MSGTAG_ID)));
+                                DatabaseHelper.MSGTAG_ID)));
                 messages.add(currentMessage);
             } while (messageTagsTableCursor.moveToNext());
         }
@@ -332,8 +288,8 @@ public class DBManager {
     //Theres 2 types of contact with the same name:
     //1.Contact that messages you directly
     //2.Contact that only messages in one or more of your group chats
-    //if contact's name exists in table, check for whether its type 1 or type 2. if
-    //the inserted type does not exist for that name, insert new contact and return
+    //if contact's name exists in table, check for whether its type 1 or type 2.
+    //if the inserted type does not exist for that name, insert new contact and return
     //new created id.
     //If contact name of the inserted type both match a record in the table, return
     //the ID of that matching record instead
@@ -352,10 +308,16 @@ public class DBManager {
             database.insert(DatabaseHelper.contactsTableName, null, contentValue);
 
             c = getLatestContactEntry();
-            return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
+            //Making default order of contact to be = to descending ID
+            int latestContactID = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
+            contentValue = new ContentValues();
+            contentValue.put(DatabaseHelper.CONTACT_CUSTOM_ORDER, latestContactID);
+            database.update(DatabaseHelper.contactsTableName, contentValue,
+                    DatabaseHelper.CONTACT_ID + " = " + latestContactID, null);
+            return latestContactID;
         } else {
             c.moveToFirst();
-            updateContactsTable(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
+            updateContactTimestamp(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
                     name, timeStamp);
             return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
         }
@@ -371,16 +333,15 @@ public class DBManager {
         if (isGroup(contactID)) {
             msgTableColumnToCompare = DatabaseHelper.MSG_GROUP_ID;
             idToCompare = getGroupID(getContactName(contactID));
-        }
-        else {
+        } else {
             msgTableColumnToCompare = DatabaseHelper.MSG_USER_ID;
             idToCompare = contactID;
         }
 
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MSG_SOURCE_APP + ", " +
-                "COUNT(" + DatabaseHelper.MSG_SOURCE_APP + ") AS total FROM " +
-                DatabaseHelper.messageTableName + " WHERE " + msgTableColumnToCompare + " = " +
-                idToCompare + " GROUP BY " + DatabaseHelper.MSG_SOURCE_APP + " ORDER BY total DESC",
+                        "COUNT(" + DatabaseHelper.MSG_SOURCE_APP + ") AS total FROM " +
+                        DatabaseHelper.messageTableName + " WHERE " + msgTableColumnToCompare + " = " +
+                        idToCompare + " GROUP BY " + DatabaseHelper.MSG_SOURCE_APP + " ORDER BY total DESC",
                 null);
 
         c.moveToFirst();
@@ -454,6 +415,15 @@ public class DBManager {
         return c;
     }
 
+    private Cursor getAllContactsSortByOrder() {
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
+                        + " ORDER BY " + DatabaseHelper.CONTACT_CUSTOM_ORDER + " DESC ",
+                null);
+        c.moveToFirst();
+
+        return c;
+    }
+
     public String getContactName(int contactID) {
         Cursor c = getContactDB(contactID);
 
@@ -462,19 +432,24 @@ public class DBManager {
 
     public ArrayList<Contact> getAllContacts(SortSetting setting) {
         Cursor c;
-        switch (setting) {
-            case Recency:
-                c = getAllContactsSortByRecency();
-                break;
-            case Frequency:
-                c = getAllContactsSortByFrequency();
-                break;
-            default:
-                c = getAllContactsDB();
-                break;
-        }
-
         ArrayList<Contact> contacts = new ArrayList<>();
+
+        if (true) {
+            switch (setting) {
+                case Recency:
+                    c = getAllContactsSortByRecency();
+                    break;
+                case Frequency:
+                    c = getAllContactsSortByFrequency();
+                    break;
+                default:
+                    c = getAllContactsDB();
+                    break;
+            }
+            reinitializeContactsOrder(c);;
+        } else
+            c = getAllContactsSortByOrder();
+
         int isGroupUser;
         Contact currentContact;
         if (c.moveToFirst()) {
@@ -543,6 +518,21 @@ public class DBManager {
         return "";
     }
 
+    private int getContactOrder(int contactID) {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_CUSTOM_ORDER + " FROM " +
+                DatabaseHelper.contactsTableName + " WHERE " + DatabaseHelper.CONTACT_ID + " = " +
+                contactID, null);
+        c.moveToFirst();
+
+        return c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_CUSTOM_ORDER));
+    }
+
+    public void swapContactPositions(int contactID1, int contactID2) {
+        int tempPosition = getContactOrder(contactID1);
+        updateContactOrder(contactID1, getContactOrder(contactID2));
+        updateContactOrder(contactID2, tempPosition);
+    }
+
     public boolean isGroup(int contactID) {
         Cursor c = database.rawQuery("SELECT " + DatabaseHelper.CONTACT_IS_GROUP + " FROM " +
                 DatabaseHelper.contactsTableName + " WHERE " + DatabaseHelper.CONTACT_ID +
@@ -553,14 +543,35 @@ public class DBManager {
         return false;
     }
 
-    public int updateContactsTable(int contactID, String contactName, Date latestMessageDate) {
+    private void reinitializeContactsOrder(Cursor c) {
+        int tempID, orderCounter = 1;
+
+        if (c.moveToLast())
+        {
+            do {
+                tempID = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID));
+                updateContactOrder(tempID, orderCounter);
+                orderCounter++;
+            } while (c.moveToPrevious());
+        }
+    }
+
+    private int updateContactOrder(int contactID, int order) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.CONTACT_CUSTOM_ORDER, order);
+        int i = database.update(DatabaseHelper.contactsTableName, contentValue,
+                DatabaseHelper.CONTACT_ID + " = " + contactID, null);
+        return i;
+    }
+
+    private int updateContactTimestamp(int contactID, String contactName, Date latestMessageDate) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.CONTACT_ID, contactID);
         contentValue.put(DatabaseHelper.CONTACT_NAME, contactName);
         contentValue.put(DatabaseHelper.CONTACT_LATEST_TIMESTAMP,
                 dateFormat.format(latestMessageDate));
         int i = database.update(DatabaseHelper.contactsTableName, contentValue,
-                DatabaseHelper.CONTACT_ID + " = '" + contactID + "'", null);
+                DatabaseHelper.CONTACT_ID + " = " + contactID, null);
         return i;
     }
 
@@ -657,13 +668,6 @@ public class DBManager {
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
 
-    public SortSetting getContactSortSetting() {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER +
-                " FROM " + DatabaseHelper.settingsTableName + ";", null);
-        c.moveToFirst();
-        return SortSetting.getSetting((c.getInt(0)));
-    }
-
     //Only 1 entry in settings table, so ID is always 0
     public void updateDeleteNotficationsSetting(boolean setting) {
         ContentValues cv = new ContentValues();
@@ -673,6 +677,32 @@ public class DBManager {
             cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 0);
         database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
+    }
+
+    public void updateCustomContactOrderSetting(boolean setting) {
+        ContentValues cv = new ContentValues();
+        if (setting)
+            cv.put(DatabaseHelper.SETTINGS_CUSTOM_CONTACT_ORDER, 1);
+        else
+            cv.put(DatabaseHelper.SETTINGS_CUSTOM_CONTACT_ORDER, 0);
+        database.update(DatabaseHelper.settingsTableName, cv,
+                DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
+    }
+
+    public boolean getCustomContactSortSetting() {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CUSTOM_CONTACT_ORDER +
+                " FROM " + DatabaseHelper.settingsTableName + ";", null);
+        c.moveToFirst();
+
+        return c.getInt(0) > 0;
+    }
+
+    public SortSetting getContactSortSetting() {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER +
+                " FROM " + DatabaseHelper.settingsTableName + ";", null);
+        c.moveToFirst();
+
+        return SortSetting.getSetting((c.getInt(0)));
     }
 
     public boolean getDeleteNotificationSetting() {
@@ -691,6 +721,8 @@ public class DBManager {
                 DatabaseHelper.defaultSortContactSetting);
         cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP,
                 DatabaseHelper.defaultDeleteNotificationSetting);
+        cv.put(DatabaseHelper.SETTINGS_CUSTOM_CONTACT_ORDER,
+                DatabaseHelper.defaultCustomContactOrder);
         database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }

@@ -44,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
     public static final String CONTACT_IS_GROUP = "Is_Group";
     public static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
+    public static final String CONTACT_CUSTOM_ORDER = "Custom_Contact_Order";
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
@@ -54,6 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
     public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
     public static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
+    public static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order";
 
     public static final String MERGE_ID = "Merge_Status_ID";
 
@@ -62,21 +64,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**************************/
     public static final int defaultSortContactSetting = 0;
     public static final boolean defaultDeleteNotificationSetting = false;
+    public static final boolean defaultCustomContactOrder = false;
 
     /*************************/
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 22;
+    static int databaseVersion = 25;
 
     /****************************/
     /**Database table creation**/
     /***************************/
-    /*
-    static final String createUserTable = "CREATE TABLE " + usersTableName + "(" +
-            USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            USER_NAME + " STRING);";
-     */
 
     static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -101,7 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_PROFILE_PIC + " BLOB, " +
             CONTACT_LATEST_TIMESTAMP + " DATE, " +
             CONTACT_IS_GROUP + " INTEGER, " +
-            CONTACT_IS_GROUP_USER + " INTEGER DEFAULT 0);";
+            CONTACT_IS_GROUP_USER + " INTEGER DEFAULT 0, " +
+            CONTACT_CUSTOM_ORDER + " INTEGER);";
 
     static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -122,7 +121,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
-            SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN);";
+            SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN, " +
+            SETTINGS_CUSTOM_CONTACT_ORDER + " BOOLEAN)";
 
     @Override
     public void onCreate(SQLiteDatabase db)
@@ -137,9 +137,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //Initializing default settings for app
         ContentValues cv = new ContentValues();
         cv.put(SETTINGS_CONTACT_SORT_ORDER, defaultSortContactSetting);
-        db.insert(settingsTableName, null, cv);
-        cv = new ContentValues();
         cv.put(SETTINGS_DELETE_NOTI_ON_STARTUP, defaultDeleteNotificationSetting);
+        cv.put(SETTINGS_CUSTOM_CONTACT_ORDER, defaultCustomContactOrder);
         db.insert(settingsTableName, null, cv);
     }
 
