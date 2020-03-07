@@ -136,6 +136,8 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             case "Telegram":
                 speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.telegram_logo_foreground);
                 break;
+            case "SMS":
+                speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.sms_logo);
         }
     }
 

@@ -1,7 +1,9 @@
 package com.mesh;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
@@ -26,6 +30,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1;
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
@@ -51,6 +56,20 @@ public class MainActivity extends AppCompatActivity {
             initialiseAlertDialog();
         }
         switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.RECEIVE_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+
+
+            // No explanation needed; request the permission
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.RECEIVE_SMS},
+                    MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+
+        } else {
+            // Permission has already been granted
+        }
     }
 
 
@@ -176,8 +195,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToHome() {
-         navController.navigate(R.id.nav_home);
+        navController.navigate(R.id.nav_home);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 
 }

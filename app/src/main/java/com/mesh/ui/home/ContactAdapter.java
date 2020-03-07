@@ -114,6 +114,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 case "Telegram":
                     temp = context.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
                     break;
+                case "SMS":
+                    temp = context.getResources().getDrawable(R.mipmap.sms_logo);
+                    break;
                 default:
                     break;
             }
