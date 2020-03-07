@@ -78,10 +78,10 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public class ResetViewHolder extends  RecyclerView.ViewHolder {
-        Button resetButton;
+    public class ExtraViewHolder extends  RecyclerView.ViewHolder {
+        Button resetButton, backupButton;
 
-        ResetViewHolder(@NonNull View itemView) {
+        ExtraViewHolder(@NonNull View itemView) {
             super(itemView);
             resetButton = itemView.findViewById(R.id.reset_button);
             resetButton.setOnClickListener(v -> {
@@ -92,6 +92,14 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 dbManager.close();
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
             });
+            backupButton = itemView.findViewById(R.id.backup_button);
+            backupButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO: 7/3/2020 back up to firebase
+                }
+            });
+
         }
     }
 
@@ -152,8 +160,8 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 View deleteNotificationView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.delete_notification_card, viewGroup,false);
                 return new DeleteNotificationViewHolder(deleteNotificationView);
             case 2:
-                View resetButtonView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.reset_to_default_button, viewGroup, false);
-                return new ResetViewHolder(resetButtonView);
+                View resetButtonView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.extras, viewGroup, false);
+                return new ExtraViewHolder(resetButtonView);
             default: return null;
         }
     }
