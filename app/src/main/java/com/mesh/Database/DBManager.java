@@ -7,11 +7,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
+
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
