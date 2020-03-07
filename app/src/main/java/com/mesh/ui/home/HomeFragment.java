@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
     public void dismissSnackbar() {
         if (mergeSnackbar != null && mergeSnackbar.isShown()) {
             mergeSnackbar.dismiss();
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+            reset();
         }
     }
 
@@ -85,5 +85,9 @@ public class HomeFragment extends Fragment {
 
     public MergeSnackbar getMergeSnackbar(){
         return mergeSnackbar;
+    }
+
+    public void reset(){
+        ((MainActivity) getActivity()).goToHome();
     }
 }

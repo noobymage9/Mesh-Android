@@ -159,6 +159,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public void merge(int from, int to) {
         Contact dragged = contactList.get(from);
         Contact target = contactList.get(to);
+        homeFragment.reset();
         //TODO merge the two contact in db
         //notifyItemRemoved(from);
     }
