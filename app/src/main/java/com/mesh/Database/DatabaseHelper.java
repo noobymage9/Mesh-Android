@@ -55,7 +55,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
     public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
     public static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
-    public static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order";
+    public static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order_Setting";
 
     public static final String MERGE_ID = "Merge_Status_ID";
 
@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 25;
+    static int databaseVersion = 28;
 
     /****************************/
     /**Database table creation**/
@@ -147,6 +147,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     {
         if (databaseVersion == oldVersion) {
             db.execSQL("drop table if exists " + messageTableName);
+            db.execSQL("drop table if exists " + contactsTableName);
+            db.execSQL("drop table if exists " + messageTableName);
+            db.execSQL("drop table if exists " + groupsTableName);
+            db.execSQL("drop table if exists " + userCollectionsTableName);
+            db.execSQL("drop table if exists " + settingsTableName);
+            db.execSQL("drop table if exists " + messageSearchTableName);
             databaseVersion = newVersion;
             onCreate(db);
         }
