@@ -11,6 +11,7 @@
 
     <string name="setting_sort">Sort</string>
     <string name="setting_sort_frequency">Frequency</string>
+    <string name="setting_sort_recency">Recency</string>
     <string name="setting_sort_unknown">Unknown</string>
     <string name="setting_delete_notification">Delete notification on start up</string>
     <string name="setting_reset">Reset</string>
@@ -23,7 +24,7 @@
     <string name="default_source_app_desc">This is a source app</string>
     <string name="default_contact_icon_desc">This is a contact icon</string>
     <string name="default_contact_name">This is a contact name</string>
-    <string name="default_sort">Recency</string>
+    <string name="default_sort">@string/setting_sort_recency</string>
     <string name="default_tag">Enter Tag Name</string>
     <string name="default_tagname">@string/tag_autofill</string>
     <string name="default_search">Filter</string>
