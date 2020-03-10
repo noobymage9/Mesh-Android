@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class NotificationService extends NotificationListenerService {
+public class MeshListener extends NotificationListenerService {
 
     public static final String RECEIVE_JSON = "NotificationService.RECEIVE_JSON";
     private final String WHATSAPP_PACKAGE = "com.whatsapp";

@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         deleteNotification = dbManager.getDeleteNotificationSetting();
         dbManager.close();
         if (deleteNotification)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
         initialiseToolbar();
         initialiseNavigationDrawer();
         if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signauture permissions
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         deleteNotification = dbManager.getDeleteNotificationSetting();
         dbManager.close();
         if (deleteNotification)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
+            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
     }
 
     private void initialiseToolbar() {
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean notificationIsEnabled() {
-        ComponentName componentName = new ComponentName(this, NotificationService.class);
+        ComponentName componentName = new ComponentName(this, MeshListener.class);
         String flat = Settings.Secure.getString(this.getContentResolver(), NOTIFICATION_LISTENER_KEY);
         return (flat != null) && (flat.contains(componentName.flattenToString()));
     }
