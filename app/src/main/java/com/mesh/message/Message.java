@@ -64,14 +64,13 @@ public class Message {
         return sourceApp;
     }
 
-    public String getDate()
-    {
+    public String getDate() {
         DateFormat date = DateFormat.getDateInstance();
         return date.format(timeStamp);
     }
 
     public String getTime() {
-        DateFormat time = DateFormat.getTimeInstance();
+        DateFormat time = DateFormat.getTimeInstance(DateFormat.SHORT);
         return time.format(timeStamp);
     }
 
