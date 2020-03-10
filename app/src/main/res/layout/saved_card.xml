@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/usercollection_name"
+            android:text="@string/default_tagname"
             android:textStyle="bold"
             android:textColor="@color/app_bar_items"
             android:textSize="24sp" />

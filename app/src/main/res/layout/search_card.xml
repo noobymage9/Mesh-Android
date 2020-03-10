@@ -34,7 +34,7 @@
                 android:layout_marginLeft="5dp"
                 android:paddingStart="10dp"
                 android:paddingLeft="10dp"
-                android:text="@string/search_message_contact_name"
+                android:text="@string/default_contact_name"
                 android:textSize="24sp"
                 android:textColor="@color/app_bar_items"
                 android:textStyle="bold"
@@ -48,7 +48,7 @@
                 android:layout_marginLeft="5dp"
                 android:paddingStart="10dp"
                 android:paddingLeft="10dp"
-                android:text="@string/search_default_message"
+                android:text="@string/default_text_message"
                 android:textColor="@color/app_bar_items"
                 android:textSize="16sp"
                  />
@@ -62,7 +62,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginRight="10dp"
-                android:text="@string/timestamp"
+                android:text="@string/default_timestamp"
                 android:textColor="@color/app_bar_items" />
 
             <include

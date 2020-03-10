@@ -16,7 +16,7 @@
         android:paddingLeft="5dp"
         android:background="@drawable/save_delete_custom_button_background"
         android:textColor="@color/app_bar_items"
-        android:text="@string/save"/>
+        android:text="@string/snackbar_save"/>
 
     <Button
         android:id="@+id/delete_button"
@@ -28,6 +28,6 @@
         android:paddingRight="5dp"
         android:background="@drawable/save_delete_custom_button_background"
         android:textColor="@color/app_bar_items"
-        android:text="@string/delete"/>
+        android:text="@string/snackbar_delete"/>
 
 </RelativeLayout>

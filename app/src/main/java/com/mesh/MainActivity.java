@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
         DBManager dbManager = new DBManager(this);
         dbManager.open();
         deleteNotification = dbManager.getDeleteNotificationSetting();
@@ -52,23 +54,16 @@ public class MainActivity extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(NotificationService.RECEIVE_JSON));
         initialiseToolbar();
         initialiseNavigationDrawer();
-        if (!notificationIsEnabled()) {
+        if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signauture permissions
             initialiseAlertDialog();
         }
-        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        // Here, thisActivity is the current activity
+
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.RECEIVE_SMS)
                 != PackageManager.PERMISSION_GRANTED) {
-
-
-            // No explanation needed; request the permission
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.RECEIVE_SMS},
                     MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
-
-        } else {
-            // Permission has already been granted
         }
     }
 
@@ -136,15 +131,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void initialiseAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.enable_notification_warning);
+        builder.setMessage(R.string.alert_dialog_enable_notification_warning);
         builder.setCancelable(true);
 
         builder.setPositiveButton(
-                R.string.positive_warning_button,
+                R.string.alert_dialog_positive_button,
                 (dialog, id) -> startActivity(new Intent(NOTIFICATION_LISTENER_SETTING)));
 
         builder.setNegativeButton(
-                R.string.negative_warning_button,
+                R.string.alert_dialog_negative_button,
                 (dialog, id) -> dialog.cancel());
 
         AlertDialog alert = builder.create();
@@ -178,11 +173,11 @@ public class MainActivity extends AppCompatActivity {
                 homeFragment.dismissSnackbar();
                 homeFragment.setMerge(!isChecked);
                 if (isChecked) {
-                    switchToast.setText(R.string.swap_mode);
+                    switchToast.setText(R.string.action_swap_mode);
                     switchToast.show();
                 } else {
                     goToHome();
-                    switchToast.setText(R.string.merge_mode);
+                    switchToast.setText(R.string.action_merge_mode);
                     switchToast.show();
                 }
 

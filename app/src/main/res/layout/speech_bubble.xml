@@ -49,7 +49,7 @@
     <ImageView
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:contentDescription="@string/default_icon"
+        android:contentDescription="@string/default_source_app_desc"
         android:id="@+id/incoming_bubble_source"
         android:paddingRight="5dp"
         android:paddingEnd="5dp"
@@ -68,7 +68,7 @@
         android:paddingRight="5dp"
         android:paddingEnd="5dp"
         android:textSize="12sp"
-        android:text="@string/message_timestamp"
+        android:text="@string/default_timestamp"
         android:layout_toRightOf="@id/incoming_bubble_text"
         android:layout_toEndOf="@id/incoming_bubble_text"/>
 

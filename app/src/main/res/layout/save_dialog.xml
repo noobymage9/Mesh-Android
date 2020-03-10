@@ -35,8 +35,8 @@
         android:textColor="@color/app_bar_items"
         android:textSize="16sp"
         android:imeOptions="actionDone"
-        android:hint="@string/tag_default_name"
-        android:autofillHints="@string/tag_default_name"
+        android:hint="@string/default_tag"
+        android:autofillHints="@string/tag_autofill"
         android:textColorHint="@color/app_bar_items"
         android:inputType="text"
         />
@@ -68,7 +68,7 @@
         android:layout_alignRight="@id/tag_list"
         android:background="@drawable/setting_reset_custom_border"
         android:textColor="@color/Black"
-        android:text="@string/save"
+        android:text="@string/snackbar_save"
         />
 
 </RelativeLayout>

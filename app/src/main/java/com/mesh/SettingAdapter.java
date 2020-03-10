@@ -32,7 +32,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             settingResult = itemView.findViewById(R.id.sort_result);
             itemView.setOnClickListener(view -> {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.sort_text);
+                builder.setTitle(R.string.setting_sort);
 
                 builder.setItems(R.array.sort_array, (dialog, which) -> {
                     switch (which) {
@@ -40,7 +40,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             DBManager dbManager = new DBManager(context);
                             dbManager.open();
                             dbManager.updateContactSortSetting(SortSetting.Recency);
-                            settingResult.setText(R.string.sort_default);
+                            settingResult.setText(R.string.default_sort);
                             dbManager.updateCustomContactOrderSetting(false);
                             dbManager.close();
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
@@ -49,7 +49,7 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                             DBManager dbManager1 = new DBManager(context);
                             dbManager1.open();
                             dbManager1.updateContactSortSetting(SortSetting.Frequency);
-                            settingResult.setText(R.string.sort_frequency);
+                            settingResult.setText(R.string.setting_sort_frequency);
                             dbManager1.updateCustomContactOrderSetting(false);
                             dbManager1.close();
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
@@ -130,13 +130,13 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 SortOrderViewHolder sortOrderViewHolder = (SortOrderViewHolder) viewHolder;
                 switch (dbManager.getContactSortSetting()) {
                     case Recency:
-                        sortOrderViewHolder.settingResult.setText(R.string.sort_default);
+                        sortOrderViewHolder.settingResult.setText(R.string.default_sort);
                         break;
                     case Frequency:
-                        sortOrderViewHolder.settingResult.setText(R.string.sort_frequency);
+                        sortOrderViewHolder.settingResult.setText(R.string.setting_sort_frequency);
                         break;
                     default:
-                        sortOrderViewHolder.settingResult.setText(R.string.sort_unknown);
+                        sortOrderViewHolder.settingResult.setText(R.string.setting_sort_unknown);
                         break;
                 }
                 dbManager.close();
