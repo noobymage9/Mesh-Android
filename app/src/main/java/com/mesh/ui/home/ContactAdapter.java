@@ -48,7 +48,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                         intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
                         v.getContext().startActivity(intent);
                     } else {
-                        homeFragment.getMergeSnackbar().dismiss();
+                        homeFragment.dismissSnack();
                     }
                 }
             });

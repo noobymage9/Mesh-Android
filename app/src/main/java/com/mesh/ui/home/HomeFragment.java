@@ -26,13 +26,13 @@ import com.mesh.R;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+    public boolean merge = true;
     private View root;
     private RecyclerView recyclerView;
     private ContactAdapter contactAdapter;
     private HomeViewModel homeViewModel;
     private ItemDragAndDropCallback itemDragAndDropCallback;
     private ItemTouchHelper itemTouchHelper;
-    public boolean merge = true;
     private MergeSnackbar mergeSnackbar;
 
 
@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void dismissSnackbar() {
+    public void dismissSnack() {
         if (mergeSnackbar != null && mergeSnackbar.isShown()) {
             mergeSnackbar.dismiss();
             reset();

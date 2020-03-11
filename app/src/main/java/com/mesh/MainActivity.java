@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
-                ((HomeFragment) fragment).dismissSnackbar();
+                ((HomeFragment) fragment).dismissSnack();
             } else {
                 super.onBackPressed();
             }
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                 for (Fragment fragment : fragmentList)
                     if (fragment instanceof HomeFragment)
                         homeFragment = (HomeFragment) fragment;
-                homeFragment.dismissSnackbar();
+                homeFragment.dismissSnack();
                 homeFragment.setMerge(!isChecked);
                 if (isChecked) {
                     switchToast.setText(R.string.action_swap_mode);
