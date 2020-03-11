@@ -31,77 +31,30 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1;
+    public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
-    public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
+    private boolean deleteNotification, mergeSwitchVisible;
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
-    private boolean deleteNotification;
-    private boolean mergeSwitchVisible;
     private Toast switchToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        deleteNotification = dbManager.getDeleteNotificationSetting();
-        dbManager.close();
-        if (deleteNotification)
-            LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
         initialiseToolbar();
         initialiseNavigationDrawer();
-        if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signauture permissions
-            initialiseAlertDialog();
-        }
 
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.RECEIVE_SMS)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.RECEIVE_SMS},
-                    MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) { // Create Setting Button
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() { // I don't what is this for
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {  // Setting Button
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                startActivity(new Intent(this, SettingActivity.class));
-                return true;
-            case R.id.merge_switch:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        deleteNotification = dbManager.getDeleteNotificationSetting();
-        dbManager.close();
-        if (deleteNotification)
+        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT); // Merge-Swap toast
+        deleteNotification = getDeleteNotificationSetting();
+        if (deleteNotification) // Tell MeshListener to delete related notifications
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
+
+        if (!notificationIsEnabled()) // May need to remove in future. Need to research into signature permissions
+            initialiseAlertDialog();
+        if (!receiveSMSEnabled())
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
     }
 
     private void initialiseToolbar() {
@@ -121,6 +74,14 @@ public class MainActivity extends AppCompatActivity {
             mergeSwitchVisible = destination.getId() == R.id.nav_home;
             invalidateOptionsMenu();
         });
+    }
+
+    private boolean getDeleteNotificationSetting() {
+        DBManager dbManager = new DBManager(this);
+        dbManager.open();
+        boolean temp = dbManager.getDeleteNotificationSetting();
+        dbManager.close();
+        return temp;
     }
 
     private boolean notificationIsEnabled() {
@@ -144,6 +105,34 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    private boolean receiveSMSEnabled() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) { // Create Setting Button
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() { // I don't what is this for
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {  // Setting Button
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingActivity.class));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -191,28 +180,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToHome() {
         navController.navigate(R.id.nav_home);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request.
-        }
     }
 
 }
