@@ -18,6 +18,7 @@ import com.mesh.MainActivity;
 import com.mesh.R;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
@@ -26,12 +27,9 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     private HomeFragment homeFragment;
     private View folder;
     private int folderPosition = -1;
-    int draggedFolderPosition = -1;
+    private int draggedFolderPosition = -1;
 
     ItemDragAndDropCallback(HomeFragment homeFragment, RecyclerView recyclerView) {
-        // Choose drag and swipe directions
-        // Up and down is chosen for dragging
-        // Nothing is chosen for swiping
         this.recyclerView = recyclerView;
         this.homeFragment = homeFragment;
     }
@@ -46,18 +44,22 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
         int from = viewHolder.getAdapterPosition();
         int to = target.getAdapterPosition();
-        //You can reorder items here
-        //Reorder items only when target is not a folder
-        recyclerView.getAdapter().notifyItemMoved(from, to);
+        recyclerView.getAdapter().notifyItemMoved(from, to); // Allow swapping in Merge Mode to prevent issues with drag-scrolling
+
         if (!homeFragment.isMerge()) {
-            DBManager dbManager = new DBManager(homeFragment.getContext());
-            dbManager.open();
-            ArrayList<Contact> contactList = ((ContactAdapter) recyclerView.getAdapter()).getContactList();
-            dbManager.swapContactPositions(contactList.get(from).getID(), contactList.get(to).getID());
-            dbManager.updateCustomContactOrderSetting(true);
-            dbManager.close();
+            swap(from, to);
         }
         return true;
+    }
+
+    private void swap(int from, int to) {
+        DBManager dbManager = new DBManager(homeFragment.getContext());
+        dbManager.open();
+        ArrayList<Contact> contactList = ((ContactAdapter) recyclerView.getAdapter()).getContactList();
+        Collections.swap(contactList, from, to);
+        dbManager.swapContactPositions(contactList.get(from).getID(), contactList.get(to).getID());
+        dbManager.updateCustomContactOrderSetting(true);
+        dbManager.close();
     }
 
     @Override
@@ -65,56 +67,34 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
         // nothing
     }
 
-    // An item will be dropped into this folder
-
-
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
 
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
-
-            // Here you are notified that the drag operation began
-
             draggedFolderPosition = viewHolder.getAdapterPosition();
             if (folder != null) {
-                //folder.setBackgroundResource(0); // Clear former folder background
                 folder = null;
                 folderPosition = -1;
             }
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
 
-            if (homeFragment.isMerge()) {
+            if (homeFragment.isMerge()) { // To prevent swapping
                 LocalBroadcastManager.getInstance(homeFragment.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
             }
-            // Here you are notified that the last operation ended
-
             if (folder != null) {
-
-                // Set folder background to a color indicating
-                // that an item was dropped into it
-                /*
-                folder.setBackgroundColor(
-                        ContextCompat.getColor(
-                                recyclerView.getContext(), android.R.color.holo_green_dark
-                        )
-                );
-                */
-
                 if (homeFragment.isMerge()) {
                     homeFragment.displaySnackBar(draggedFolderPosition, folderPosition);
                 }
-
                 folder = null;
                 folderPosition = -1;
                 // You can remove item from the list here and add it to the folder
                 // Remember to notify RecyclerView about it
-                //recyclerView.getAdapter().notifyItemRemoved(draggedFolderPosition);
+                // recyclerView.getAdapter().notifyItemRemoved(draggedFolderPosition);
             }
         }
     }
 
-    // This method gets called a lot, so don't do any expensive operations here
     @Override
     public void onChildDraw(
             @NonNull Canvas c,
@@ -127,15 +107,15 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
     ) {
         if (homeFragment.isMerge()) {
             if (actionState == ItemTouchHelper.ACTION_STATE_DRAG && isCurrentlyActive) {
-                // Here you are notified that the drag operation is in progress
 
                 float itemTopPosition = viewHolder.itemView.getTop() + dY + viewHolder.itemView.getHeight() / 2;
                 float itemBottomPosition = viewHolder.itemView.getBottom() + dY - viewHolder.itemView.getHeight() / 2;
 
-                // Find folder under dragged item
+                // Find itemHolder under the dragged
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     View child = recyclerView.getChildAt(i);
                     RecyclerView.ViewHolder childView = recyclerView.getChildViewHolder(child);
+
                     // Exclude dragged item from detection
                     if (!child.equals(viewHolder.itemView)) {
 
@@ -143,29 +123,12 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                         boolean topWithinChild = child.getTop() < itemTopPosition && itemTopPosition < child.getBottom();
                         boolean bottomWithinChild = child.getBottom() > itemBottomPosition && itemBottomPosition > child.getTop();
                         if (topWithinChild || bottomWithinChild) {
-
                             folder = child;
                             folderPosition = i;
                             if (!((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
                                 expand(child);
                                 ((ContactAdapter.ContactViewHolder) childView).setExpanded(true);
                             }
-                            // Set folder background to a color indicating
-                            // that an item will be dropped into it upon release
-                        /*
-
-                        folder.setBackgroundColor(
-                                ContextCompat.getColor(
-                                        recyclerView.getContext(), android.R.color.holo_green_light
-                                )
-                        );
-                        */
-                            /*
-
-
-                             */
-
-                            // break;
                         } else {
                             if (((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
                                 shrink(child);
@@ -173,11 +136,10 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
                                 ((ContactAdapter.ContactViewHolder) childView).setExpanded(false);
                                 folderPosition = 1;
                             }
-                            //break;
                         }
                     }
                 }
-            } else {
+            } else { // Everytime it is drawing, it checks all itemHolder and shrink if necessary. Refactor if in future, size gets too big
                 folder = null;
                 folderPosition = -1;
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
@@ -194,7 +156,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
-    public void shrink(View view) {
+    private void shrink(View view) {
         ScaleAnimation shrink = new ScaleAnimation(
                 1.1f, 1.0f,
                 1.1f, 1.0f,
@@ -206,7 +168,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
         view.startAnimation(shrink);
     }
 
-    public void expand(View view) {
+    private void expand(View view) {
         ScaleAnimation expand = new ScaleAnimation(
                 1.0f, 1.1f,
                 1.0f, 1.1f,
@@ -219,6 +181,7 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
 
     }
 
+    // Change scroll style
     @Override
     public int interpolateOutOfBoundsScroll(@NonNull RecyclerView recyclerView, int viewSize, int viewSizeOutOfBounds, int totalSize, long msSinceStartScroll) {
         return super.interpolateOutOfBoundsScroll(recyclerView, viewSize * 2, viewSizeOutOfBounds, totalSize, msSinceStartScroll);
