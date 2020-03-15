@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.mesh.message.Message;
@@ -455,7 +456,7 @@ public class DBManager {
         if (c.moveToFirst()) {
             do {
                 currentContact = new Contact(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
-                        c.getBlob(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
+                        c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
                         c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)));
                 isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
                 if (isGroupUser == 0)
@@ -579,6 +580,18 @@ public class DBManager {
         database.delete(DatabaseHelper.contactsTableName,
                 DatabaseHelper.CONTACT_ID + " = '" + contactID + "'", null);
     }
+
+    /**
+     * Terry failure below
+     * Same category
+     * Contact Table
+     */
+    public void insertIcon(String icon, String id) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.CONTACT_PROFILE_PIC, icon);
+        database.update(DatabaseHelper.contactsTableName, contentValues, DatabaseHelper.CONTACT_ID + "=?", new String[]{id});
+    }
+
 
     /*************************/
     /**Group table functions**/

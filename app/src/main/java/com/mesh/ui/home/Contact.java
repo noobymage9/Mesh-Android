@@ -7,11 +7,11 @@ import androidx.annotation.NonNull;
 
 public class Contact implements Parcelable {
     protected int id;
-    protected byte[] icon;
+    protected String icon;
     protected String name;
 
 
-    public Contact(int id, byte[] icon, String name) {
+    public Contact(int id, String icon, String name) {
         this.id = id;
         this.icon = icon;
         this.name = name;
@@ -24,7 +24,7 @@ public class Contact implements Parcelable {
 
     protected Contact(Parcel in) {
         id = in.readInt();
-        icon = in.createByteArray();
+        icon = in.readString();
         name = in.readString();
     }
 
@@ -42,7 +42,7 @@ public class Contact implements Parcelable {
 
     public int getID() {return this.id;}
 
-    public byte[] getProfilePic() {
+    public String getProfilePic() {
         return this.icon;
     }
 
@@ -58,7 +58,7 @@ public class Contact implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
-        dest.writeByteArray(icon);
+        dest.writeString(icon);
         dest.writeString(name);
     }
 
