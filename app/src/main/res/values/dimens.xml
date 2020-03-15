@@ -19,7 +19,7 @@
     <dimen name="save_button_width">@dimen/_120sdp</dimen>
     <dimen name="nav_header_height">@dimen/_170sdp</dimen>
     <dimen name="tag_field_width">@dimen/_180sdp</dimen>
-    <dimen name="max_speech_bubble_width">@dimen/_300sdp</dimen>
+    <dimen name="max_speech_bubble_width">@dimen/_200sdp</dimen>
 
     <dimen name="timestamp_size">@dimen/_12sdp</dimen>
     <dimen name="default_text_size">@dimen/_16sdp</dimen>

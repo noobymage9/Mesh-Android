@@ -105,13 +105,13 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         else
             speechBubbleViewHolder.bubble.getBackground().setTintList(null);
         if (messageActivity.isGroup()){
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
+            RelativeLayout.LayoutParams timestampLayoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
             if (message.getContactName().length() > message.getMessageContent().length()) {
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
-                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
+                timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
+                timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
             } else {
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
-                layoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
+                timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
+                timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
             }
             speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
             speechBubbleViewHolder.title.setText(message.getContactName());
@@ -122,8 +122,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
         }
         speechBubbleViewHolder.content.setText(message.getMessageContent());
-
-        if (message.getMessageContent().length() > 100) {
+        if (speechBubbleViewHolder.content.getText().length() > 20) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
             layoutParams.addRule(RelativeLayout.BELOW, 0);
