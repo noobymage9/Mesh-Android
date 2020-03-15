@@ -7,9 +7,9 @@
     </style>
 
     <style name="ToolBarStyle">
-        <item name="android:textColorPrimary">@color/app_bar_items</item>
-        <item name="android:textColorSecondary">@color/app_bar_items</item>
-        <item name="android:actionMenuTextColor">@color/app_bar_items</item>
+        <item name="android:textColorPrimary">@color/headers</item>
+        <item name="android:textColorSecondary">@color/headers</item>
+        <item name="android:actionMenuTextColor">@color/headers</item>
         <item name="android:actionOverflowMenuStyle">@style/popUp</item>
     </style>
 

@@ -4,9 +4,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/saved_card"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="@dimen/card_height"
     card_view:cardCornerRadius="20dp"
-    android:layout_margin="5dp">
+    android:layout_margin="@dimen/default_child_margin">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,8 +20,8 @@
             android:layout_centerInParent="true"
             android:text="@string/default_tagname"
             android:textStyle="bold"
-            android:textColor="@color/app_bar_items"
-            android:textSize="24sp" />
+            android:textColor="@color/headers"
+            android:textSize="@dimen/nav_header_text_size" />
 
         <!--TextView
             android:id="@+id/txtContent"

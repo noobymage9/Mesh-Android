@@ -27,7 +27,7 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="popUp">
-        <item name="android:textColor">@color/app_bar_items</item>
+        <item name="android:textColor">@color/headers</item>
     </style>
 
     <style name="overflowMenu" parent="@style/Widget.AppCompat.ActionButton.Overflow"/>

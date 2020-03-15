@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -67,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_saved, R.id.nav_contact)
                 .setDrawerLayout(findViewById(R.id.drawer_layout))
                 .build();
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        // Latest Update Issue
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+        navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController((NavigationView) findViewById(R.id.nav_view), navController);
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {

@@ -27,7 +27,6 @@
     <string name="default_sort">@string/setting_sort_recency</string>
     <string name="default_tag">Enter Tag Name</string>
     <string name="default_tagname">@string/tag_autofill</string>
-    <string name="default_search">Filter</string>
 
     <string name="alert_dialog_enable_notification_warning">Please enable the notification listener for our application to work</string>
     <string name="alert_dialog_positive_button">OK</string>
