@@ -1,6 +1,7 @@
 package com.mesh.ui.search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -14,8 +15,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mesh.Database.DBManager;
 import com.mesh.R;
 import com.mesh.message.Message;
+import com.mesh.message.MessageActivity;
+import com.mesh.ui.home.Contact;
+import com.mesh.ui.home.ContactAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,8 +43,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
             messageTimeStamp = itemView.findViewById(R.id.message_timestamp);
             messageContactName = itemView.findViewById(R.id.message_contact_name);
             sourceApp = itemView.findViewById(R.id.first_source_app);
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
+                String name = messageContactName.getText().toString();
+                DBManager dbManager = new DBManager(searchFragment.getContext());
+                dbManager.open();
+                Contact temp = new Contact(dbManager.getContactID(name), name);
+                dbManager.close();
+                intent.putExtra(ContactAdapter.CONTACT_PARCEL, temp);
+                itemView.getContext().startActivity(intent);
 
-
+            });
         }
     }
 

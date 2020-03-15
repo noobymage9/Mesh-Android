@@ -17,6 +17,11 @@ public class Contact implements Parcelable {
         this.name = name;
     }
 
+    public Contact(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     protected Contact(Parcel in) {
         id = in.readInt();
         icon = in.createByteArray();

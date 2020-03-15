@@ -35,24 +35,24 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         protected ImageView icon;
         boolean expanded = false;
 
-        ContactViewHolder(final View v) {  //
-            super(v);
-            name = v.findViewById(R.id.contact_name);
-            icon = v.findViewById(R.id.contact_icon);
-            timestamp = v.findViewById(R.id.contact_timestamp);
-            sourceApp = v.findViewById(R.id.source_app);
-            v.setOnClickListener(view -> {
+        ContactViewHolder(final View itemView) {  //
+            super(itemView);
+            name = itemView.findViewById(R.id.contact_name);
+            icon = itemView.findViewById(R.id.contact_icon);
+            timestamp = itemView.findViewById(R.id.contact_timestamp);
+            sourceApp = itemView.findViewById(R.id.source_app);
+            itemView.setOnClickListener(view -> {
                 if (homeFragment.isMerge()) {
                     if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
-                        Intent intent = new Intent(v.getContext(), MessageActivity.class);
+                        Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
                         intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
-                        v.getContext().startActivity(intent);
+                        itemView.getContext().startActivity(intent);
                     } else {
                         homeFragment.dismissSnack();
                     }
                 }
             });
-            v.setOnTouchListener((v1, event) -> {
+            itemView.setOnTouchListener((v1, event) -> {
                 if (!homeFragment.isMerge()) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         homeFragment.getItemTouchHelper().startDrag(ContactViewHolder.this);
@@ -60,7 +60,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                     }
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    v.performClick();
+                    itemView.performClick();
                     return true;
                 }
                 return false;
