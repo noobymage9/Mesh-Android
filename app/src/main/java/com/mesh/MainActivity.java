@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Switch;
@@ -18,7 +19,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -27,15 +27,17 @@ import com.google.android.material.navigation.NavigationView;
 import com.mesh.Database.DBManager;
 import com.mesh.ui.home.HomeFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 1;
+    private static final int ALL_PERMISSIONS = 1;
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     private boolean deleteNotification, mergeSwitchVisible;
+    private String[] neededPermissions;
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private Toast switchToast;
@@ -54,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (!notificationIsEnabled()) // May need to remove in future. Need to research into signature permissions
             initialiseAlertDialog();
-        if (!receiveSMSEnabled())
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS}, MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+        if (!allPermissionsEnabled())
+            ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
     }
 
     private void initialiseToolbar() {
@@ -110,8 +112,19 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    private boolean receiveSMSEnabled() {
-        return ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED;
+    private boolean allPermissionsEnabled() {
+        boolean temp = true;
+        ArrayList<String> tempList = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS) != PackageManager.PERMISSION_GRANTED) {
+            temp = false;
+            tempList.add(Manifest.permission.RECEIVE_SMS);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp = false;
+            tempList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        neededPermissions = tempList.toArray(new String[tempList.size()]);
+        return temp;
     }
 
 
@@ -138,17 +151,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // TODO: 15/3/2020 Find a way to fix this
     @Override
-    public void onBackPressed() {
+    public void onBackPressed() { // This cause home to be unable to back out of Mesh
+
         List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
                 ((HomeFragment) fragment).dismissSnack();
-            } else {
-                super.onBackPressed();
+                return;
             }
         }
+        super.onBackPressed();
     }
 
     @Override
