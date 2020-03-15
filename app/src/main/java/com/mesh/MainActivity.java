@@ -32,7 +32,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int ALL_PERMISSIONS = 1;
+    public static final int ALL_PERMISSIONS = 1;
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
@@ -122,6 +122,10 @@ public class MainActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             temp = false;
             tempList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            temp = false;
+            tempList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         neededPermissions = tempList.toArray(new String[tempList.size()]);
         return temp;

@@ -105,15 +105,10 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-            Bitmap bitmap;
-            Uri uri = data.getData();
-
-
             String realPath = ImageFilePath.getPath(getContext(), data.getData());
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();
             dbManager.insertIcon(realPath, contactAdapter.getCurrentContactClicked().getID() + "");
-            Log.e("TEST", realPath);
             dbManager.close();
             reset();
         }

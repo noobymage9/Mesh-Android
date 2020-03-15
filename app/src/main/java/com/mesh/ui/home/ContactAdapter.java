@@ -66,6 +66,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                     }
                 }
             });
+            icon.setOnLongClickListener(new View.OnLongClickListener() { // temporary way.
+                @Override
+                public boolean onLongClick(View v) {
+                    DBManager dbManager = new DBManager(homeFragment.getContext());
+                    dbManager.open();
+                    dbManager.insertIcon(null, contact.getID() + "");
+                    dbManager.close();
+                    return false;
+                }
+            });
 
             timestamp = itemView.findViewById(R.id.contact_timestamp);
             sourceApp = itemView.findViewById(R.id.source_app);
@@ -171,11 +181,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
         dbManager.close();
 
-        if (contact.icon != null) {
-            Log.e("TEST", contact.icon);
-            File imgFile = new File(contact.icon);
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            contactViewHolder.icon.setImageBitmap(myBitmap);
+        if (contact.icon != null) { // Temporary reduce size of photo
+            Bitmap myBitmap = BitmapFactory.decodeFile(contact.icon);
+            int nh = (int) (myBitmap.getHeight() * (512.0 / myBitmap.getWidth()));
+            Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 512, nh, true);
+            contactViewHolder.icon.setImageBitmap(scaled);
         }
     }
 
