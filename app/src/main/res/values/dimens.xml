@@ -15,7 +15,7 @@
     <dimen name="snackbar_height">@dimen/contact_icon_size</dimen>
     <dimen name="nav_header_icon_size">@dimen/_75sdp</dimen>
     <dimen name="setting_card_height">@dimen/_80sdp</dimen>
-    <dimen name="card_height">@dimen/_100sdp</dimen>
+    <dimen name="card_height">@dimen/setting_card_height</dimen>
     <dimen name="save_button_width">@dimen/_120sdp</dimen>
     <dimen name="nav_header_height">@dimen/_170sdp</dimen>
     <dimen name="tag_field_width">@dimen/_180sdp</dimen>
