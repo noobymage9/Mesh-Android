@@ -27,7 +27,7 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/default_child_margin"
                 android:contentDescription="@string/default_contact_icon_desc"
-                android:background="@mipmap/default_icon" />
+                android:src="@mipmap/default_icon" />
 
 
             <TextView

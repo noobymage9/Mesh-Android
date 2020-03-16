@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
     private void initialiseRecyclerView(View root, ArrayList<Contact> contactList) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
-        contactAdapter = new ContactAdapter(contactList, this.getContext(), this);
+        contactAdapter = new ContactAdapter(contactList,this);
         recyclerView.setAdapter(contactAdapter);
         itemDragAndDropCallback = new ItemDragAndDropCallback(this, recyclerView);
         itemTouchHelper = new ItemTouchHelper(itemDragAndDropCallback);

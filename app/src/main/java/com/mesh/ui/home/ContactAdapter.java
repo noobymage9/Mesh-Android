@@ -19,6 +19,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
@@ -30,7 +32,6 @@ import java.util.ArrayList;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
     private ArrayList<Contact> contactList;
-    private Context context;
     public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private HomeFragment homeFragment;
@@ -114,9 +115,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
     }
 
-    ContactAdapter(ArrayList<Contact> contactList, Context context, HomeFragment homeFragment) {
+    ContactAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
         this.contactList = contactList;
-        this.context = context;
         this.homeFragment = homeFragment;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
     }
@@ -129,7 +129,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     @Override
     public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
         contactViewHolder.setIsRecyclable(false);
-        DBManager dbManager = new DBManager(context);
+        DBManager dbManager = new DBManager(homeFragment.getContext());
         dbManager.open();
         contactViewHolder.contact = contactList.get(i);
         Contact contact = contactList.get(i);
@@ -147,13 +147,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             Drawable temp = null;
             switch (sourceApps.get(j)) {
                 case "WhatsApp":
-                    temp = context.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground);
+                    temp = homeFragment.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground);
                     break;
                 case "Telegram":
-                    temp = context.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
+                    temp = homeFragment.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
                     break;
                 case "SMS":
-                    temp = context.getResources().getDrawable(R.mipmap.sms_logo);
+                    temp = homeFragment.getResources().getDrawable(R.mipmap.sms_logo);
                     break;
                 default:
                     break;
@@ -174,18 +174,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {
-            contactViewHolder.icon.setImageDrawable(context.getResources().getDrawable(R.drawable.group_icon));
+            Glide.with(homeFragment).load(contact.icon).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.group_icon).into(contactViewHolder.icon);
         } else {
-            contactViewHolder.icon.setImageDrawable(context.getResources().getDrawable(R.drawable.individual_icon));
+            Glide.with(homeFragment).load(contact.icon).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.individual_icon).into(contactViewHolder.icon);
         }
         dbManager.close();
-
-        if (contact.icon != null) { // Temporary reduce size of photo
-            Bitmap myBitmap = BitmapFactory.decodeFile(contact.icon);
-            int nh = (int) (myBitmap.getHeight() * (512.0 / myBitmap.getWidth()));
-            Bitmap scaled = Bitmap.createScaledBitmap(myBitmap, 512, nh, true);
-            contactViewHolder.icon.setImageBitmap(scaled);
-        }
     }
 
 
@@ -199,7 +192,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     private int getSizeInDP(int size) {
-        float scale = context.getResources().getDisplayMetrics().density;
+        float scale = homeFragment.getResources().getDisplayMetrics().density;
         return (int) (size * scale + 0.5f);
     }
 
