@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/home_card_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="@dimen/activity_margin">
 
-    <androidx.cardview.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/home_card"
         android:layout_width="match_parent"
         android:layout_height="@dimen/card_height"
@@ -29,7 +27,7 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="@dimen/default_child_margin"
                 android:contentDescription="@string/default_contact_icon_desc"
-                android:src="@mipmap/default_icon" />
+                android:background="@mipmap/default_icon" />
 
 
             <TextView
@@ -37,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-               android:layout_marginHorizontal="@dimen/default_child_margin"
+                android:layout_marginHorizontal="@dimen/default_child_margin"
                 android:layout_toEndOf="@id/contact_icon"
                 android:text="@string/default_contact_name"
                 android:textColor="@color/headers"
@@ -50,9 +48,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="@dimen/default_child_margin"
-                android:textSize="@dimen/timestamp_size"
                 android:text="@string/default_timestamp"
-                android:textColor="@color/headers" />
+                android:textColor="@color/headers"
+                android:textSize="@dimen/timestamp_size" />
 
             <include
                 layout="@layout/source_icon"
@@ -60,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="@dimen/default_child_margin"/>
+                android:layout_margin="@dimen/default_child_margin" />
 
             <!--TextView
                 android:id="@+id/txtContent"
