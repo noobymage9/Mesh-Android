@@ -174,9 +174,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {
-            Glide.with(homeFragment).load(contact.icon).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.group_icon).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.group_icon).into(contactViewHolder.icon);
         } else {
-            Glide.with(homeFragment).load(contact.icon).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.individual_icon).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.individual_icon).into(contactViewHolder.icon);
         }
         dbManager.close();
     }
