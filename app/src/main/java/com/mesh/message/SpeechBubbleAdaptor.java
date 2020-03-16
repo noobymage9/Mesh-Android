@@ -122,7 +122,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
         }
         speechBubbleViewHolder.content.setText(message.getMessageContent());
-        if (speechBubbleViewHolder.content.getText().length() > 20) {
+        if (speechBubbleViewHolder.content.getLineCount() > 2) {
             RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
             layoutParams.addRule(RelativeLayout.BELOW, 0);
