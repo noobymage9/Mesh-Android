@@ -19,14 +19,15 @@
             android:id="@+id/inner_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/card_color">
+            android:background="@color/card_color"
+            android:paddingStart="@dimen/default_child_margin">
 
             <ImageView
                 android:id="@+id/contact_icon"
                 android:layout_width="@dimen/contact_icon_size"
                 android:layout_height="@dimen/contact_icon_size"
                 android:layout_centerVertical="true"
-                android:layout_marginHorizontal="@dimen/default_child_margin"
+                android:layout_margin="@dimen/default_child_margin"
                 android:contentDescription="@string/default_contact_icon_desc"
                 android:src="@mipmap/default_icon" />
 

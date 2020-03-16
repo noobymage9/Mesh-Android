@@ -10,7 +10,7 @@
     <!-- margin Horizontal not set as card can expand -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactList"
-        android:layout_marginVertical="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
