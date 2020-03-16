@@ -80,17 +80,15 @@ public class ItemDragAndDropCallback extends ItemTouchHelper.Callback {
         } else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
 
             if (homeFragment.isMerge()) { // To prevent swapping
-                if (folder != null) {
-                    if (homeFragment.isMerge()) {
-                        homeFragment.displaySnackBar(draggedFolderPosition, folderPosition);
-                    }
+                if (folder != null && homeFragment.getMergeSnackbar() == null) {
+                    homeFragment.displaySnackBar(draggedFolderPosition, folderPosition);
                     folder = null;
                     folderPosition = -1;
                     // You can remove item from the list here and add it to the folder
                     // Remember to notify RecyclerView about it
                     // recyclerView.getAdapter().notifyItemRemoved(draggedFolderPosition);
                 } else
-                    LocalBroadcastManager.getInstance(homeFragment.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
+                    homeFragment.reset();
             }
         }
     }
