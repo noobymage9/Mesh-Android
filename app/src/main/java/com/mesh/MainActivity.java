@@ -9,6 +9,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -23,6 +25,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.mesh.Database.DBManager;
 import com.mesh.ui.home.HomeFragment;
@@ -32,6 +36,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int PICK_IMAGE = 21;
     public static final int ALL_PERMISSIONS = 1;
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
@@ -78,6 +83,22 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             mergeSwitchVisible = destination.getId() == R.id.nav_home;
             invalidateOptionsMenu();
+        });
+
+        ImageView profilePicture = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.profile_picture);
+        // TODO: 16/3/2020 get Profile Picture from database
+        String profilePicturePath = "test";
+        Glide.with(this).load(profilePicturePath).apply(RequestOptions.circleCropTransform()).placeholder(R.mipmap.default_icon).into(profilePicture);
+
+        profilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.putExtra("return-data", true);
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+            }
         });
     }
 
@@ -202,6 +223,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void goToHome() {
         navController.navigate(R.id.nav_home);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+            String realPath = ImageFilePath.getPath(this, data.getData());
+            // TODO: 16/3/2020 Insert realpath into database for Personal Profile Picture
+        }
     }
 
 }
