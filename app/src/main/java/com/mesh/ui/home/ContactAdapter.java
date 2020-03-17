@@ -160,13 +160,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             }
             switch (j) {
                 case 0:
-                    contactViewHolder.sourceApp.findViewById(R.id.first_source_app).setBackground(temp);
+                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.first_source_app));
                     break;
                 case 1:
-                    contactViewHolder.sourceApp.findViewById(R.id.second_source_app).setBackground(temp);
+                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.second_source_app));
                     break;
                 case 2:
-                    contactViewHolder.sourceApp.findViewById(R.id.third_source_app).setBackground(temp);
+                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.third_source_app));
                     break;
                 default:
                     break;
