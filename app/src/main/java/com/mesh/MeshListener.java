@@ -25,6 +25,7 @@ public class MeshListener extends NotificationListenerService {
     public static final String RECEIVE_JSON = "NotificationService.RECEIVE_JSON";
     private final String WHATSAPP_PACKAGE = "com.whatsapp";
     private final String TELEGRAM_PACKAGE = "org.telegram.messenger";
+    private final String FACEBOOK_MESSENGER_PACKAGE = "com.facebook.orca";
     private final String ANDROID_TITLE_KEY = "android.title";
     private final String ANDROID_TEXT_KEY = "android.text";
     private boolean listenerConnected = false;
@@ -69,6 +70,8 @@ public class MeshListener extends NotificationListenerService {
         text = "";
         sourceApp = "";
         currentDate = null;
+
+        notificationDetails(statusBarNotification, extras);
 
         dbManager = new DBManager(this);
         dbManager.open();
@@ -153,6 +156,7 @@ public class MeshListener extends NotificationListenerService {
         switch(pack) {
             case WHATSAPP_PACKAGE: return "WhatsApp";
             case TELEGRAM_PACKAGE: return "Telegram";
+            case FACEBOOK_MESSENGER_PACKAGE: return "Facebook_Messenger";
             default: return "";
         }
     }
@@ -182,7 +186,8 @@ public class MeshListener extends NotificationListenerService {
         return !title.equals("WhatsApp") &&
                 !title.equals("WhatsApp Web") &&
                 !title.equals("Line") &&
-                !title.equals("Telegram");
+                !title.equals("Telegram") &&
+                !title.equals("Facebook_Messenger");
     }
 
     private boolean isGroupName(String title) {

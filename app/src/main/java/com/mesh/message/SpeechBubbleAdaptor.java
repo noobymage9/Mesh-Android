@@ -15,6 +15,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.mesh.Image;
 import com.mesh.R;
 
 import java.util.ArrayList;
@@ -136,16 +137,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
             }
         });
 
-        switch (message.getSourceApp()) {
-            case "WhatsApp":
-                Glide.with(messageActivity).load(R.mipmap.whatsapp_logo_foreground).fitCenter().into(speechBubbleViewHolder.sourceIcon);
-                break;
-            case "Telegram":
-                Glide.with(messageActivity).load(R.mipmap.telegram_logo_foreground).fitCenter().into(speechBubbleViewHolder.sourceIcon);
-                break;
-            case "SMS":
-                Glide.with(messageActivity).load(R.mipmap.sms_logo).fitCenter().into(speechBubbleViewHolder.sourceIcon);
-        }
+        Image.setSource(message.getSourceApp(), messageActivity, speechBubbleViewHolder.sourceIcon);
     }
 
     @NonNull

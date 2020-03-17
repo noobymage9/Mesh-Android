@@ -2,36 +2,23 @@ package com.mesh.ui.home;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mesh.Database.DBManager;
-import com.mesh.ImageFilePath;
+import com.mesh.Image;
 import com.mesh.MainActivity;
 import com.mesh.R;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
@@ -107,7 +94,7 @@ public class HomeFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-            String realPath = ImageFilePath.getPath(getContext(), data.getData());
+            String realPath = Image.getPath(getContext(), data.getData());
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();
             dbManager.insertIcon(realPath, contactAdapter.getCurrentContactClicked().getID() + "");

@@ -2,6 +2,7 @@ package com.mesh;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,12 +11,17 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 
 //import android.provider.<span id="IL_AD11" class="IL_AD">MediaStore</span>;
 
 @SuppressLint("NewApi")
 @TargetApi(Build.VERSION_CODES.KITKAT)
-public class ImageFilePath {
+public class Image {
 
     /**
      * Method for return file path of Gallery image
@@ -170,5 +176,35 @@ public class ImageFilePath {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri
                 .getAuthority());
+    }
+
+    public static void setSource(String sourceApp, Fragment fragment, ImageView imageView) {
+        switch (sourceApp) {
+            case "WhatsApp":
+                Glide.with(fragment).load(R.mipmap.whatsapp_logo_foreground).fitCenter().into(imageView);
+                break;
+            case "Telegram":
+                Glide.with(fragment).load(R.mipmap.telegram_logo_foreground).fitCenter().into(imageView);
+                break;
+            case "SMS":
+                Glide.with(fragment).load(R.mipmap.sms_logo).fitCenter().into(imageView);
+            case "Facebook_Messenger":
+                Glide.with(fragment).load(R.mipmap.facebook_messenger_logo_foreground).fitCenter().into(imageView);
+        }
+    }
+
+    public static void setSource(String sourceApp, Activity activity, ImageView imageView) {
+        switch (sourceApp) {
+            case "WhatsApp":
+                Glide.with(activity).load(R.mipmap.whatsapp_logo_foreground).fitCenter().into(imageView);
+                break;
+            case "Telegram":
+                Glide.with(activity).load(R.mipmap.telegram_logo_foreground).fitCenter().into(imageView);
+                break;
+            case "SMS":
+                Glide.with(activity).load(R.mipmap.sms_logo).fitCenter().into(imageView);
+            case "Facebook_Messenger":
+                Glide.with(activity).load(R.mipmap.facebook_messenger_logo_foreground).fitCenter().into(imageView);
+        }
     }
 }

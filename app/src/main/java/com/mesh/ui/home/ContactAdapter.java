@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
+import com.mesh.Image;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
 
@@ -144,33 +145,21 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
         int j = 0;
         while (j < sourceApps.size()) {
-            Drawable temp = null;
-            switch (sourceApps.get(j)) {
-                case "WhatsApp":
-                    temp = homeFragment.getResources().getDrawable(R.mipmap.whatsapp_logo_foreground);
-                    break;
-                case "Telegram":
-                    temp = homeFragment.getResources().getDrawable(R.mipmap.telegram_logo_foreground);
-                    break;
-                case "SMS":
-                    temp = homeFragment.getResources().getDrawable(R.mipmap.sms_logo);
-                    break;
-                default:
-                    break;
-            }
+            ImageView sourceApp = null;
             switch (j) {
                 case 0:
-                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.first_source_app));
+                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.first_source_app);
                     break;
                 case 1:
-                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.second_source_app));
+                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.second_source_app);
                     break;
                 case 2:
-                    Glide.with(homeFragment).load(temp).fitCenter().into((ImageView) contactViewHolder.sourceApp.findViewById(R.id.third_source_app));
+                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.third_source_app);
                     break;
                 default:
                     break;
             }
+            Image.setSource(sourceApps.get(j), homeFragment, sourceApp);
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {

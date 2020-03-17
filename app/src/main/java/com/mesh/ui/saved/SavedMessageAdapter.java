@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mesh.Image;
 import com.mesh.R;
 import com.mesh.message.Message;
 
@@ -141,14 +142,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
             sourceIconLayoutParams.addRule(RelativeLayout.BELOW, 0);
             savedMessageViewHolder.sourceIcon.setLayoutParams(sourceIconLayoutParams);
         }
-        switch (message.getSourceApp()) {
-            case "WhatsApp":
-                savedMessageViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo_foreground);
-                break;
-            case "Telegram":
-                savedMessageViewHolder.sourceIcon.setImageResource(R.mipmap.telegram_logo_foreground);
-                break;
-        }
+        Image.setSource(message.getSourceApp(), savedMessageActivity, savedMessageViewHolder.sourceIcon);
     }
 
     private boolean someAreSelected() {

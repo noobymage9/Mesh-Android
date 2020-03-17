@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
-            String realPath = ImageFilePath.getPath(this, data.getData());
+            String realPath = Image.getPath(this, data.getData());
             // TODO: 16/3/2020 Insert realpath into database for Personal Profile Picture
         }
     }
