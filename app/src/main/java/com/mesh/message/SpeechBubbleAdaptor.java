@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mesh.R;
 
 import java.util.ArrayList;
@@ -122,21 +123,28 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
         }
         speechBubbleViewHolder.content.setText(message.getMessageContent());
-        if (speechBubbleViewHolder.content.getLineCount() > 2) {
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
-            layoutParams.addRule(RelativeLayout.BELOW, 0);
-            speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
-        }
+        speechBubbleViewHolder.content.post(new Runnable() {
+            @Override
+            public void run() {
+                int lineCount = speechBubbleViewHolder.content.getLineCount();
+                if (lineCount > 1) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
+                    layoutParams.addRule(RelativeLayout.BELOW, 0);
+                    speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
+                }
+            }
+        });
+
         switch (message.getSourceApp()) {
             case "WhatsApp":
-                speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.whatsapp_logo_foreground);
+                Glide.with(messageActivity).load(R.mipmap.whatsapp_logo_foreground).fitCenter().into(speechBubbleViewHolder.sourceIcon);
                 break;
             case "Telegram":
-                speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.telegram_logo_foreground);
+                Glide.with(messageActivity).load(R.mipmap.telegram_logo_foreground).fitCenter().into(speechBubbleViewHolder.sourceIcon);
                 break;
             case "SMS":
-                speechBubbleViewHolder.sourceIcon.setImageResource(R.mipmap.sms_logo);
+                Glide.with(messageActivity).load(R.mipmap.sms_logo).fitCenter().into(speechBubbleViewHolder.sourceIcon);
         }
     }
 

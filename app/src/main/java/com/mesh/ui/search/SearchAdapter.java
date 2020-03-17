@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.mesh.Database.DBManager;
 import com.mesh.R;
 import com.mesh.message.Message;
@@ -80,9 +81,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());
         switch(message.getSourceApp()) {
-            case "WhatsApp": searchBubbleViewHolder.sourceApp.setImageResource(R.mipmap.whatsapp_logo_foreground);
-            break;
-            case "Telegram": searchBubbleViewHolder.sourceApp.setImageResource(R.mipmap.telegram_logo_foreground);
+            case "WhatsApp": Glide.with(searchFragment).load(R.mipmap.whatsapp_logo_foreground).fitCenter().placeholder(R.mipmap.default_icon).into(searchBubbleViewHolder.sourceApp);
+                break;
+            case "Telegram": Glide.with(searchFragment).load(R.mipmap.telegram_logo_foreground).fitCenter().placeholder(R.mipmap.default_icon).into(searchBubbleViewHolder.sourceApp);
+                break;
+            case "SMS": Glide.with(searchFragment).load(R.mipmap.sms_logo).fitCenter().placeholder(R.mipmap.default_icon).into(searchBubbleViewHolder.sourceApp);
             break;
             default: break;
         }
