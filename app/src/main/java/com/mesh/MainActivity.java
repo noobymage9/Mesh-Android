@@ -36,11 +36,14 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int PICK_IMAGE = 21;
-    public static final int ALL_PERMISSIONS = 1;
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
+
+    private static final int PICK_IMAGE = 21;
+    private static final int ALL_PERMISSIONS = 1;
+
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
+
     private boolean deleteNotification, mergeSwitchVisible;
     private String[] neededPermissions;
     private AppBarConfiguration appBarConfiguration;

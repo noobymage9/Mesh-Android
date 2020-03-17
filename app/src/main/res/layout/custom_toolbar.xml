@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize">
+
+    <ImageView
+        android:id="@+id/contact_icon"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="@dimen/default_child_margin"
+        android:contentDescription="@string/default_contact_icon_desc"/>
+
+    <TextView
+        android:id="@+id/contact_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/contact_icon"
+        android:textSize="@dimen/default_text_size"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:textColor="@color/headers"
+        android:layout_marginStart="@dimen/default_child_margin"/>
+
+
+</RelativeLayout>

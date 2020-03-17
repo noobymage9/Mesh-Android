@@ -10,6 +10,7 @@
     tools:context=".message.MessageActivity">
 
     <include layout="@layout/toolbar"/>
+    <include layout="@layout/custom_toolbar"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageList"
