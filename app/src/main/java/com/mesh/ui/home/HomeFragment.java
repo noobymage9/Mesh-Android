@@ -65,11 +65,13 @@ public class HomeFragment extends Fragment {
     }
 
 
-    public void dismissSnack() {
+    public boolean dismissSnack() {
         if (mergeSnackbar != null && mergeSnackbar.isShown()) {
             mergeSnackbar.dismiss();
             reset();
+            return true;
         }
+        return false;
     }
 
     public void setMerge(boolean merge){

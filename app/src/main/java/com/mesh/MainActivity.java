@@ -176,7 +176,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // TODO: 15/3/2020 Find a way to fix this
     @Override
     public void onBackPressed() { // This cause home to be unable to back out of Mesh
 
@@ -184,7 +183,8 @@ public class MainActivity extends AppCompatActivity {
 
         for (Fragment fragment : fragmentList) {
             if (fragment instanceof HomeFragment) {
-                ((HomeFragment) fragment).dismissSnack();
+                if (!((HomeFragment) fragment).dismissSnack())
+                    super.onBackPressed();
                 return;
             }
         }
