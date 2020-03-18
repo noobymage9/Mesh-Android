@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 //import android.provider.<span id="IL_AD11" class="IL_AD">MediaStore</span>;
 
@@ -188,8 +189,11 @@ public class Image {
                 break;
             case "SMS":
                 Glide.with(fragment).load(R.mipmap.sms_logo).fitCenter().into(imageView);
+                break;
             case "Facebook_Messenger":
-                Glide.with(fragment).load(R.mipmap.facebook_messenger_logo_foreground).fitCenter().into(imageView);
+                Glide.with(fragment).load(R.mipmap.facebook_messenger_logo).apply(RequestOptions.circleCropTransform()).into(imageView);
+                break;
+            default: break;
         }
     }
 
@@ -203,8 +207,11 @@ public class Image {
                 break;
             case "SMS":
                 Glide.with(activity).load(R.mipmap.sms_logo).fitCenter().into(imageView);
+                break;
             case "Facebook_Messenger":
-                Glide.with(activity).load(R.mipmap.facebook_messenger_logo_foreground).fitCenter().into(imageView);
+                Glide.with(activity).load(R.mipmap.facebook_messenger_logo).apply(RequestOptions.circleCropTransform()).into(imageView);
+                break;
+            default: break;
         }
     }
 }
