@@ -37,5 +37,7 @@
 
     <string name="action_merge_mode">Merge Mode</string>
     <string name="action_swap_mode">Swap Mode</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
 
 </resources>
