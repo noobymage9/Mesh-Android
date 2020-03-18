@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/bottom_sheet"
-    android:background="@drawable/bottom_sheet"
     android:orientation="horizontal"
     android:padding="@dimen/_16sdp"
     >
+
     <RelativeLayout
         android:id="@+id/gallery_group"
         android:layout_width="wrap_content"
