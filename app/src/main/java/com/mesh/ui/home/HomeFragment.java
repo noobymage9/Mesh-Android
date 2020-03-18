@@ -102,11 +102,20 @@ public class HomeFragment extends Fragment {
             dbManager.insertIcon(realPath, contactAdapter.getCurrentContactClicked().getID() + "");
             dbManager.close();
             reset();
-            imagePickerDialog.dismiss();
         }
+        imagePickerDialog.dismiss();
     }
 
     public ImagePickerDialog getImagePickerDialog() {
         return imagePickerDialog;
+    }
+
+    public void resetIcon() {
+        DBManager dbManager = new DBManager(getContext());
+        dbManager.open();
+        dbManager.insertIcon("", contactAdapter.getCurrentContactClicked().getID() + "");
+        dbManager.close();
+        imagePickerDialog.dismiss();
+        reset();
     }
 }

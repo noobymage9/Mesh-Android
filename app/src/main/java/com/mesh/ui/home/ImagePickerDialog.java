@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 
@@ -51,6 +53,14 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
                 intent.putExtra("return-data", true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+            }
+        });
+
+        Button reset = root.findViewById(R.id.reset_button);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeFragment) fragment).resetIcon();
             }
         });
         return root;
