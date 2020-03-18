@@ -427,10 +427,18 @@ public class DBManager {
         return c;
     }
 
-    private Cursor getAllContactsDB(SortSetting setting) {
+    public String getContactName(int contactID) {
+        Cursor c = getContactDB(contactID);
+
+        return c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME));
+    }
+
+    public ArrayList<Contact> getAllContacts() {
         Cursor c;
+        ArrayList<Contact> contacts = new ArrayList<>();
+
         if (!getCustomContactSortSetting()) {
-            switch (setting) {
+            switch (getContactSortSetting()) {
                 case Recency:
                     c = getAllContactsSortByRecency();
                     break;
@@ -444,21 +452,6 @@ public class DBManager {
             reinitializeContactsOrder(c);;
         } else
             c = getAllContactsSortByOrder();
-
-        return c;
-    }
-
-    public String getContactName(int contactID) {
-        Cursor c = getContactDB(contactID);
-
-        return c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME));
-    }
-
-    public ArrayList<Contact> getAllContacts(SortSetting setting) {
-        Cursor c;
-        ArrayList<Contact> contacts = new ArrayList<>();
-
-       c = getAllContactsDB(setting);
 
         int isGroupUser;
         Contact currentContact;
@@ -567,9 +560,9 @@ public class DBManager {
         }
     }
 
-    public ArrayList<Contact> getFavouriteContacts(SortSetting setting)
+    public ArrayList<Contact> getFavouriteContacts()
     {
-        ArrayList<Contact> contacts = getAllContacts(setting);
+        ArrayList<Contact> contacts = getAllContacts();
 
         for(Contact contact : contacts)
         {
