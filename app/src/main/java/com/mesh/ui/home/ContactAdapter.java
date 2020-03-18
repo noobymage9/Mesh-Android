@@ -33,6 +33,7 @@ import java.util.ArrayList;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
 
     private ArrayList<Contact> contactList;
+    private final String imagePickerFragmentTag = "image_picker_dialog";
     public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private HomeFragment homeFragment;
@@ -56,12 +57,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 public void onClick(View v) {
                     if (homeFragment.isMerge()) {
                         if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
+                            homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), imagePickerFragmentTag);
                             currentContactClicked = contact;
-                            Intent intent = new Intent();
-                            intent.setType("image/*");
-                            intent.putExtra("return-data", true);
-                            intent.setAction(Intent.ACTION_GET_CONTENT);
-                            homeFragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
                         } else {
                             homeFragment.dismissSnack();
                         }

@@ -4,8 +4,10 @@ import android.Manifest;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +38,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
+    public static String galleryPackage;
+    //public static final String cameraPackage;
 
     private static final int PICK_IMAGE = 21;
     private static final int ALL_PERMISSIONS = 1;
@@ -65,8 +69,21 @@ public class MainActivity extends AppCompatActivity {
             initialiseAlertDialog();
         if (!allPermissionsEnabled())
             ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
+
+
+        galleryPackage = getGalleryPackage();
+
     }
 
+    private String getGalleryPackage() {
+        PackageManager packageManager = getPackageManager();
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setType("image/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.get(0).activityInfo.packageName;
+    }
     private void initialiseToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar));
     }

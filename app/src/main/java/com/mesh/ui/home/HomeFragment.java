@@ -31,6 +31,7 @@ public class HomeFragment extends Fragment {
     private ItemDragAndDropCallback itemDragAndDropCallback;
     private ItemTouchHelper itemTouchHelper;
     private MergeSnackbar mergeSnackbar;
+    private ImagePickerDialog imagePickerDialog;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -38,6 +39,7 @@ public class HomeFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_home, container, false);
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         homeViewModel.getContactNames().observe(getViewLifecycleOwner(), contactList -> initialiseRecyclerView(root, contactList));
+        imagePickerDialog = new ImagePickerDialog(this);
         return root;
     }
 
@@ -100,7 +102,11 @@ public class HomeFragment extends Fragment {
             dbManager.insertIcon(realPath, contactAdapter.getCurrentContactClicked().getID() + "");
             dbManager.close();
             reset();
+            imagePickerDialog.dismiss();
         }
     }
 
+    public ImagePickerDialog getImagePickerDialog() {
+        return imagePickerDialog;
+    }
 }
