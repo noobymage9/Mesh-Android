@@ -11,11 +11,12 @@
     <RelativeLayout
         android:id="@+id/gallery_group"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
         <ImageView
             android:id="@+id/gallery_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/contact_icon_size"
+            android:layout_height="@dimen/contact_icon_size"
             android:layout_alignStart="@id/gallery_name"
             android:layout_alignEnd="@id/gallery_name"/>
         <TextView
@@ -33,16 +34,21 @@
         android:id="@+id/camera_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/default_child_margin"
-        android:layout_toEndOf="@id/gallery_group">
+        android:layout_marginStart="@dimen/double_default"
+        android:layout_toEndOf="@id/gallery_group"
+        android:layout_alignBottom="@id/gallery_group">
         <ImageView
             android:id="@+id/camera_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_width="@dimen/contact_icon_size"
+            android:layout_height="@dimen/contact_icon_size"
+            android:layout_alignStart="@id/camera_name"
+            android:layout_alignEnd="@id/camera_name"
+            />
         <TextView
             android:id="@+id/camera_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:textColor="@color/text_message"
             android:textStyle="bold"
             android:textSize="@dimen/default_text_size"
@@ -52,12 +58,11 @@
 
     <Button
         android:id="@+id/reset_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/contact_icon_size"
+        android:layout_height="@dimen/contact_icon_size"
         android:layout_toEndOf="@id/camera_group"
         android:layout_alignTop="@id/camera_group"
-        android:layout_alignBottom="@id/camera_group"
-        android:layout_marginStart="@dimen/default_child_margin"
+        android:layout_marginStart="@dimen/double_default"
         android:text="@string/setting_reset"
         android:background="@drawable/setting_reset_custom_border"/>
 

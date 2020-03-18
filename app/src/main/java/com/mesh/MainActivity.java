@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
@@ -39,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     public static String galleryPackage;
-    //public static final String cameraPackage;
+    public static String cameraPackage;
 
     private static final int PICK_IMAGE = 21;
     private static final int ALL_PERMISSIONS = 1;
@@ -72,7 +73,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         galleryPackage = getGalleryPackage();
+        cameraPackage = getCameraPackage();
 
+    }
+
+    private String getCameraPackage() {
+        PackageManager packageManager = getPackageManager();
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.get(0).activityInfo.packageName;
     }
 
     private String getGalleryPackage() {

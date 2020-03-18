@@ -36,7 +36,7 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
         ImageView camera = root.findViewById(R.id.camera_icon);
         try {
             Glide.with(root).load(fragment.getActivity().getPackageManager().getApplicationIcon(MainActivity.galleryPackage)).fitCenter().into(gallery);
-            //Glide.with(root).load(activity.getPackageManager().getApplicationIcon(cameraPackage)).fitCenter().into(camera);
+            Glide.with(root).load(fragment.getActivity().getPackageManager().getApplicationIcon(MainActivity.cameraPackage)).fitCenter().into(camera);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("ERROR", e + "");
         }
