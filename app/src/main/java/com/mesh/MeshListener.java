@@ -13,6 +13,7 @@ import android.util.Log;
 import androidx.annotation.RequiresApi;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.mesh.Database.BooleanEnum;
 import com.mesh.Database.DBManager;
 import com.mesh.message.MessageActivity;
 
@@ -116,14 +117,17 @@ public class MeshListener extends NotificationListenerService {
             contactName = title.substring(title.indexOf(":") + 2);
 
             dbManager.insertGroup(groupName);
-            dbManager.insertContact(groupName, currentDate, 1, 0);
-            contactID = dbManager.insertContact(contactName, currentDate, 0, 1);
+            dbManager.insertContact(groupName, currentDate, BooleanEnum.getIntValueOfBoolean(true),
+                    BooleanEnum.getIntValueOfBoolean(false));
+            contactID = dbManager.insertContact(contactName, currentDate, BooleanEnum.getIntValueOfBoolean(false),
+                    BooleanEnum.getIntValueOfBoolean(true));
             dbManager.insertMessage(contactID, dbManager.getGroupID(groupName),
                     text, sourceApp, currentDate);
         }
         else {
             contactName = title;
-            contactID = dbManager.insertContact(contactName, currentDate, 0, 0);
+            contactID = dbManager.insertContact(contactName, currentDate, BooleanEnum.getIntValueOfBoolean(false),
+                    BooleanEnum.getIntValueOfBoolean(false));
             dbManager.insertMessage(contactID, text, sourceApp, currentDate);
         }
 

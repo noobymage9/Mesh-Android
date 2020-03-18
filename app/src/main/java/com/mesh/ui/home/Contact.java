@@ -9,12 +9,13 @@ public class Contact implements Parcelable {
     protected int id;
     protected String icon;
     protected String name;
+    protected boolean isFavourite;
 
-
-    public Contact(int id, String icon, String name) {
+    public Contact(int id, String icon, String name, boolean isFavourite) {
         this.id = id;
         this.icon = icon;
         this.name = name;
+        this.isFavourite = isFavourite;
     }
 
     public Contact(int id, String name) {
@@ -49,6 +50,8 @@ public class Contact implements Parcelable {
     public String getName() {
         return this.name;
     }
+
+    public boolean getIsFavourite() { return this.isFavourite; }
 
     @Override
     public int describeContents() {

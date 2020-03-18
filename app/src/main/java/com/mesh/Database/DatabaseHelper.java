@@ -45,6 +45,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_IS_GROUP = "Is_Group";
     public static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
     public static final String CONTACT_CUSTOM_ORDER = "Custom_Contact_Order";
+    public static final String CONTACT_IS_FAVOURITE = "Is_Favourite";
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
@@ -62,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**************************/
     /**Default Setting Values**/
     /**************************/
-    public static final int defaultSortContactSetting = 0;
+    public static final int defaultSortContactSetting = SortSetting.getSettingID(SortSetting.Recency);
     public static final boolean defaultDeleteNotificationSetting = false;
     public static final boolean defaultCustomContactOrder = false;
 
@@ -99,8 +100,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_PROFILE_PIC + " STRING, " +
             CONTACT_LATEST_TIMESTAMP + " DATE, " +
             CONTACT_IS_GROUP + " INTEGER, " +
-            CONTACT_IS_GROUP_USER + " INTEGER DEFAULT 0, " +
-            CONTACT_CUSTOM_ORDER + " INTEGER);";
+            CONTACT_IS_GROUP_USER + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ", " +
+            CONTACT_CUSTOM_ORDER + " INTEGER, " +
+            CONTACT_IS_FAVOURITE + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ");";
 
     static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
