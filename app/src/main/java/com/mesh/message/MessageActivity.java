@@ -88,7 +88,10 @@ public class MessageActivity extends AppCompatActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.custom_toolbar, null);
         ImageView contactIcon = view.findViewById(R.id.contact_icon);
         TextView contactName = view.findViewById(R.id.contact_name);
-        Glide.with(this).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).into(contactIcon);
+        if(contact.getProfilePic() != null)
+            Glide.with(this).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).into(contactIcon);
+        else
+            contactIcon.setVisibility(View.GONE);
         contactName.setText(contact.toString());
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
