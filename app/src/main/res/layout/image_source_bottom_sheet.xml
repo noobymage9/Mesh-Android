@@ -12,6 +12,7 @@
         android:id="@+id/gallery_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         >
         <ImageView
             android:id="@+id/gallery_icon"
@@ -63,7 +64,8 @@
         android:layout_toEndOf="@id/camera_group"
         android:layout_alignTop="@id/camera_group"
         android:layout_marginStart="@dimen/double_default"
-        android:text="@string/setting_reset"
+        android:textSize="@dimen/small_text_size"
+        android:text="@string/remove"
         android:background="@drawable/setting_reset_custom_border"/>
 
 

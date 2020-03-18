@@ -39,5 +39,6 @@
     <string name="action_swap_mode">Swap Mode</string>
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
+    <string name="remove">Remove</string>
 
 </resources>
