@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     protected static final int PICK_IMAGE = 7;
+    protected static final int CAPTURE_IMAGE = 8;
     public boolean merge = true;
     private View root;
     private RecyclerView recyclerView;
@@ -95,7 +96,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+        if ((requestCode == PICK_IMAGE || requestCode == CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(getContext(), data.getData());
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();

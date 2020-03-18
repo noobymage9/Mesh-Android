@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,12 +48,22 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
         galleryGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.putExtra("return-data", true);
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+                if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null)
+                    fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+            }
+        });
+
+        RelativeLayout cameraGroup = root.findViewById(R.id.camera_group);
+        cameraGroup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null && fragment.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+                    fragment.getActivity().startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
             }
         });
 
