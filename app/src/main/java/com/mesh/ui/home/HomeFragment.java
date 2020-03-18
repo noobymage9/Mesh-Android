@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment {
     public void resetIcon() {
         DBManager dbManager = new DBManager(getContext());
         dbManager.open();
-        dbManager.insertIcon("", contactAdapter.getCurrentContactClicked().getID() + "");
+        dbManager.insertIcon(null, contactAdapter.getCurrentContactClicked().getID() + "");
         dbManager.close();
         imagePickerDialog.dismiss();
         reset();

@@ -72,7 +72,7 @@ public class MeshListener extends NotificationListenerService {
         sourceApp = "";
         currentDate = null;
 
-        notificationDetails(statusBarNotification, extras);
+        //notificationDetails(statusBarNotification, extras);
 
         dbManager = new DBManager(this);
         dbManager.open();
