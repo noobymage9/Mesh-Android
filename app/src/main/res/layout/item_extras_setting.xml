@@ -15,7 +15,7 @@
         app:layout_constraintHorizontal_bias="0.75"
         android:textSize="@dimen/default_text_size"
         android:padding="@dimen/default_child_margin"
-        android:background="@drawable/setting_reset_custom_border"
+        android:background="@drawable/all_button"
         android:text="@string/setting_reset" />
 
     <Button
@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
         android:textSize="@dimen/default_text_size"
-        android:background="@drawable/setting_reset_custom_border"
+        android:background="@drawable/all_button"
         android:text="@string/setting_backup"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

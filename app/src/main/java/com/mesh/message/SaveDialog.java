@@ -6,12 +6,10 @@ import android.content.ContextWrapper;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.Window;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,7 +31,7 @@ public class SaveDialog extends Dialog {
     SaveDialog(@NonNull Context context) {
         super(context);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.save_dialog);
+        setContentView(R.layout.layout_savedialog_message);
         messageActivity = ((MessageActivity) ((ContextWrapper) getContext()).getBaseContext());
 
         initialiseEditText();

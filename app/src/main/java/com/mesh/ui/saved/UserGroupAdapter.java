@@ -45,7 +45,7 @@ public class UserGroupAdapter extends RecyclerView.Adapter<UserGroupAdapter.User
     public UserGroupViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(parent.getContext()).
-                inflate(R.layout.saved_card, parent, false);
+                inflate(R.layout.item_saved, parent, false);
         return new UserGroupAdapter.UserGroupViewHolder(itemView);
     }
 

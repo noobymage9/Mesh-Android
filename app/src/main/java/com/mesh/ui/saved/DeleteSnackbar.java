@@ -59,7 +59,7 @@ final class DeleteSnackbar extends BaseTransientBottomBar<DeleteSnackbar> {
     static DeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList, UserCollection userCollection) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View content = inflater.inflate(R.layout.save_delete_bar, parent, false);
+        View content = inflater.inflate(R.layout.layout_snackbar_message, parent, false);
         Button save = content.findViewById(R.id.save_button);
         save.setVisibility(View.GONE);
 

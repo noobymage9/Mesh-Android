@@ -5,7 +5,7 @@
     android:id="@+id/save_dialog"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/setting_reset_custom_border"
+    android:background="@drawable/all_button"
     android:backgroundTint="@color/save_dialog_background"
     android:padding="@dimen/default_child_margin">
 
@@ -16,7 +16,7 @@
         android:layout_alignTop="@id/add_field"
         android:layout_alignBottom="@id/add_field"
         android:padding="@dimen/default_child_margin"
-        android:background="@drawable/dialog_add"
+        android:background="@drawable/savedialog_addbutton"
         />
 
     <EditText
@@ -26,7 +26,7 @@
         android:layout_margin="@dimen/default_child_margin"
         android:paddingHorizontal="@dimen/default_child_margin"
         android:layout_toEndOf="@id/add_button"
-        android:background="@drawable/setting_reset_custom_border"
+        android:background="@drawable/all_button"
         android:backgroundTint="@color/colorPrimary"
         android:textCursorDrawable="@null"
         android:textColor="@color/headers"
@@ -55,7 +55,7 @@
         android:layout_height="@dimen/save_button_height"
         android:layout_below="@id/tag_list"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/setting_reset_custom_border"
+        android:background="@drawable/all_button"
         android:textColor="@color/Black"
         android:text="@string/snackbar_save"
         />

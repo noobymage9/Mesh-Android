@@ -9,8 +9,8 @@
     android:background="@color/background"
     tools:context=".message.MessageActivity">
 
-    <include layout="@layout/toolbar"/>
-    <include layout="@layout/custom_toolbar"/>
+    <include layout="@layout/layout_toolbar_all"/>
+    <include layout="@layout/layout_toolbar_messageactivity"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/messageList"

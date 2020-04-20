@@ -10,7 +10,7 @@
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/incoming_speech_bubble">
+        android:background="@drawable/messageactivity_speechbubble">
 
         <TextView
             android:id="@+id/incoming_bubble_title"

@@ -1,14 +1,6 @@
 package com.mesh.ui.home;
 
-import android.content.ClipData;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -26,8 +18,6 @@ import com.mesh.Image;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
@@ -160,9 +150,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.group_icon).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_group).into(contactViewHolder.icon);
         } else {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.individual_icon).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_individual).into(contactViewHolder.icon);
         }
         dbManager.close();
     }
@@ -173,7 +163,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.home_card, viewGroup, false);
+                inflate(R.layout.item_home, viewGroup, false);
         return new ContactViewHolder(itemView);
     }
 

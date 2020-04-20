@@ -40,7 +40,7 @@ public class TagAdapter extends RecyclerView.Adapter<TagAdapter.TagViewHolder> {
     public TagViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.
                 from(parent.getContext()).
-                inflate(R.layout.tag_card, parent, false);
+                inflate(R.layout.item_savedtag, parent, false);
 
         return new TagAdapter.TagViewHolder(itemView);
     }

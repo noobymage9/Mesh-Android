@@ -1,21 +1,14 @@
 package com.mesh.message;
 
 import android.content.Intent;
-import android.drm.DrmStore;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
@@ -34,7 +25,6 @@ import com.mesh.SettingActivity;
 import com.mesh.ui.home.Contact;
 import com.mesh.ui.home.ContactAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class MessageActivity extends AppCompatActivity {
@@ -85,7 +75,7 @@ public class MessageActivity extends AppCompatActivity {
     }
 
     private void initialiseActionBar() {
-        View view = LayoutInflater.from(this).inflate(R.layout.custom_toolbar, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_toolbar_messageactivity, null);
         ImageView contactIcon = view.findViewById(R.id.contact_icon);
         TextView contactName = view.findViewById(R.id.contact_name);
         if(contact.getProfilePic() != null)

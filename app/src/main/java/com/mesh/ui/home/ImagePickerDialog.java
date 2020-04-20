@@ -1,6 +1,5 @@
 package com.mesh.ui.home;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.mesh.Database.DBManager;
 import com.mesh.MainActivity;
 import com.mesh.R;
 
@@ -34,7 +32,7 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.image_source_bottom_sheet, container, false);
+        View root = inflater.inflate(R.layout.layout_bottomsheet, container, false);
         ImageView gallery = root.findViewById(R.id.gallery_icon);
         ImageView camera = root.findViewById(R.id.camera_icon);
         try {

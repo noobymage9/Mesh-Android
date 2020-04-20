@@ -8,7 +8,7 @@
     android:background="@color/background"
     tools:context=".SettingActivity">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/layout_toolbar_all"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/setting_list"

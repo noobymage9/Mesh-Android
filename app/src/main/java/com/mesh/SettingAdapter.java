@@ -156,13 +156,13 @@ public class SettingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         switch (i) {
             case 0:
-                View sortOrderItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.sort_card, viewGroup,false);
+                View sortOrderItemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_sort_setting, viewGroup,false);
                 return new SortOrderViewHolder(sortOrderItemView);
             case 1:
-                View deleteNotificationView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.delete_notification_card, viewGroup,false);
+                View deleteNotificationView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_delete_setting, viewGroup,false);
                 return new DeleteNotificationViewHolder(deleteNotificationView);
             case 2:
-                View resetButtonView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.extras, viewGroup, false);
+                View resetButtonView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_extras_setting, viewGroup, false);
                 return new ExtraViewHolder(resetButtonView);
             default: return null;
         }

@@ -17,7 +17,7 @@
     </style>
 
     <style name="SplashScreen" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:background">@drawable/splash_screen</item>
+        <item name="android:background">@drawable/splashscreen_image</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>
@@ -30,7 +30,7 @@
 
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bottom_sheet</item>
+        <item name="android:background">@drawable/all_botttomsheet</item>
     </style>
 
 

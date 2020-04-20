@@ -13,7 +13,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
         android:layout_margin="@dimen/default_child_margin"
-        android:background="@drawable/save_delete_custom_button_background"
+        android:background="@drawable/messageactivity_savedeletesnackbar"
         android:textColor="@color/headers"
         android:text="@string/snackbar_save"/>
 
@@ -24,7 +24,7 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_margin="@dimen/default_child_margin"
-        android:background="@drawable/save_delete_custom_button_background"
+        android:background="@drawable/messageactivity_savedeletesnackbar"
         android:textColor="@color/headers"
         android:text="@string/snackbar_delete"/>
 

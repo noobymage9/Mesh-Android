@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.mesh.Image;
 import com.mesh.R;
 
@@ -124,16 +123,18 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
 
         }
         speechBubbleViewHolder.content.setText(message.getMessageContent());
-        speechBubbleViewHolder.content.post(new Runnable() {
-            @Override
-            public void run() {
-                int lineCount = speechBubbleViewHolder.content.getLineCount();
-                if (lineCount > 1) {
-                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
-                    layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
-                    layoutParams.addRule(RelativeLayout.BELOW, 0);
-                    speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
-                }
+        speechBubbleViewHolder.content.post(() -> {
+            int lineCount = speechBubbleViewHolder.content.getLineCount();
+            if (lineCount > 1) {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+                layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
+                layoutParams.addRule(RelativeLayout.BELOW, 0);
+                speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
+            } else {
+                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+                layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, 0);
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.incoming_bubble_timestamp);
+                speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
             }
         });
 
@@ -145,7 +146,7 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     public SpeechBubbleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.speech_bubble, viewGroup, false);
+                inflate(R.layout.item_speechbubble_message, viewGroup, false);
 
         return new SpeechBubbleViewHolder(itemView);
     }

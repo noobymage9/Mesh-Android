@@ -2,8 +2,9 @@
 <layer-list
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:drawable="@color/White"
-        android:gravity="fill"></item>
+    <item
+        android:drawable="@color/White"
+        android:gravity="fill" />
 
     <item
         android:drawable="@mipmap/app_logo"

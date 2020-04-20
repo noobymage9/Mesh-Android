@@ -3,7 +3,7 @@
     android:id="@+id/sort_card"
     android:layout_width="match_parent"
     android:layout_height="@dimen/setting_card_height"
-    android:background="@drawable/setting_card_custom_border"
+    android:background="@drawable/settingfragment_item"
     >
 
     <TextView

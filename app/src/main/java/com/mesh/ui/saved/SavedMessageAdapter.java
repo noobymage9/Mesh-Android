@@ -93,7 +93,7 @@ public class SavedMessageAdapter extends RecyclerView.Adapter<SavedMessageAdapte
     public SavedMessageAdapter.SavedMessageViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
-                inflate(R.layout.speech_bubble, viewGroup, false);
+                inflate(R.layout.item_speechbubble_message, viewGroup, false);
 
         return new SavedMessageAdapter.SavedMessageViewHolder(itemView);
     }

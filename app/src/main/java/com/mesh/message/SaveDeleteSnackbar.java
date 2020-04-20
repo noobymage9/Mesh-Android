@@ -61,7 +61,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
     public static SaveDeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View content = inflater.inflate(R.layout.save_delete_bar, parent, false);
+        View content = inflater.inflate(R.layout.layout_snackbar_message, parent, false);
 
         // create snackbar with custom view
         ContentViewCallback callback = new ContentViewCallback(content);
@@ -77,6 +77,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
                 if (message.isSelected())
                     dbManager.deleteFromMessageTable(message.getID());
             dbManager.close();
+            saveDeleteSnackbar.messageActivity.getSpeechBubbleAdaptor().notifyDataSetChanged();
             saveDeleteSnackbar.dismiss();
             LocalBroadcastManager.getInstance(parent.getContext()).sendBroadcast(new Intent(MainActivity.RECEIVE_JSON));
         });

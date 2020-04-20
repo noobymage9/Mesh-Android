@@ -1,6 +1,5 @@
 package com.mesh.ui.home;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,17 +7,10 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.core.view.ViewCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.mesh.Database.DBManager;
-import com.mesh.MainActivity;
 import com.mesh.R;
-import com.mesh.message.Message;
-import com.mesh.message.UserCollection;
-
-import java.util.List;
 
 final class MergeSnackbar extends BaseTransientBottomBar<MergeSnackbar> {
 
@@ -60,7 +52,7 @@ final class MergeSnackbar extends BaseTransientBottomBar<MergeSnackbar> {
     static MergeSnackbar make(ViewGroup parent, @Duration int duration, int from, int to, RecyclerView recyclerView) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View content = inflater.inflate(R.layout.save_delete_bar, parent, false);
+        View content = inflater.inflate(R.layout.layout_snackbar_message, parent, false);
         Button save = content.findViewById(R.id.save_button);
         save.setVisibility(View.GONE);
 
