@@ -9,7 +9,7 @@
         android:id="@+id/contact_icon"
         android:layout_width="?attr/actionBarSize"
         android:layout_height="match_parent"
-        android:layout_marginVertical="@dimen/default_child_margin"
+        android:layout_marginVertical="@dimen/margin_all_default"
         android:contentDescription="@string/default_contact_icon_desc"/>
 
     <TextView
@@ -18,11 +18,11 @@
         android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:layout_toEndOf="@id/contact_icon"
-        android:textSize="@dimen/default_text_size"
+        android:textSize="@dimen/textsize_big"
         android:textStyle="bold"
         android:gravity="center_vertical"
         android:textColor="@color/headers"
-        android:layout_marginStart="@dimen/default_child_margin"/>
+        android:layout_marginStart="@dimen/margin_all_default"/>
 
 
 </RelativeLayout>

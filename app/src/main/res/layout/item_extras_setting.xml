@@ -13,8 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.75"
-        android:textSize="@dimen/default_text_size"
-        android:padding="@dimen/default_child_margin"
+        android:textSize="@dimen/textsize_big"
+        android:padding="@dimen/margin_all_default"
         android:background="@drawable/all_button"
         android:text="@string/setting_reset" />
 
@@ -22,13 +22,13 @@
         android:id="@+id/backup_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_child_margin"
+        android:padding="@dimen/margin_all_default"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.25"
-        android:textSize="@dimen/default_text_size"
+        android:textSize="@dimen/textsize_big"
         android:background="@drawable/all_button"
         android:text="@string/setting_backup"
         />

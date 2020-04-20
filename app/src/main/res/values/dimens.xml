@@ -1,32 +1,26 @@
 <resources>
     <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="speech_bubble_vertical_padding">@dimen/_3sdp</dimen>
-    <dimen name="default_child_margin">@dimen/_5sdp</dimen>
-    <dimen name="double_default">@dimen/_5sdp</dimen>
-    <dimen name="activity_margin">@dimen/_16sdp</dimen>
-    <dimen name="recycler_view_vertical_margin">@dimen/activity_margin</dimen>
-    <dimen name="speech_bubble_horizontal_padding">@dimen/activity_margin</dimen>
-    <dimen name="search_bar">@dimen/_20sdp</dimen>
-    <dimen name="card_horizontal_margin">@dimen/search_bar</dimen>
-    <dimen name="tag_check_box_padding">@dimen/search_bar</dimen>
-    <dimen name="source_icon_size">@dimen/_23sdp</dimen>
-    <dimen name="add_button_size">@dimen/_40sdp</dimen>
-    <dimen name="tag_field_height">@dimen/add_button_size</dimen>
-    <dimen name="save_button_height">@dimen/add_button_size</dimen>
-    <dimen name="contact_icon_size">@dimen/add_button_size</dimen>
-    <dimen name="snackbar_height">@dimen/contact_icon_size</dimen>
-    <dimen name="nav_header_icon_size">@dimen/_75sdp</dimen>
-    <dimen name="setting_card_height">@dimen/_80sdp</dimen>
-    <dimen name="card_height">@dimen/setting_card_height</dimen>
-    <dimen name="save_button_width">@dimen/_120sdp</dimen>
-    <dimen name="nav_header_height">@dimen/_170sdp</dimen>
-    <dimen name="tag_field_width">@dimen/_180sdp</dimen>
-    <dimen name="max_speech_bubble_width">@dimen/_200sdp</dimen>
+    <dimen name="padding_speechbubble_vertical">@dimen/_3sdp</dimen>
+    <dimen name="margin_all_default">@dimen/_5sdp</dimen>
+    <dimen name="margin_all_recyclerview">@dimen/_16sdp</dimen>
+    <dimen name="padding_searchbar_horizontal">@dimen/_20sdp</dimen>
+    <dimen name="padding_tagcheckbox_horizontal">@dimen/_20sdp</dimen>
+    <dimen name="size_sourceicon">@dimen/_23sdp</dimen>
+    <dimen name="size_addbutton">@dimen/_40sdp</dimen>
+    <dimen name="height_tagfield">@dimen/_40sdp</dimen>
+    <dimen name="height_savebutton">@dimen/_40sdp</dimen>
+    <dimen name="size_contacticon">@dimen/_40sdp</dimen>
+    <dimen name="height_snackbar">@dimen/_40sdp</dimen>
+    <dimen name="size_navigationheadericon">@dimen/_75sdp</dimen>
+    <dimen name="height_settingitem">@dimen/_80sdp</dimen>
+    <dimen name="height_homeitem">@dimen/height_settingitem</dimen>
+    <dimen name="width_savebutton">@dimen/_120sdp</dimen>
+    <dimen name="height_navigationheader">@dimen/_170sdp</dimen>
+    <dimen name="width_tagfield">@dimen/_180sdp</dimen>
+    <dimen name="width_speechbubble_maximum">@dimen/_200sdp</dimen>
 
-    <dimen name="small_text_size">@dimen/_8sdp</dimen>
-    <dimen name="timestamp_size">@dimen/_12sdp</dimen>
-    <dimen name="default_text_size">@dimen/_16sdp</dimen>
-    <dimen name="contact_name_size">@dimen/_20sdp</dimen>
-    <dimen name="nav_header_text_size">@dimen/contact_name_size</dimen>
-    <dimen name="setting_item_header_size">@dimen/default_text_size</dimen>
+    <dimen name="textsize_small">@dimen/_8sdp</dimen>
+    <dimen name="textsize_medium">@dimen/_12sdp</dimen>
+    <dimen name="textsize_big">@dimen/_16sdp</dimen>
+    <dimen name="textsize_header">@dimen/_20sdp</dimen>
 </resources>

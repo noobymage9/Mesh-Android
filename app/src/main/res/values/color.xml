@@ -11,17 +11,16 @@
     <color name="Tiger">#F9AA33</color>
 
     <color name="accent">@color/Tiger</color>
-    <color name="app_bar_background">@color/BritishBlue</color>
-    <color name="drawer_menu_background">@color/app_bar_background</color>
-    <color name="snackbar_background">@color/app_bar_background</color>
-    <color name="background">@color/Montfort</color>
-    <color name="nav_header_background">@color/background</color>
-    <color name="save_dialog_background">@color/background</color>
-    <color name="card_color">@color/WinterSoldierBlue</color>
-    <color name="headers">@color/Ivory</color>
-    <color name="text_message">@color/Black</color>
-    <color name="text">@color/White</color>
-    <color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
-    <color name="colorAccent">@color/Tiger</color>
-    <color name="colorPrimaryDark">@color/WinterSoldierBlue</color>
-</resources>
+<color name="app_bar_background">@color/BritishBlue</color>
+<color name="drawer_menu_background">@color/BritishBlue</color>
+<color name="snackbar_background">@color/BritishBlue</color>
+<color name="background">@color/Montfort</color>
+<color name="nav_header_background">@color/Montfort</color>
+<color name="save_dialog_background">@color/Montfort</color>
+<color name="card_color">@color/WinterSoldierBlue</color>
+<color name="headers">@color/Ivory</color>
+<color name="text_message">@color/Black</color>
+<color name="colorPrimary">@color/BritishBlue</color> <!-- Original: #008577 -->
+<color name="colorAccent">@color/Tiger</color>
+<color name="colorPrimaryDark">@color/WinterSoldierBlue</color>
+    </resources>

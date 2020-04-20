@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/delete_notification_card"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/setting_card_height"
+    android:layout_height="@dimen/height_settingitem"
     android:background="@drawable/settingfragment_item"
     >
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:paddingHorizontal="@dimen/default_child_margin"
+        android:paddingHorizontal="@dimen/margin_all_default"
         />
 
 
@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:text="@string/setting_delete_notification"
         android:layout_centerVertical="true"
-        android:paddingHorizontal="@dimen/default_child_margin"
-        android:textSize="@dimen/setting_item_header_size"
+        android:paddingHorizontal="@dimen/margin_all_default"
+        android:textSize="@dimen/textsize_big"
         android:textStyle="bold"
         />
 

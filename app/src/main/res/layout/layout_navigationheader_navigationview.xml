@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
+    android:layout_height="@dimen/height_navigationheader"
     android:background="@color/nav_header_background"
     android:orientation="vertical">
 
     <ImageView
         android:id="@+id/profile_picture"
-        android:layout_width="@dimen/nav_header_icon_size"
-        android:layout_height="@dimen/nav_header_icon_size"
+        android:layout_width="@dimen/size_navigationheadericon"
+        android:layout_height="@dimen/size_navigationheadericon"
         android:contentDescription="@string/default_nav_header_image_desc"
         app:srcCompat="@mipmap/default_icon"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/default_child_margin"
+        android:layout_margin="@dimen/margin_all_default"
         />
 
     <TextView
@@ -24,8 +24,8 @@
         android:layout_toEndOf="@id/profile_picture"
         android:layout_alignTop="@id/profile_picture"
         android:text="@string/default_nav_header_name"
-        android:layout_margin="@dimen/default_child_margin"
-        android:textSize="@dimen/nav_header_text_size"
+        android:layout_margin="@dimen/margin_all_default"
+        android:textSize="@dimen/textsize_header"
         android:textStyle="bold"
         android:textColor="@color/headers"
         />

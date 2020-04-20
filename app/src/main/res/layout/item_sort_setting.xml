@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/sort_card"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/setting_card_height"
+    android:layout_height="@dimen/height_settingitem"
     android:background="@drawable/settingfragment_item"
     >
 
@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:text="@string/setting_sort"
         android:layout_centerVertical="true"
-        android:layout_margin="@dimen/default_child_margin"
-        android:textSize="@dimen/setting_item_header_size"
+        android:layout_margin="@dimen/margin_all_default"
+        android:textSize="@dimen/textsize_big"
         android:textStyle="bold"
         />
 
@@ -24,8 +24,8 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:text="@string/default_sort"
-        android:layout_margin="@dimen/default_child_margin"
-        android:textSize="@dimen/default_text_size"
+        android:layout_margin="@dimen/margin_all_default"
+        android:textSize="@dimen/textsize_big"
         />
 
 

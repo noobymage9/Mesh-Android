@@ -2,7 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/snackbar_height"
+    android:layout_height="@dimen/height_snackbar"
     android:background="@color/snackbar_background">
 
 
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="@dimen/default_child_margin"
+        android:layout_margin="@dimen/margin_all_default"
         android:background="@drawable/messageactivity_savedeletesnackbar"
         android:textColor="@color/headers"
         android:text="@string/snackbar_save"/>
@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
-        android:layout_margin="@dimen/default_child_margin"
+        android:layout_margin="@dimen/margin_all_default"
         android:background="@drawable/messageactivity_savedeletesnackbar"
         android:textColor="@color/headers"
         android:text="@string/snackbar_delete"/>

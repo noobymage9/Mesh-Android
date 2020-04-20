@@ -7,30 +7,30 @@
     android:layout_height="wrap_content"
     android:background="@drawable/all_button"
     android:backgroundTint="@color/save_dialog_background"
-    android:padding="@dimen/default_child_margin">
+    android:padding="@dimen/margin_all_default">
 
     <Button
         android:id="@+id/add_button"
-        android:layout_width="@dimen/add_button_size"
-        android:layout_height="@dimen/add_button_size"
+        android:layout_width="@dimen/size_addbutton"
+        android:layout_height="@dimen/size_addbutton"
         android:layout_alignTop="@id/add_field"
         android:layout_alignBottom="@id/add_field"
-        android:padding="@dimen/default_child_margin"
+        android:padding="@dimen/margin_all_default"
         android:background="@drawable/savedialog_addbutton"
         />
 
     <EditText
         android:id="@+id/add_field"
-        android:layout_width="@dimen/tag_field_width"
-        android:layout_height="@dimen/tag_field_height"
-        android:layout_margin="@dimen/default_child_margin"
-        android:paddingHorizontal="@dimen/default_child_margin"
+        android:layout_width="@dimen/width_tagfield"
+        android:layout_height="@dimen/height_tagfield"
+        android:layout_margin="@dimen/margin_all_default"
+        android:paddingHorizontal="@dimen/margin_all_default"
         android:layout_toEndOf="@id/add_button"
         android:background="@drawable/all_button"
         android:backgroundTint="@color/colorPrimary"
         android:textCursorDrawable="@null"
         android:textColor="@color/headers"
-        android:textSize="@dimen/default_text_size"
+        android:textSize="@dimen/textsize_big"
         android:imeOptions="actionDone"
         android:hint="@string/default_tag"
         android:autofillHints="@string/tag_autofill"
@@ -42,7 +42,7 @@
         android:id="@+id/tag_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_margin"
+        android:layout_margin="@dimen/margin_all_recyclerview"
         android:layout_below="@id/add_button"
         android:layout_alignStart="@id/add_button"
         android:layout_alignEnd="@id/add_field"
@@ -51,8 +51,8 @@
 
     <Button
         android:id="@+id/save_bar"
-        android:layout_width="@dimen/save_button_width"
-        android:layout_height="@dimen/save_button_height"
+        android:layout_width="@dimen/width_savebutton"
+        android:layout_height="@dimen/height_savebutton"
         android:layout_below="@id/tag_list"
         android:layout_centerHorizontal="true"
         android:background="@drawable/all_button"
