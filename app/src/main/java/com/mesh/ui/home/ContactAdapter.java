@@ -167,7 +167,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         return new ContactViewHolder(itemView);
     }
 
-    private int getSizeInDP(int size) {
+    public int getSizeInDP(int size) {
         float scale = homeFragment.getResources().getDisplayMetrics().density;
         return (int) (size * scale + 0.5f);
     }

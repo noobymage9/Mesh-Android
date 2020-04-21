@@ -2,7 +2,12 @@ package com.mesh.ui.home;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +34,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter contactAdapter;
     private HomeViewModel homeViewModel;
-    private ItemDragAndDropCallback itemDragAndDropCallback;
+    private DragSwipeController dragSwipeController;
     private ItemTouchHelper itemTouchHelper;
     private MergeSnackbar mergeSnackbar;
     private ImagePickerDialog imagePickerDialog;
@@ -49,8 +54,8 @@ public class HomeFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         contactAdapter = new ContactAdapter(contactList,this);
         recyclerView.setAdapter(contactAdapter);
-        itemDragAndDropCallback = new ItemDragAndDropCallback(this, recyclerView);
-        itemTouchHelper = new ItemTouchHelper(itemDragAndDropCallback);
+        dragSwipeController = new DragSwipeController(this, recyclerView);
+        itemTouchHelper = new ItemTouchHelper(dragSwipeController);
         itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
@@ -76,8 +81,8 @@ public class HomeFragment extends Fragment {
         return itemTouchHelper;
     }
 
-    public ItemDragAndDropCallback getItemDragAndDropCallback() {
-        return itemDragAndDropCallback;
+    public DragSwipeController getDragSwipeController() {
+        return dragSwipeController;
     }
 
     public void displaySnackBar(int draggedFolderPosition, int folderPosition) {
@@ -90,8 +95,9 @@ public class HomeFragment extends Fragment {
     }
 
     public void reset(){
+        Log.e("Mesh HomeFragment", "Resetted");
         ((MainActivity) getActivity()).goToHome();
-    }
+    } // to prevent bug where item dragged is not moving
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -118,5 +124,31 @@ public class HomeFragment extends Fragment {
         dbManager.close();
         imagePickerDialog.dismiss();
         reset();
+    }
+
+    public ContactAdapter getContactAdapter() {
+        return contactAdapter;
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable, int scale) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth() + scale, drawable.getIntrinsicHeight() + scale, Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 }
