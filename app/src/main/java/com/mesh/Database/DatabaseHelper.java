@@ -14,7 +14,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /************************/
     /**Database table names**/
     /************************/
-    public static final String usersTableName = "User_Table";
     public static final String messageTableName = "Message";
     public static final String messageTagsTableName = "Message_Tags";
     public static final String contactsTableName = "Contacts";
@@ -22,7 +21,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String userCollectionsTableName = "User_Collections";
     public static final String settingsTableName = "Settings";
     public static final String messageSearchTableName = "Message_Search";
-    public static final String contactMergeStatusTable = "Merged_Contacts";
+    public static final String contactMergeStatusTableName = "Merged_Contact_Status";
 
     /***************************/
     /**Database table columns**/
@@ -46,6 +45,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
     public static final String CONTACT_CUSTOM_ORDER = "Custom_Contact_Order";
     public static final String CONTACT_IS_FAVOURITE = "Is_Favourite";
+    public static final String CONTACT_IS_MERGE_PARENT = "Is_Merge_Parent";
+    public static final String CONTACT_IS_MERGE_CHILD = "Is_Merge_Child";
 
     public static final String GROUPS_ID = "Group_ID";
     public static final String GROUPS_NAME = "Group_Name";
@@ -59,6 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order_Setting";
 
     public static final String MERGE_ID = "Merge_Status_ID";
+    public static final String MERGE_CHILD_ID = "Merge_Child_ID";
+    public static final String MERGE_PARENT_ID = "Merge_Parent_ID";
 
     /**************************/
     /**Default Setting Values**/
@@ -71,13 +74,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 30;
+    static int databaseVersion = 31;
 
     /****************************/
     /**Database table creation**/
     /***************************/
 
-    static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
+    private static final String createMessageTable = "CREATE TABLE "+ messageTableName + "(" +
             MSG_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MSG_GROUP_ID + " INTEGER DEFAULT -1, " +
             MSG_USER_ID + " INTEGER, " +
@@ -87,14 +90,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "FOREIGN KEY (" + MSG_USER_ID + ") REFERENCES " + contactsTableName + "(" +
             CONTACT_ID + ") ON DELETE CASCADE);";
 
-    static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
+    private static final String createMessageTagsTable = "CREATE TABLE " + messageTagsTableName + "(" +
             MSGTAG_ID  + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MSGTAG_MSG_ID + " INTEGER, " +
             MSGTAG_COLLECTION_ID + " INTEGER, " +
             "FOREIGN KEY (" + MSGTAG_COLLECTION_ID + ") REFERENCES " + userCollectionsTableName + "(" +
             COLLECTIONS_ID + ")" + "ON DELETE CASCADE);";
 
-    static final String createContactsTable = "CREATE TABLE " + contactsTableName + "(" +
+    private static final String createContactsTable = "CREATE TABLE " + contactsTableName + "(" +
             CONTACT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             CONTACT_NAME + " STRING NOT NULL, " +
             CONTACT_PROFILE_PIC + " STRING, " +
@@ -102,17 +105,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             CONTACT_IS_GROUP + " INTEGER, " +
             CONTACT_IS_GROUP_USER + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ", " +
             CONTACT_CUSTOM_ORDER + " INTEGER, " +
-            CONTACT_IS_FAVOURITE + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ");";
+            CONTACT_IS_FAVOURITE + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ", " +
+            CONTACT_IS_MERGE_CHILD + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) + ", " +
+            CONTACT_IS_MERGE_PARENT + " INTEGER DEFAULT " + BooleanEnum.getIntValueOfBoolean(false) +");";
 
-    static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
+    private static final String createGroupsTable = "CREATE TABLE " + groupsTableName + "(" +
             GROUPS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             GROUPS_NAME + " STRING);";
 
-    static final String createUserCollectionsTable = "CREATE TABLE " + userCollectionsTableName + "(" +
+    private static final String createUserCollectionsTable = "CREATE TABLE " + userCollectionsTableName + "(" +
             COLLECTIONS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLLECTIONS_NAME + " STRING);";
 
-    static final String createSearchMessageTable = "CREATE VIRTUAL TABLE " + messageSearchTableName +
+    private static final String createSearchMessageTable = "CREATE VIRTUAL TABLE " + messageSearchTableName +
             " USING fts4 (" +  MSG_ID + ", " +
             MSG_GROUP_ID + ", " +
             MSG_USER_ID + ", " +
@@ -120,7 +125,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MSG_SOURCE_APP + ", " +
             MSG_TIMESTAMP + ")";
 
-    static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
+    private static final String createContactMergeStatusTable = "CREATE TABLE " + contactMergeStatusTableName + "(" +
+            MERGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            MERGE_CHILD_ID + " INTEGER, " +
+            MERGE_PARENT_ID + " INTEGER, " +
+            "FOREIGN KEY " + MERGE_CHILD_ID + " REFERENCES " + contactsTableName + "(" + CONTACT_ID +
+            ") ON DELETE CASCADE, " +
+            "FOREIGN KEY " + MERGE_PARENT_ID + " REFERENCES " + contactsTableName + "(" + CONTACT_ID +
+            ") ON DELETE CASCADE);";
+
+    private static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +
             SETTINGS_TABLE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SETTINGS_CONTACT_SORT_ORDER + " INTEGER, " +
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN, " +
@@ -134,6 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createMessageTagsTable);
         db.execSQL(createGroupsTable);
         db.execSQL(createUserCollectionsTable);
+        db.execSQL(createContactMergeStatusTable);
         db.execSQL(createSettingsTable);
         db.execSQL(createSearchMessageTable);
         //Initializing default settings for app
