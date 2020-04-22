@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -207,7 +208,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
     }
 
     private void drawIcon(Canvas c, RectF button, Paint p) {
-        float textSize = 60;
+        float textSize = 100;
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);
@@ -215,7 +216,8 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         Bitmap temp = HomeFragment.drawableToBitmap(temp1, + homeFragment.getContactAdapter().getSizeInDP(24));
         //temp1.setBounds((int) button.left + maxSlide / 3, (int) button.top + maxSlide / 3, (int) button.left + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24), (int) button.top + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24));
         //temp1.draw(c);
-        c.drawBitmap(temp, button.left + maxSlide / 3, button.top + maxSlide / 3, null);
+        c.drawText("\u2764", button.left + maxSlide / 3, button.top + 3 * maxSlide / 4, p);
+        //c.drawBitmap(temp, button.left + maxSlide / 3, button.top + maxSlide / 3, null);
     }
 
 
@@ -224,6 +226,11 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                                   RecyclerView.ViewHolder viewHolder,
                                   float dX, float dY,
                                   int actionState, boolean isCurrentlyActive) {
+
+        // Forcibly reset all swiped
+        for (int i = 0; i < recyclerView.getChildCount(); i++) {
+            recyclerView.getChildAt(i).setPadding(0, 0, 0, 0);
+        }
 
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -235,11 +242,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                         viewHolder.itemView.setPadding(maxSlide, 0, 0, 0);
                         setTouchDownListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                         setItemsClickable(recyclerView, false);
-                    } else {
-                        buttonInstance = null;
-                        viewHolder.itemView.setPadding(0, 0, 0, 0);
                     }
-
                 }
                 return false;
             }
@@ -270,12 +273,20 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                 onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
-                    public boolean onTouch(View v, MotionEvent event) {
+                    public boolean onTouch(View v, MotionEvent event)
+                    {
                         return false;
                     }
                 });
                 setItemsClickable(recyclerView, true);
                 swipeBack = false;
+                // on click listener for button for when u lift ur finger off the button
+                if (buttonInstance.contains(event.getX(), event.getY())) {
+                    DBManager dbManager = new DBManager(homeFragment.getContext());
+                    dbManager.open();
+                    dbManager.setFavouriteContact(homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition()).getID());
+                    dbManager.close();
+                }
                 buttonShowedState = ButtonsState.GONE;
             }
             return false;
