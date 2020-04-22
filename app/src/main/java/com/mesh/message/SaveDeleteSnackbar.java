@@ -3,12 +3,14 @@ package com.mesh.message;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.view.ViewCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -58,6 +60,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public static SaveDeleteSnackbar make(ViewGroup parent, @Duration int duration, List<Message> messageList) {
         // inflate custom layout
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -91,6 +94,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         return saveDeleteSnackbar;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void dismiss() {
         super.dismiss();

@@ -2,19 +2,26 @@ package com.mesh.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObservable;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.util.Log;
 
 import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+
+import androidx.annotation.RequiresApi;
 
 public class DBManager {
     private DatabaseHelper dbHelper;
@@ -84,7 +91,12 @@ public class DBManager {
 
     private Message constructMessage(Cursor c) {
         try {
-            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)), getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))), c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)), dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
+            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -93,21 +105,32 @@ public class DBManager {
 
     private Message constructMessageWithTag(Cursor c, int tag) {
         try {
-            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)), getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))), getGroupName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID))), c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)), c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)), dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))), tag);
+            return new Message(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_ID)),
+                    getContactName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_USER_ID))),
+                    getGroupName(c.getInt(c.getColumnIndex(DatabaseHelper.MSG_GROUP_ID))),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_CONTENTS)),
+                    c.getString(c.getColumnIndex(DatabaseHelper.MSG_SOURCE_APP)),
+                    dateFormat.parse(c.getString(c.getColumnIndex(DatabaseHelper.MSG_TIMESTAMP))), tag);
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }/*Get all messages for 1 user*/
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Message> getMessages(int contactID) {
         ArrayList<Message> messages = new ArrayList<>();
+        ArrayList<Message> childMessages = new ArrayList<>();
         Message m;
         Cursor c;
         if (isGroup(contactID)) {
             String groupName = getContactName(contactID);
+
             c = getAllMessagesFromGroupDB(getGroupID(groupName));
-        } else c = getAllMessagesFromUserDB(contactID);
+        }
+        else
+            c = getAllMessagesFromUserDB(contactID);
+
         if (c.moveToFirst()) /*c.getCount doesnt work, movetofirst resets cursor when view is created*/
             do try {
                 m = constructMessage(c);
@@ -115,6 +138,19 @@ public class DBManager {
             } catch (Exception e) {
                 e.printStackTrace();
             } while (c.moveToNext());
+
+        if (isMergeParent(contactID))
+        {
+            ArrayList<Integer> childIDs = getAllChildContactIDs(contactID);
+            for (int childContactID : childIDs)
+            {
+                childMessages = getMessages(childContactID);
+                messages.addAll(childMessages);
+            }
+
+            Collections.sort(messages, Comparator.comparing(obj -> obj.getDate()));
+        }
+
         return messages;
     }
 
@@ -453,7 +489,7 @@ public class DBManager {
         } else
             c = getAllContactsSortByOrder();
 
-        int isGroupUser;
+        int isGroupUser, isMergeChild;
         Contact currentContact;
         if (c.moveToFirst()) {
             do {
@@ -461,8 +497,11 @@ public class DBManager {
                         c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
                         c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)),
                         BooleanEnum.getBoolean(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_FAVOURITE))));
+
                 isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
-                if (isGroupUser == 0)
+                isMergeChild = c.getInt(c.getColumnIndex((DatabaseHelper.CONTACT_IS_MERGE_CHILD)));
+
+                if (!BooleanEnum.getBoolean(isGroupUser) && !BooleanEnum.getBoolean(isMergeChild))
                     contacts.add(currentContact);
             } while (c.moveToNext());
         }
@@ -520,6 +559,22 @@ public class DBManager {
         }
 
         return "";
+    }
+
+    public void mergeContacts(int childContactID, int parentContactID)
+    {
+        updateContactMergeStatus(childContactID, DatabaseHelper.CONTACT_IS_MERGE_CHILD, true);
+        updateContactMergeStatus(parentContactID, DatabaseHelper.CONTACT_IS_MERGE_PARENT, true);
+        insertContactMergeStatus(childContactID, parentContactID);
+    }
+
+    public void unMergeContacts(int childContactID, int parentContactID)
+    {
+        updateContactMergeStatus(childContactID, DatabaseHelper.CONTACT_IS_MERGE_CHILD, false);
+        if(!isMergeParent(parentContactID))
+            updateContactMergeStatus(parentContactID, DatabaseHelper.CONTACT_IS_MERGE_PARENT, false);
+
+        deleteContactMergeStatus(childContactID, parentContactID);
     }
 
     private int getContactOrder(int contactID) {
@@ -591,10 +646,19 @@ public class DBManager {
         return i;
     }
 
+    private int updateContactMergeStatus(int contactID, String mergeStatus, boolean isMerged)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(mergeStatus, isMerged);
+        int i = database.update(DatabaseHelper.contactsTableName, cv,
+                DatabaseHelper.CONTACT_ID + " = " + contactID, null);
+        return i;
+    }
+
     private int updateContactOrder(int contactID, int order) {
-        ContentValues contentValue = new ContentValues();
-        contentValue.put(DatabaseHelper.CONTACT_CUSTOM_ORDER, order);
-        int i = database.update(DatabaseHelper.contactsTableName, contentValue,
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.CONTACT_CUSTOM_ORDER, order);
+        int i = database.update(DatabaseHelper.contactsTableName, cv,
                 DatabaseHelper.CONTACT_ID + " = " + contactID, null);
         return i;
     }
@@ -625,8 +689,6 @@ public class DBManager {
         contentValues.put(DatabaseHelper.CONTACT_PROFILE_PIC, icon);
         database.update(DatabaseHelper.contactsTableName, contentValues, DatabaseHelper.CONTACT_ID + "=?", new String[]{id});
     }
-
-
 
     /*************************/
     /**Group table functions**/
@@ -690,6 +752,61 @@ public class DBManager {
         Cursor c = getLatestGroupEntry();
 
         return c.getInt(c.getColumnIndex(DatabaseHelper.GROUPS_ID));
+    }
+
+    public void deleteGroup(int groupID)
+    {
+        database.delete(DatabaseHelper.groupsTableName,
+                DatabaseHelper.GROUPS_ID + " = " + groupID, null);
+    }
+
+    /*************************/
+    /**Merge table functions**/
+    /*************************/
+
+    private boolean isMergeParent(int contactID)
+    {
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MERGE_PARENT_ID + " FROM " +
+                DatabaseHelper.contactMergeStatusTableName + " WHERE " + DatabaseHelper.MERGE_PARENT_ID +
+                " = " + contactID, null);
+
+        if (c.moveToFirst())
+            return true;
+        else
+            return false;
+    }
+
+    private ArrayList<Integer> getAllChildContactIDs(int contactID)
+    {
+        ArrayList<Integer> childContactIDs = new ArrayList<>();
+
+        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MERGE_CHILD_ID + " FROM " +
+                DatabaseHelper.contactMergeStatusTableName + " WHERE " + DatabaseHelper.MERGE_PARENT_ID +
+                " = " + contactID, null);
+
+        if (c.moveToFirst())
+        {
+            do {
+                childContactIDs.add(c.getColumnIndex(DatabaseHelper.MERGE_CHILD_ID));
+            } while (c.moveToNext());
+        }
+
+        return childContactIDs;
+    }
+
+    public void insertContactMergeStatus(int childContactID, int parentContactID)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.MERGE_CHILD_ID, childContactID);
+        cv.put(DatabaseHelper.MERGE_PARENT_ID, parentContactID);
+        database.insert(DatabaseHelper.contactMergeStatusTableName, null, cv);
+    }
+
+    public void deleteContactMergeStatus(int childContactID, int parentContactID)
+    {
+        database.delete(DatabaseHelper.contactMergeStatusTableName,
+                DatabaseHelper.MERGE_CHILD_ID + " = " + childContactID + " AND " +
+                DatabaseHelper.MERGE_PARENT_ID + " = " + parentContactID, null);
     }
 
     /****************************/

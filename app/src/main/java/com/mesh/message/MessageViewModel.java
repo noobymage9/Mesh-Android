@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -22,6 +24,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
     private LocalBroadcastManager localBroadcastManager;
     private Contact contact;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @RequiresApi(api = Build.VERSION_CODES.N)
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getExtras() != null && intent.getExtras().getString(MessageActivity.CONTACT_NAME).equals(contact.getName()))
@@ -34,6 +37,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         initialiseLocalBroadcastManager();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     LiveData<ArrayList<Message>> getMessages(Contact contact){
         this.contact = contact;
         messages = new MutableLiveData<>();
@@ -41,6 +45,7 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         return messages;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     void loadMessages() {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
