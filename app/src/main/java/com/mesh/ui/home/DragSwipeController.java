@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
@@ -15,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -201,23 +203,27 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         RectF leftButton = new RectF(itemView.getLeft(), itemView.getTop() + defaultMargin, itemView.getLeft() + buttonWidth, itemView.getBottom() - defaultMargin);
         p.setColor(homeFragment.getResources().getColor(R.color.BritishBlue));
         c.drawRoundRect(leftButton, corners, corners, p);
-        drawIcon( c, leftButton, p);
+        drawIcon( c, leftButton, p, viewHolder);
 
         buttonInstance = null;
         if (buttonShowedState == ButtonsState.VISIBLE) buttonInstance = leftButton;
     }
 
-    private void drawIcon(Canvas c, RectF button, Paint p) {
+    private void drawIcon(Canvas c, RectF button, Paint p, RecyclerView.ViewHolder viewHolder) {
         float textSize = 100;
         p.setColor(Color.WHITE);
         p.setAntiAlias(true);
         p.setTextSize(textSize);
         Drawable temp1 = homeFragment.getContext().getDrawable(R.drawable.menu_favourite);
+        Drawable wrappedDrawable = DrawableCompat.wrap(temp1);
+        Contact contact = homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition());
+        if (contact.isFavourite) DrawableCompat.setTint(wrappedDrawable, homeFragment.getResources().getColor(R.color.Tiger));
+        else DrawableCompat.setTint(wrappedDrawable, homeFragment.getResources().getColor(R.color.Ivory));
         Bitmap temp = HomeFragment.drawableToBitmap(temp1, + homeFragment.getContactAdapter().getSizeInDP(24));
         //temp1.setBounds((int) button.left + maxSlide / 3, (int) button.top + maxSlide / 3, (int) button.left + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24), (int) button.top + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24));
         //temp1.draw(c);
-        c.drawText("\u2764", button.left + maxSlide / 3, button.top + 3 * maxSlide / 4, p);
-        //c.drawBitmap(temp, button.left + maxSlide / 3, button.top + maxSlide / 3, null);
+        //c.drawText("\u2764", button.left + maxSlide / 3, button.top + 3 * maxSlide / 4, p);
+        c.drawBitmap(temp, button.left + maxSlide / 3, button.top + maxSlide / 3, null);
     }
 
 
@@ -270,7 +276,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         recyclerView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 viewHolder.itemView.setPadding(0, 0, 0, 0);
-                onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
+                // onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event)
