@@ -284,7 +284,17 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                 if (buttonInstance.contains(event.getX(), event.getY())) {
                     DBManager dbManager = new DBManager(homeFragment.getContext());
                     dbManager.open();
-                    dbManager.setFavouriteContact(homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition()).getID());
+                    Contact temp = homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition());
+                    if (temp.isFavourite) {
+                        Log.e("UNFAVOURITED", temp.getName());
+                        temp.isFavourite = false;
+                        dbManager.removeFavouriteContact(temp.getID());
+                    }
+                    else {
+                        Log.e("FAVOURITED", temp.getName());
+                        temp.isFavourite = true;
+                        dbManager.setFavouriteContact(temp.getID());
+                    }
                     dbManager.close();
                 }
                 buttonShowedState = ButtonsState.GONE;
