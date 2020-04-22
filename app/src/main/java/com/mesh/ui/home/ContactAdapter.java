@@ -17,6 +17,7 @@ import com.mesh.Database.DBManager;
 import com.mesh.Image;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
+import com.mesh.ui.favourite.FavouriteFragment;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private HomeFragment homeFragment;
+    private FavouriteFragment favouriteFragment;
     private int imageActualSize;
     private Contact currentContactClicked;
 
@@ -103,9 +105,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
     }
 
-    ContactAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
+    public ContactAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
         this.contactList = contactList;
         this.homeFragment = homeFragment;
+        imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
+    }
+
+    public ContactAdapter(ArrayList<Contact> contactList, FavouriteFragment favouriteFragment) {
+        this.contactList = contactList;
+        this.favouriteFragment = favouriteFragment;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
     }
 
