@@ -31,7 +31,6 @@ public class SMSListener extends BroadcastReceiver {
                 contactName = smsMessage.getOriginatingAddress();
                 text = smsMessage.getMessageBody();
                 currentDate = new Date(smsMessage.getTimestampMillis());
-                Log.e("TEST", contactName + " : " + text);
 
                 contactID = dbManager.insertContact(contactName, currentDate, 0, 0);
                 dbManager.insertMessage(contactID, text, sourceApp, currentDate);

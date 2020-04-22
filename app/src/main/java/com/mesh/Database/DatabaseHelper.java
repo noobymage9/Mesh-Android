@@ -129,9 +129,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MERGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MERGE_CHILD_ID + " INTEGER, " +
             MERGE_PARENT_ID + " INTEGER, " +
-            "FOREIGN KEY " + MERGE_CHILD_ID + " REFERENCES " + contactsTableName + "(" + CONTACT_ID +
+            "FOREIGN KEY (" + MERGE_CHILD_ID + ") REFERENCES " + contactsTableName + "(" + CONTACT_ID +
             ") ON DELETE CASCADE, " +
-            "FOREIGN KEY " + MERGE_PARENT_ID + " REFERENCES " + contactsTableName + "(" + CONTACT_ID +
+            "FOREIGN KEY (" + MERGE_PARENT_ID + ") REFERENCES " + contactsTableName + "(" + CONTACT_ID +
             ") ON DELETE CASCADE);";
 
     private static final String createSettingsTable = "CREATE TABLE " + settingsTableName + "(" +

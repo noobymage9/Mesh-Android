@@ -85,7 +85,6 @@ public class MeshListener extends NotificationListenerService {
         if (sourceApp.equals("WhatsApp")) {
             String[] temp = statusBarNotification.getKey().split(Pattern.quote("|"));
             if (temp[3].equals("null") && !title.contains(":")) {
-                Log.e("TEST", "TEST");
                 return;
             }
         }

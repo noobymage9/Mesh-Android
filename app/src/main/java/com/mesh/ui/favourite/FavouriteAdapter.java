@@ -1,4 +1,4 @@
-package com.mesh.ui.home;
+package com.mesh.ui.favourite;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,82 +18,50 @@ import com.mesh.Image;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
 import com.mesh.ui.favourite.FavouriteFragment;
+import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder> {
 
     private ArrayList<Contact> contactList;
     private final String imagePickerFragmentTag = "image_picker_dialog";
     public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
-    private HomeFragment homeFragment;
+    private FavouriteFragment favouriteFragment;
     private int imageActualSize;
     private Contact currentContactClicked;
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+    public class FavouriteViewHolder extends RecyclerView.ViewHolder {
         protected Contact contact;
         protected TextView name;
         TextView timestamp;
         View sourceApp;
         protected ImageView icon;
-        boolean expanded = false;
 
-        ContactViewHolder(final View itemView) {  //
+        FavouriteViewHolder(final View itemView) {  //
             super(itemView);
             name = itemView.findViewById(R.id.contact_name);
             icon = itemView.findViewById(R.id.contact_icon);
             icon.setOnClickListener(v -> {
-                if (homeFragment.isMerge()) {
-                    if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
-                        homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), imagePickerFragmentTag);
-                        currentContactClicked = contact;
-                    } else {
-                        homeFragment.dismissSnack();
-                    }
-                }
+                favouriteFragment.getImagePickerDialog().show(favouriteFragment.getParentFragmentManager(), imagePickerFragmentTag);
+                currentContactClicked = contact;
+
             });
 
             timestamp = itemView.findViewById(R.id.contact_timestamp);
             sourceApp = itemView.findViewById(R.id.source_app);
             itemView.setOnClickListener(view -> {
-                if (homeFragment.isMerge()) {
-                    if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
-                        Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
-                        intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
-                        itemView.getContext().startActivity(intent);
-                    } else {
-                        homeFragment.dismissSnack();
-                    }
-                }
+                Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
+                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                itemView.getContext().startActivity(intent);
             });
-            itemView.setOnTouchListener((v1, event) -> {
-                if (!homeFragment.isMerge()) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        homeFragment.getItemTouchHelper().startDrag(ContactViewHolder.this);
-                        return true;
-                    }
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    itemView.performClick();
-                    return true;
-                }
-                return false;
-            });
-        }
-
-        public boolean getExpanded() {
-            return this.expanded;
-        }
-
-        public void setExpanded(boolean expanded) {
-            this.expanded = expanded;
         }
     }
 
-    public ContactAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
+    public FavouriteAdapter(ArrayList<Contact> contactList, FavouriteFragment favouriteFragment) {
         this.contactList = contactList;
-        this.homeFragment = homeFragment;
+        this.favouriteFragment = favouriteFragment;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
     }
 
@@ -103,9 +71,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
+    public void onBindViewHolder(FavouriteViewHolder contactViewHolder, int i) {
         contactViewHolder.setIsRecyclable(false);
-        DBManager dbManager = new DBManager(homeFragment.getContext());
+        DBManager dbManager = new DBManager(favouriteFragment.getContext());
         dbManager.open();
         contactViewHolder.contact = contactList.get(i);
         Contact contact = contactList.get(i);
@@ -134,13 +102,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 default:
                     break;
             }
-            Image.setSource(sourceApps.get(j), homeFragment, sourceApp);
+            Image.setSource(sourceApps.get(j), favouriteFragment, sourceApp);
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_group).into(contactViewHolder.icon);
+            Glide.with(favouriteFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_group).into(contactViewHolder.icon);
         } else {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_individual).into(contactViewHolder.icon);
+            Glide.with(favouriteFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_individual).into(contactViewHolder.icon);
         }
         dbManager.close();
     }
@@ -148,25 +116,18 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     @NonNull
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public FavouriteViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.item_home, viewGroup, false);
-        return new ContactViewHolder(itemView);
+        return new FavouriteViewHolder(itemView);
     }
 
     public int getSizeInDP(int size) {
-        float scale = homeFragment.getResources().getDisplayMetrics().density;
+        float scale = favouriteFragment.getResources().getDisplayMetrics().density;
         return (int) (size * scale + 0.5f);
     }
 
-    public void merge(int from, int to) {
-        Contact dragged = contactList.get(from);
-        Contact target = contactList.get(to);
-        homeFragment.reset();
-        //TODO merge the two contact in db
-        //notifyItemRemoved(from);
-    }
 
     public ArrayList<Contact> getContactList() {
         return contactList;

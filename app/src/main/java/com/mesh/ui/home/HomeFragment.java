@@ -95,7 +95,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void reset(){
-        Log.e("Mesh HomeFragment", "Resetted");
         ((MainActivity) getActivity()).goToHome();
     } // to prevent bug where item dragged is not moving
 

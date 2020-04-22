@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mesh.Database.DBManager;
 import com.mesh.R;
 import com.mesh.ui.home.Contact;
 import com.mesh.ui.home.ContactAdapter;
@@ -24,7 +25,7 @@ public class FavouriteFragment extends Fragment {
     private FavouriteViewModel favouriteViewModel;
     private View root;
     private RecyclerView recyclerView;
-    private ContactAdapter contactAdapter;
+    private FavouriteAdapter favouriteAdapter;
     private ImagePickerDialog imagePickerDialog;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -32,7 +33,7 @@ public class FavouriteFragment extends Fragment {
         favouriteViewModel =
                 new ViewModelProvider(this).get(FavouriteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_favourite, container, false);
-        //favouriteViewModel.getContactNames().observe(getViewLifecycleOwner(), contactList -> initialiseRecyclerView(root, contactList));
+        favouriteViewModel.getContactNames().observe(getViewLifecycleOwner(), contactList -> initialiseRecyclerView(root, contactList));
         imagePickerDialog = new ImagePickerDialog(this);
 
         return root;
@@ -41,8 +42,18 @@ public class FavouriteFragment extends Fragment {
     private void initialiseRecyclerView (View root, ArrayList<Contact> contactList) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
-        contactAdapter = new ContactAdapter(contactList,this);
-        recyclerView.setAdapter(contactAdapter);
+        favouriteAdapter = new FavouriteAdapter(contactList,this);
+        recyclerView.setAdapter(favouriteAdapter);
+    }
+
+
+    public void resetIcon() {
+        DBManager dbManager = new DBManager(getContext());
+        dbManager.open();
+        dbManager.insertIcon(null, favouriteAdapter.getCurrentContactClicked().getID() + "");
+        dbManager.close();
+        imagePickerDialog.dismiss();
+        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public ImagePickerDialog getImagePickerDialog() {

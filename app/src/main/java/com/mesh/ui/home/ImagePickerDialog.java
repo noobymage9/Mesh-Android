@@ -20,6 +20,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mesh.MainActivity;
 import com.mesh.R;
+import com.mesh.ui.favourite.FavouriteFragment;
 
 public class ImagePickerDialog extends BottomSheetDialogFragment {
 
@@ -56,21 +57,16 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
         });
 
         RelativeLayout cameraGroup = root.findViewById(R.id.camera_group);
-        cameraGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null && fragment.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
-                    fragment.getActivity().startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
-            }
+        cameraGroup.setOnClickListener(v -> {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null && fragment.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+                fragment.getActivity().startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
         });
 
         Button reset = root.findViewById(R.id.reset_button);
-        reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((HomeFragment) fragment).resetIcon();
-            }
+        reset.setOnClickListener(v -> {
+            if (fragment instanceof HomeFragment) ((HomeFragment) fragment).resetIcon();
+            if (fragment instanceof FavouriteFragment) ((FavouriteFragment) fragment).resetIcon();
         });
         return root;
     }
