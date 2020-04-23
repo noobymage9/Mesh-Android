@@ -25,7 +25,7 @@ import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.SettingActivity;
 import com.mesh.ui.home.Contact;
-import com.mesh.ui.home.ContactAdapter;
+import com.mesh.ui.home.ConversationAdapter;
 
 import java.util.ArrayList;
 
@@ -45,7 +45,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contact = getIntent().getExtras().getParcelable(ContactAdapter.CONTACT_PARCEL);
+        contact = getIntent().getExtras().getParcelable(ConversationAdapter.CONTACT_PARCEL);
         DBManager dbManager = new DBManager(this);
         dbManager.open();
         isGroup = dbManager.isGroup(contact.getID());
@@ -97,6 +97,7 @@ public class MessageActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void initialiseRecyclerView(ArrayList<Message> messages) {
         this.messages = messages;
         recyclerView = findViewById(R.id.messageList);
@@ -109,6 +110,7 @@ public class MessageActivity extends AppCompatActivity {
         resetRecyclerView();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onBackPressed() {
         if (speechBubbleAdaptor.saveDeleteSnackbarExist()) {

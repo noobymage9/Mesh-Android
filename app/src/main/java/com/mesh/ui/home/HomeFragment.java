@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public class HomeFragment extends Fragment {
     public boolean merge = true;
     private View root;
     private RecyclerView recyclerView;
-    private ContactAdapter contactAdapter;
+    private ConversationAdapter conversationAdapter;
     private HomeViewModel homeViewModel;
     private DragSwipeController dragSwipeController;
     private ItemTouchHelper itemTouchHelper;
@@ -52,8 +51,8 @@ public class HomeFragment extends Fragment {
     private void initialiseRecyclerView(View root, ArrayList<Contact> contactList) {
         recyclerView = root.findViewById(R.id.contactList);
         recyclerView.setHasFixedSize(true);
-        contactAdapter = new ContactAdapter(contactList,this);
-        recyclerView.setAdapter(contactAdapter);
+        conversationAdapter = new ConversationAdapter(contactList,this);
+        recyclerView.setAdapter(conversationAdapter);
         dragSwipeController = new DragSwipeController(this, recyclerView);
         itemTouchHelper = new ItemTouchHelper(dragSwipeController);
         itemTouchHelper.attachToRecyclerView(recyclerView);
@@ -105,7 +104,7 @@ public class HomeFragment extends Fragment {
             String realPath = Image.getPath(getContext(), data.getData());
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();
-            dbManager.insertIcon(realPath, contactAdapter.getCurrentContactClicked().getID() + "");
+            dbManager.insertIcon(realPath, conversationAdapter.getCurrentContactClicked().getID() + "");
             dbManager.close();
             reset();
         }
@@ -119,14 +118,14 @@ public class HomeFragment extends Fragment {
     public void resetIcon() {
         DBManager dbManager = new DBManager(getContext());
         dbManager.open();
-        dbManager.insertIcon(null, contactAdapter.getCurrentContactClicked().getID() + "");
+        dbManager.insertIcon(null, conversationAdapter.getCurrentContactClicked().getID() + "");
         dbManager.close();
         imagePickerDialog.dismiss();
         reset();
     }
 
-    public ContactAdapter getContactAdapter() {
-        return contactAdapter;
+    public ConversationAdapter getConversationAdapter() {
+        return conversationAdapter;
     }
 
     public static Bitmap drawableToBitmap (Drawable drawable, int scale) {

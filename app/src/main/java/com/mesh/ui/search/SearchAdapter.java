@@ -18,7 +18,7 @@ import com.mesh.R;
 import com.mesh.message.Message;
 import com.mesh.message.MessageActivity;
 import com.mesh.ui.home.Contact;
-import com.mesh.ui.home.ContactAdapter;
+import com.mesh.ui.home.ConversationAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,7 +47,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
                 dbManager.open();
                 Contact temp = new Contact(dbManager.getContactID(name), name);
                 dbManager.close();
-                intent.putExtra(ContactAdapter.CONTACT_PARCEL, temp);
+                intent.putExtra(ConversationAdapter.CONTACT_PARCEL, temp);
                 itemView.getContext().startActivity(intent);
 
             });

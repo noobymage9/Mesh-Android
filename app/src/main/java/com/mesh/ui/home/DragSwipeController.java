@@ -1,15 +1,12 @@
 package com.mesh.ui.home;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -75,7 +72,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
     private void swap(int from, int to) {
         DBManager dbManager = new DBManager(homeFragment.getContext());
         dbManager.open();
-        ArrayList<Contact> contactList = ((ContactAdapter) recyclerView.getAdapter()).getContactList();
+        ArrayList<Contact> contactList = ((ConversationAdapter) recyclerView.getAdapter()).getContactList();
         Collections.swap(contactList, from, to);
         dbManager.swapContactPositions(contactList.get(from).getID(), contactList.get(to).getID());
         dbManager.updateCustomContactOrderSetting(true);
@@ -161,15 +158,15 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                             if (topWithinChild || bottomWithinChild) {
                                 folder = child;
                                 folderPosition = i;
-                                if (!((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
+                                if (!((ConversationAdapter.ConversationViewHolder) childView).getExpanded()) {
                                     expand(child);
-                                    ((ContactAdapter.ContactViewHolder) childView).setExpanded(true);
+                                    ((ConversationAdapter.ConversationViewHolder) childView).setExpanded(true);
                                 }
                             } else {
-                                if (((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
+                                if (((ConversationAdapter.ConversationViewHolder) childView).getExpanded()) {
                                     shrink(child);
                                     folder = null;
-                                    ((ContactAdapter.ContactViewHolder) childView).setExpanded(false);
+                                    ((ConversationAdapter.ConversationViewHolder) childView).setExpanded(false);
                                     folderPosition = 1;
                                 }
                             }
@@ -182,9 +179,9 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                 for (int i = 0; i < recyclerView.getChildCount(); i++) {
                     View child = recyclerView.getChildAt(i);
                     RecyclerView.ViewHolder childView = recyclerView.getChildViewHolder(child);
-                    if (((ContactAdapter.ContactViewHolder) childView).getExpanded()) {
+                    if (((ConversationAdapter.ConversationViewHolder) childView).getExpanded()) {
                         shrink(child);
-                        ((ContactAdapter.ContactViewHolder) childView).setExpanded(false);
+                        ((ConversationAdapter.ConversationViewHolder) childView).setExpanded(false);
                     }
                 }
 
@@ -195,7 +192,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
     }
 
     private void drawButtons(Canvas c, RecyclerView.ViewHolder viewHolder) {
-        float corners = homeFragment.getContactAdapter().getSizeInDP(20);
+        float corners = homeFragment.getConversationAdapter().getSizeInDP(20);
 
         View itemView = viewHolder.itemView;
         Paint p = new Paint();
@@ -216,10 +213,10 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         p.setTextSize(textSize);
         Drawable temp1 = homeFragment.getContext().getDrawable(R.drawable.menu_favourite);
         Drawable wrappedDrawable = DrawableCompat.wrap(temp1);
-        Contact contact = homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition());
+        Contact contact = homeFragment.getConversationAdapter().getContactList().get(viewHolder.getAdapterPosition());
         if (contact.isFavourite) DrawableCompat.setTint(wrappedDrawable, homeFragment.getResources().getColor(R.color.Tiger));
         else DrawableCompat.setTint(wrappedDrawable, homeFragment.getResources().getColor(R.color.Ivory));
-        Bitmap temp = HomeFragment.drawableToBitmap(temp1, + homeFragment.getContactAdapter().getSizeInDP(24));
+        Bitmap temp = HomeFragment.drawableToBitmap(temp1, + homeFragment.getConversationAdapter().getSizeInDP(24));
         //temp1.setBounds((int) button.left + maxSlide / 3, (int) button.top + maxSlide / 3, (int) button.left + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24), (int) button.top + maxSlide / 3 + homeFragment.getContactAdapter().getSizeInDP(24));
         //temp1.draw(c);
         //c.drawText("\u2764", button.left + maxSlide / 3, button.top + 3 * maxSlide / 4, p);
@@ -290,7 +287,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                 if (buttonInstance.contains(event.getX(), event.getY())) {
                     DBManager dbManager = new DBManager(homeFragment.getContext());
                     dbManager.open();
-                    Contact temp = homeFragment.getContactAdapter().getContactList().get(viewHolder.getAdapterPosition());
+                    Contact temp = homeFragment.getConversationAdapter().getContactList().get(viewHolder.getAdapterPosition());
                     if (temp.isFavourite) {
                         Log.e("UNFAVOURITED", temp.getName());
                         temp.isFavourite = false;
