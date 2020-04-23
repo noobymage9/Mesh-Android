@@ -1,5 +1,8 @@
 package com.mesh;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,80 +13,74 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
+public class accountRegister extends AppCompatActivity {
 
-public class Login extends AppCompatActivity {
-
-    private EditText emailtf, passtf;
-    private Button loginbtn, regformbtn;
-    ProgressBar pb;
+    private EditText nametf, emailtf, passtf;
+    private Button regbtn, loginfrmbtn;
+    private ProgressBar pb;
     FirebaseAuth fauth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_account_register);
 
         //INITIALIZING ALL DECLARED ELEMENTS
         initElements();
 
-//        SENDING TO REGISTRATION FORM ON CLICK OF REGISTER BUTTON
+//        SENDING TO LOGIN FORM ON CLICK OF LOGIN BUTTON
 
-        regformbtn.setOnClickListener(new View.OnClickListener() {
+        loginfrmbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), accountRegister.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             }
         });
 
-
-//        LOGIN BUTTON FUNCTION
-        loginbtn.setOnClickListener(new View.OnClickListener() {
+//        REGITER BUTTON FUNCTION
+        regbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String name = nametf.getText().toString().trim();
                 String email = emailtf.getText().toString().trim();
                 String pass = passtf.getText().toString().trim();
 
 //                VALIDATING USER INPUT
-                if (validateInp(email, pass) == true) {
+                if(validateInp(name, email, pass) == true) {
 
-
-                    //PROGRESS BAR
                     pb.setVisibility(View.VISIBLE);
 
-//                FIREBASE LOGIN GAME HERE:
+//                FIREBASE REGISTRATION GAME HERE:
 
-                    fauth.signInWithEmailAndPassword(email, pass).addOnCompleteListener((new OnCompleteListener<AuthResult>() {
+                    fauth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
 
 
                             if (task.isSuccessful()) {
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                startActivity((new Intent(getApplicationContext(),Login.class)));
                                 finish();
                             } else {
                                 pb.setVisibility(View.INVISIBLE);
-                                Toast.makeText(Login.this, "Login Failed!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(accountRegister.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
-                    }));
+                    });
                 }
                 else{
-                    Toast.makeText(Login.this, "Error in Logging in!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(accountRegister.this, "Error in Registering!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
 
-    private boolean validateInp(String email, String pass) {
+    private boolean validateInp(String name, String email, String pass) {
 
 //        IF TEXT FIELDS ARE EMPTY
 
@@ -118,19 +115,18 @@ public class Login extends AppCompatActivity {
 
     }
 
-
     private void initElements() {
+        nametf = (EditText) findViewById(R.id.nametf);
         emailtf = (EditText) findViewById(R.id.emailtf);
         passtf = (EditText) findViewById(R.id.passtf);
 
-        loginbtn = (Button) findViewById(R.id.loginbtn);
-        regformbtn = (Button) findViewById(R.id.regformbtn);
+        regbtn = (Button) findViewById(R.id.regbtn);
+        loginfrmbtn = (Button) findViewById(R.id.loginfrmbtn);
 
         pb = (ProgressBar) findViewById(R.id.pb);
 
         fauth = FirebaseAuth.getInstance();
 
     }
-
 
 }
