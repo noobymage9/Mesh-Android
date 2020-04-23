@@ -22,11 +22,11 @@
         android:roundIcon="@mipmap/app_logo_foreground"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".accountRegister"></activity>
+        <activity android:name=".AccountRegisterActivity"></activity>
         <activity
-            android:name=".SplashScreen"
+            android:name=".SplashScreenActivity"
             android:theme="@style/SplashScreen"/>
-        <activity android:name=".Login" >
+        <activity android:name=".LoginActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
