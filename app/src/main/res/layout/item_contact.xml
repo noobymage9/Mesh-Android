@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/contact_card"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/height_contact_item"
+    card_view:cardCornerRadius="20dp"
+    android:layout_margin="@dimen/margin_all_default">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/card_color"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/contact_icon"
+            android:layout_width="@dimen/size_contacticon"
+            android:layout_height="@dimen/size_contacticon"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/margin_all_default"
+            android:contentDescription="@string/default_contact_icon_desc"
+            android:src="@mipmap/default_icon"/>
+
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/contact_icon"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/margin_all_default"
+            android:text="@string/default_contact_name"
+            android:textStyle="bold"
+            android:textColor="@color/headers"
+            android:textSize="@dimen/textsize_header" />
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

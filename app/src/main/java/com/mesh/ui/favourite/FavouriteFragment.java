@@ -4,18 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
 import com.mesh.R;
 import com.mesh.ui.home.Contact;
-import com.mesh.ui.home.ContactAdapter;
+import com.mesh.ui.home.HomeFragment;
 import com.mesh.ui.home.ImagePickerDialog;
 
 import java.util.ArrayList;

@@ -64,7 +64,7 @@ final class MergeSnackbar extends BaseTransientBottomBar<MergeSnackbar> {
         Button merge = content.findViewById(R.id.delete_button);
         merge.setText("Merge");
         merge.setOnClickListener(v -> {
-            ((ContactAdapter) recyclerView.getAdapter()).merge(from, to);
+            ((ConversationAdapter) recyclerView.getAdapter()).merge(from, to);
             mergeSnackbar.dismiss();
         });
 

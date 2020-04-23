@@ -40,5 +40,6 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="remove">Remove</string>
+    <string name="contact_merge">Merged Contacts</string>
 
 </resources>

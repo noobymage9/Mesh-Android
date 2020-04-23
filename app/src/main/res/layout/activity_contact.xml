@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_contact"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_100sdp"
+        android:background="@color/BritishBlue">
+
+        <include layout="@layout/layout_toolbar_all"/>
+
+        <ImageView
+            android:id="@+id/contact_icon"
+            android:layout_width="@dimen/size_contacticon"
+            android:layout_height="@dimen/size_contacticon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/margin_all_default"
+            android:background="@mipmap/default_icon"/>
+
+        <TextView
+            android:id="@+id/contact_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contact_icon"
+            android:layout_centerHorizontal="true"
+            android:text="@string/default_contact_name"
+            android:textColor="@color/headers"
+            android:textSize="@dimen/textsize_header"
+            android:textStyle="bold"
+            />
+
+        <include
+            layout="@layout/layout_sourceicon_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/margin_all_default" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/merge_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_snackbar"
+        android:layout_below="@id/header"
+        android:text="@string/contact_merge"
+        android:textSize="@dimen/textsize_header"
+        android:gravity="center_vertical"
+        android:paddingStart="@dimen/padding_searchbar_horizontal"
+        android:textColor="@color/BritishBlue"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/merge_contact_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/merge_header"
+        android:layout_marginTop="@dimen/margin_all_default"
+        android:clipToPadding="false"
+        android:layout_marginStart="@dimen/margin_all_recyclerview"
+        android:layout_marginEnd="@dimen/margin_all_recyclerview"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+
+</RelativeLayout>

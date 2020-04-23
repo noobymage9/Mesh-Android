@@ -15,23 +15,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
 import com.mesh.Image;
+import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
-import com.mesh.ui.favourite.FavouriteFragment;
 
 import java.util.ArrayList;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactViewHolder> {
+public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationViewHolder> {
 
     private ArrayList<Contact> contactList;
-    private final String imagePickerFragmentTag = "image_picker_dialog";
-    public static final String CONTACT_PARCEL = "Contact Parcel";
+    public static final String CONVERSATION_PARCEL = "Conversation Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private HomeFragment homeFragment;
     private int imageActualSize;
     private Contact currentContactClicked;
 
-    public class ContactViewHolder extends RecyclerView.ViewHolder {
+    public class ConversationViewHolder extends RecyclerView.ViewHolder {
         protected Contact contact;
         protected TextView name;
         TextView timestamp;
@@ -39,14 +38,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         protected ImageView icon;
         boolean expanded = false;
 
-        ContactViewHolder(final View itemView) {  //
+        ConversationViewHolder(final View itemView) {  //
             super(itemView);
             name = itemView.findViewById(R.id.contact_name);
             icon = itemView.findViewById(R.id.contact_icon);
             icon.setOnClickListener(v -> {
                 if (homeFragment.isMerge()) {
                     if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
-                        homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), imagePickerFragmentTag);
+                        homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), MainActivity.ImagePickerFragmentTag);
                         currentContactClicked = contact;
                     } else {
                         homeFragment.dismissSnack();
@@ -60,7 +59,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
                 if (homeFragment.isMerge()) {
                     if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
                         Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
-                        intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                        intent.putExtra(CONVERSATION_PARCEL, contactList.get(getAdapterPosition()));
                         itemView.getContext().startActivity(intent);
                     } else {
                         homeFragment.dismissSnack();
@@ -70,7 +69,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             itemView.setOnTouchListener((v1, event) -> {
                 if (!homeFragment.isMerge()) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        homeFragment.getItemTouchHelper().startDrag(ContactViewHolder.this);
+                        homeFragment.getItemTouchHelper().startDrag(ConversationViewHolder.this);
                         return true;
                     }
                 }
@@ -91,7 +90,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
         }
     }
 
-    public ContactAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
+    public ConversationAdapter(ArrayList<Contact> contactList, HomeFragment homeFragment) {
         this.contactList = contactList;
         this.homeFragment = homeFragment;
         imageActualSize = getSizeInDP(SOURCE_APP_IMAGE_SIZE);
@@ -103,19 +102,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
     }
 
     @Override
-    public void onBindViewHolder(ContactViewHolder contactViewHolder, int i) {
-        contactViewHolder.setIsRecyclable(false);
+    public void onBindViewHolder(ConversationViewHolder conversationViewHolder, int i) {
+        conversationViewHolder.setIsRecyclable(false);
         DBManager dbManager = new DBManager(homeFragment.getContext());
         dbManager.open();
-        contactViewHolder.contact = contactList.get(i);
+        conversationViewHolder.contact = contactList.get(i);
         Contact contact = contactList.get(i);
         String contactName = contact.getName();
-        contactViewHolder.timestamp.setText(dbManager.getContactLatestMessageTime(contact.getID()));
+        conversationViewHolder.timestamp.setText(dbManager.getContactLatestMessageTime(contact.getID()));
         if (contactName.length() > 15) {
             contactName = contactName.substring(0, 15);
             contactName += "...";
         }
-        contactViewHolder.name.setText(contactName);
+        conversationViewHolder.name.setText(contactName);
 
         ArrayList<String> sourceApps = dbManager.getContactMostUsedSourceApps(contact.getID());
         int j = 0;
@@ -123,13 +122,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             ImageView sourceApp = null;
             switch (j) {
                 case 0:
-                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.first_source_app);
+                    sourceApp = conversationViewHolder.sourceApp.findViewById(R.id.first_source_app);
                     break;
                 case 1:
-                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.second_source_app);
+                    sourceApp = conversationViewHolder.sourceApp.findViewById(R.id.second_source_app);
                     break;
                 case 2:
-                    sourceApp = contactViewHolder.sourceApp.findViewById(R.id.third_source_app);
+                    sourceApp = conversationViewHolder.sourceApp.findViewById(R.id.third_source_app);
                     break;
                 default:
                     break;
@@ -138,9 +137,9 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
             j++;
         }
         if (dbManager.isGroup(contact.getID())) {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_group).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_group).into(conversationViewHolder.icon);
         } else {
-            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_individual).into(contactViewHolder.icon);
+            Glide.with(homeFragment).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).placeholder(R.drawable.all_individual).into(conversationViewHolder.icon);
         }
         dbManager.close();
     }
@@ -148,11 +147,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactV
 
     @NonNull
     @Override
-    public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+    public ConversationViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.
                 from(viewGroup.getContext()).
                 inflate(R.layout.item_home, viewGroup, false);
-        return new ContactViewHolder(itemView);
+        return new ConversationViewHolder(itemView);
     }
 
     public int getSizeInDP(int size) {
