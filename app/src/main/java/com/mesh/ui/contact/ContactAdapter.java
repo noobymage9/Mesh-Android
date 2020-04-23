@@ -28,7 +28,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactB
 
     private ArrayList<Contact> contactList;
     private ContactFragment contactFragment;
-    private HashMap<String, Integer> contactColor;
 
     public class ContactBubbleViewHolder extends RecyclerView.ViewHolder {
 
@@ -39,6 +38,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactB
             super(itemView);
             contactName = itemView.findViewById(R.id.contact_name);
             contactIcon = itemView.findViewById(R.id.contact_icon);
+            itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(itemView.getContext(), ContactActivity.class);
+                intent.putExtra(ContactFragment.CONTACT_PARCEL, contact);
+                itemView.getContext().startActivity(intent);
+
+            });
         }
     }
 

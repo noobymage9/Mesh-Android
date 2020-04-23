@@ -38,6 +38,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
+    public static final String ImagePickerFragmentTag = "image_picker_dialog";
     public static String galleryPackage;
     public static String cameraPackage;
 

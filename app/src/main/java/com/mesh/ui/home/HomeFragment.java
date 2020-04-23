@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +27,8 @@ import com.mesh.R;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    protected static final int PICK_IMAGE = 7;
-    protected static final int CAPTURE_IMAGE = 8;
+    public static final int PICK_IMAGE = 7;
+    public static final int CAPTURE_IMAGE = 8;
     public boolean merge = true;
     private View root;
     private RecyclerView recyclerView;
@@ -100,7 +101,9 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
+        Log.e("HomeFragment", "Received data");
         if ((requestCode == PICK_IMAGE || requestCode == CAPTURE_IMAGE) && data != null && data.getData() != null) {
+            Log.e("HomeFragement", "MATCHED");
             String realPath = Image.getPath(getContext(), data.getData());
             DBManager dbManager = new DBManager(getContext());
             dbManager.open();

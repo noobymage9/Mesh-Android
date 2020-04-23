@@ -45,7 +45,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        contact = getIntent().getExtras().getParcelable(ConversationAdapter.CONTACT_PARCEL);
+        contact = getIntent().getExtras().getParcelable(ConversationAdapter.CONVERSATION_PARCEL);
         DBManager dbManager = new DBManager(this);
         dbManager.open();
         isGroup = dbManager.isGroup(contact.getID());

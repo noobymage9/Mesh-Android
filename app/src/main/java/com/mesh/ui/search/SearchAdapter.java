@@ -47,7 +47,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
                 dbManager.open();
                 Contact temp = new Contact(dbManager.getContactID(name), name);
                 dbManager.close();
-                intent.putExtra(ConversationAdapter.CONTACT_PARCEL, temp);
+                intent.putExtra(ConversationAdapter.CONVERSATION_PARCEL, temp);
                 itemView.getContext().startActivity(intent);
 
             });

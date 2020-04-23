@@ -50,6 +50,10 @@
             android:name=".ui.saved.SavedMessageActivity"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.contact.ContactActivity"
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".MeshListener"

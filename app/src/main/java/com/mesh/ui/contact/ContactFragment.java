@@ -21,6 +21,8 @@ import com.mesh.ui.home.Contact;
 import java.util.ArrayList;
 
 public class ContactFragment extends Fragment {
+    public static final String CONTACT_PARCEL = "Contact Parcel";
+
 
     private ContactViewModel contactViewModel;
     private EditText searchBar;
@@ -28,6 +30,7 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private View root;
     private ContactAdapter contactAdapter;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
 import com.mesh.Image;
+import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
 
@@ -23,8 +24,7 @@ import java.util.ArrayList;
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationViewHolder> {
 
     private ArrayList<Contact> contactList;
-    private final String imagePickerFragmentTag = "image_picker_dialog";
-    public static final String CONTACT_PARCEL = "Contact Parcel";
+    public static final String CONVERSATION_PARCEL = "Conversation Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private HomeFragment homeFragment;
     private int imageActualSize;
@@ -45,7 +45,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             icon.setOnClickListener(v -> {
                 if (homeFragment.isMerge()) {
                     if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
-                        homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), imagePickerFragmentTag);
+                        homeFragment.getImagePickerDialog().show(homeFragment.getParentFragmentManager(), MainActivity.ImagePickerFragmentTag);
                         currentContactClicked = contact;
                     } else {
                         homeFragment.dismissSnack();
@@ -59,7 +59,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 if (homeFragment.isMerge()) {
                     if (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown()) {
                         Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
-                        intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                        intent.putExtra(CONVERSATION_PARCEL, contactList.get(getAdapterPosition()));
                         itemView.getContext().startActivity(intent);
                     } else {
                         homeFragment.dismissSnack();
