@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.annotation.RequiresApi;
 
@@ -148,9 +149,10 @@ public class DBManager {
                 messages.addAll(childMessages);
             }
 
-            Collections.sort(messages, Comparator.comparing(obj -> obj.getDate()));
+            Collections.sort(messages, Comparator.comparing(Message::getDate));
         }
 
+        c.close();
         return messages;
     }
 
@@ -263,6 +265,7 @@ public class DBManager {
                                 DatabaseHelper.MSGTAG_ID)));
                 messages.add(currentMessage);
             } while (messageTagsTableCursor.moveToNext());
+            messageTableCursor.close();
         }
 
         return messages;
@@ -425,6 +428,14 @@ public class DBManager {
         return c;
     }
 
+    private Contact constructContact(Cursor c)
+    {
+        return new Contact(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
+                c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
+                c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)),
+                BooleanEnum.getBoolean(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_FAVOURITE))));
+    }
+
     private Cursor getAllContactsDB() {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName,
                 null);
@@ -493,10 +504,7 @@ public class DBManager {
         Contact currentContact;
         if (c.moveToFirst()) {
             do {
-                currentContact = new Contact(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_ID)),
-                        c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_PROFILE_PIC)),
-                        c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME)),
-                        BooleanEnum.getBoolean(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_FAVOURITE))));
+                currentContact = constructContact(c);
 
                 isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
                 isMergeChild = c.getInt(c.getColumnIndex((DatabaseHelper.CONTACT_IS_MERGE_CHILD)));
@@ -506,6 +514,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
+        c.close();
         return contacts;
     }
 
@@ -552,8 +561,8 @@ public class DBManager {
         Cursor c = getContactTableEntry(contactID);
 
         try {
-            return time.format(dateFormat.parse(c.getString
-                    (c.getColumnIndex(DatabaseHelper.CONTACT_LATEST_TIMESTAMP))));
+            return time.format(Objects.requireNonNull(dateFormat.parse(c.getString
+                    (c.getColumnIndex(DatabaseHelper.CONTACT_LATEST_TIMESTAMP)))));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -617,14 +626,23 @@ public class DBManager {
 
     public ArrayList<Contact> getFavouriteContacts()
     {
-        ArrayList<Contact> contacts = getAllContacts();
+        Cursor c = getAllContactsDB();
+        ArrayList<Contact> contacts = new ArrayList<>();
+        Contact currentContact;
 
-        for(Contact contact : contacts)
+        if (c.moveToFirst())
         {
-            if (!contact.getIsFavourite())
-                contacts.remove(contact);
+            do
+            {
+                if (BooleanEnum.getBoolean
+                        (c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_FAVOURITE)))) {
+                    currentContact = constructContact(c);
+                    contacts.add(currentContact);
+                }
+            } while (c.moveToNext());
         }
 
+        c.close();
         return contacts;
     }
 
@@ -825,7 +843,7 @@ public class DBManager {
         database.insert(DatabaseHelper.settingsTableName, null, cv);
     }
 
-    //Only 1 entry in settings table, so ID is always 0
+    //Only 1 entry in settings table, so ID is always 1
     public void updateContactSortSetting(SortSetting setting) {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.SETTINGS_CONTACT_SORT_ORDER, SortSetting.getSettingID(setting));
@@ -833,13 +851,13 @@ public class DBManager {
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
 
-    //Only 1 entry in settings table, so ID is always 0
+    //Only 1 entry in settings table, so ID is always 1
     public void updateDeleteNotficationsSetting(boolean setting) {
         ContentValues cv = new ContentValues();
         if (setting)
-            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 1);
+            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, BooleanEnum.getIntValueOfBoolean(true));
         else
-            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, 0);
+            cv.put(DatabaseHelper.SETTINGS_DELETE_NOTI_ON_STARTUP, BooleanEnum.getIntValueOfBoolean(false));
         database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
     }
@@ -859,7 +877,7 @@ public class DBManager {
                 " FROM " + DatabaseHelper.settingsTableName + ";", null);
         c.moveToFirst();
 
-        return c.getInt(0) > 0;
+        return BooleanEnum.getBoolean(c.getInt(0));
     }
 
     public SortSetting getContactSortSetting() {
@@ -876,7 +894,7 @@ public class DBManager {
                 " FROM " + DatabaseHelper.settingsTableName + ";", null);
         c.moveToFirst();
 
-        return c.getInt(0) > 0;
+        return BooleanEnum.getBoolean(c.getInt(0));
     }
 
     //Again assuming only 1 entry in settings table
@@ -890,5 +908,26 @@ public class DBManager {
                 DatabaseHelper.defaultCustomContactOrder);
         database.update(DatabaseHelper.settingsTableName, cv,
                 DatabaseHelper.SETTINGS_TABLE_ID + " = 1", null);
+    }
+
+    /******************************/
+    /**User Login table functions**/
+    /******************************/
+
+    public void insertLoginDetails(String userID, String password)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.LOGIN_USER_ID, userID);
+        cv.put(DatabaseHelper.LOGIN_PASSWORD, password);
+        database.insert(DatabaseHelper.loginDetailsTableName, null, cv);
+    }
+
+    public void updateLoginDetails(String userID, String password)
+    {
+        ContentValues cv = new ContentValues();
+        cv.put(DatabaseHelper.LOGIN_USER_ID, userID);
+        cv.put(DatabaseHelper.LOGIN_PASSWORD, password);
+        database.update(DatabaseHelper.loginDetailsTableName, cv,
+                DatabaseHelper.LOGIN_ID + " = 1", null);
     }
 }
