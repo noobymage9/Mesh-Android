@@ -862,7 +862,7 @@ public class DBManager {
         if (c.moveToFirst())
         {
             do {
-                currentContact = constructContact(c);
+                currentContact = constructContact(getContactDB(c.getInt(c.getColumnIndex(DatabaseHelper.MERGE_PARENT_ID))));
                 parentContacts.add(currentContact);
             } while (c.moveToNext());
 
