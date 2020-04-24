@@ -118,6 +118,24 @@ public class DBManager {
         return null;
     }/*Get all messages for 1 user*/
 
+    public static class MyObject implements Comparable<MyObject> {
+
+        private Date dateTime;
+
+        public Date getDateTime() {
+            return dateTime;
+        }
+
+        public void setDateTime(Date datetime) {
+            this.dateTime = datetime;
+        }
+
+        @Override
+        public int compareTo(MyObject o) {
+            return getDateTime().compareTo(o.getDateTime());
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Message> getMessages(int contactID) {
         ArrayList<Message> messages = new ArrayList<>();
@@ -148,9 +166,12 @@ public class DBManager {
                 childMessages = getMessages(childContactID);
                 messages.addAll(childMessages);
             }
-
-            Collections.sort(messages, Comparator.comparing(Message::getDate));
         }
+
+        Comparator<Message> compareMessagesByDate = (Message m1, Message m2) ->
+                m1.getRawDate().compareTo( m2.getRawDate() );
+
+        Collections.sort(messages, compareMessagesByDate);
 
         c.close();
         return messages;
@@ -243,6 +264,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
+        c.close();
         return tagIDs;
     }
 
@@ -268,6 +290,7 @@ public class DBManager {
             messageTableCursor.close();
         }
 
+        messageTagsTableCursor.close();
         return messages;
     }
 
@@ -451,6 +474,7 @@ public class DBManager {
 
                 if (!BooleanEnum.getBoolean(isGroupUser) && !BooleanEnum.getBoolean(isMergeChild))
                     contacts.add(currentContact);
+
             } while (c.moveToNext());
         }
 
@@ -814,14 +838,19 @@ public class DBManager {
 
     private boolean isMergeParent(int contactID)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MERGE_PARENT_ID + " FROM " +
+        Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.contactMergeStatusTableName + " WHERE " + DatabaseHelper.MERGE_PARENT_ID +
                 " = " + contactID, null);
 
-        if (c.moveToFirst())
+        if (c.moveToFirst()) {
+            c.close();
             return true;
+        }
         else
+        {
+            c.close();
             return false;
+        }
     }
 
     private ArrayList<Integer> getAllChildContactIDs(int contactID)
@@ -835,7 +864,7 @@ public class DBManager {
         if (c.moveToFirst())
         {
             do {
-                childContactIDs.add(c.getColumnIndex(DatabaseHelper.MERGE_CHILD_ID));
+                childContactIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.MERGE_CHILD_ID)));
             } while (c.moveToNext());
         }
 
