@@ -190,7 +190,8 @@ public class MeshListener extends NotificationListenerService {
                 !title.equals("WhatsApp Web") &&
                 !title.equals("Line") &&
                 !title.equals("Telegram") &&
-                !title.equals("Facebook_Messenger");
+                !title.equals("Facebook_Messenger") &&
+                !title.equals("You"); // To prevent reading user made replies
     }
 
     private boolean isGroupName(String title) {
