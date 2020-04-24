@@ -19,6 +19,7 @@ import com.mesh.R;
 import com.mesh.message.MessageActivity;
 import com.mesh.ui.favourite.FavouriteFragment;
 import com.mesh.ui.home.Contact;
+import com.mesh.ui.home.ConversationAdapter;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
 
     private ArrayList<Contact> contactList;
     private final String imagePickerFragmentTag = "image_picker_dialog";
-    public static final String CONTACT_PARCEL = "Contact Parcel";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private FavouriteFragment favouriteFragment;
     private int imageActualSize;
@@ -53,7 +53,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             sourceApp = itemView.findViewById(R.id.source_app);
             itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(itemView.getContext(), MessageActivity.class);
-                intent.putExtra(CONTACT_PARCEL, contactList.get(getAdapterPosition()));
+                intent.putExtra(ConversationAdapter.CONVERSATION_PARCEL, contactList.get(getAdapterPosition()));
                 itemView.getContext().startActivity(intent);
             });
         }

@@ -186,8 +186,8 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                 }
 
             }
+            drawButtons(c, viewHolder);
         }
-        drawButtons(c, viewHolder);
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 

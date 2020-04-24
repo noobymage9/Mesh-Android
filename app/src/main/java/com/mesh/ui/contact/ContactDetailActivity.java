@@ -24,7 +24,7 @@ import com.mesh.ui.home.ImagePickerDialog;
 
 import java.util.ArrayList;
 
-public class ContactActivity extends AppCompatActivity {
+public class ContactDetailActivity extends AppCompatActivity {
 
     private ActionBar actionBar;
     private Contact contact;
