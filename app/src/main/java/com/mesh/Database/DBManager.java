@@ -118,6 +118,24 @@ public class DBManager {
         return null;
     }/*Get all messages for 1 user*/
 
+    public static class MyObject implements Comparable<MyObject> {
+
+        private Date dateTime;
+
+        public Date getDateTime() {
+            return dateTime;
+        }
+
+        public void setDateTime(Date datetime) {
+            this.dateTime = datetime;
+        }
+
+        @Override
+        public int compareTo(MyObject o) {
+            return getDateTime().compareTo(o.getDateTime());
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Message> getMessages(int contactID) {
         ArrayList<Message> messages = new ArrayList<>();
@@ -148,9 +166,12 @@ public class DBManager {
                 childMessages = getMessages(childContactID);
                 messages.addAll(childMessages);
             }
-
-            Collections.sort(messages, Comparator.comparing(Message::getDate));
         }
+
+        Comparator<Message> compareMessagesByDate = (Message m1, Message m2) ->
+                m1.getRawDate().compareTo( m2.getRawDate() );
+
+        Collections.sort(messages, compareMessagesByDate);
 
         c.close();
         return messages;
