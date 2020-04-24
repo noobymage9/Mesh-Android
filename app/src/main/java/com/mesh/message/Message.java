@@ -64,6 +64,11 @@ public class Message {
         return sourceApp;
     }
 
+    public Date getRawDate()
+    {
+        return timeStamp;
+    }
+
     public String getDate() {
         DateFormat date = DateFormat.getDateInstance();
         return date.format(timeStamp);
