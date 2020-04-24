@@ -243,6 +243,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
+        c.close();
         return tagIDs;
     }
 
@@ -268,6 +269,7 @@ public class DBManager {
             messageTableCursor.close();
         }
 
+        messageTagsTableCursor.close();
         return messages;
     }
 
@@ -451,6 +453,7 @@ public class DBManager {
 
                 if (!BooleanEnum.getBoolean(isGroupUser) && !BooleanEnum.getBoolean(isMergeChild))
                     contacts.add(currentContact);
+
             } while (c.moveToNext());
         }
 
@@ -814,14 +817,19 @@ public class DBManager {
 
     private boolean isMergeParent(int contactID)
     {
-        Cursor c = database.rawQuery("SELECT " + DatabaseHelper.MERGE_PARENT_ID + " FROM " +
+        Cursor c = database.rawQuery("SELECT * FROM " +
                 DatabaseHelper.contactMergeStatusTableName + " WHERE " + DatabaseHelper.MERGE_PARENT_ID +
                 " = " + contactID, null);
 
-        if (c.moveToFirst())
+        if (c.moveToFirst()) {
+            c.close();
             return true;
+        }
         else
+        {
+            c.close();
             return false;
+        }
     }
 
     private ArrayList<Integer> getAllChildContactIDs(int contactID)
@@ -835,7 +843,7 @@ public class DBManager {
         if (c.moveToFirst())
         {
             do {
-                childContactIDs.add(c.getColumnIndex(DatabaseHelper.MERGE_CHILD_ID));
+                childContactIDs.add(c.getInt(c.getColumnIndex(DatabaseHelper.MERGE_CHILD_ID)));
             } while (c.moveToNext());
         }
 
