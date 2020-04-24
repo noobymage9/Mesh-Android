@@ -2,7 +2,6 @@ package com.mesh.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.ContentObservable;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,7 +12,6 @@ import com.mesh.message.Message;
 import com.mesh.message.UserCollection;
 import com.mesh.ui.home.Contact;
 
-import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -853,6 +851,27 @@ public class DBManager {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Contact> getAllMergeParentContacts()
+    {
+        Cursor c = database.rawQuery("SELECT DISTINCT " + DatabaseHelper.MERGE_PARENT_ID + " FROM " +
+                DatabaseHelper.contactMergeStatusTableName, null);
+        ArrayList<Contact> parentContacts = new ArrayList<>();
+        Contact currentContact;
+
+        if (c.moveToFirst())
+        {
+            do {
+                currentContact = constructContact(c);
+                parentContacts.add(currentContact);
+            } while (c.moveToNext());
+
+            parentContacts.sort(Comparator.comparing(Contact::getName));
+        }
+
+        return parentContacts;
+    }
+
     private ArrayList<Integer> getAllChildContactIDs(int contactID)
     {
         ArrayList<Integer> childContactIDs = new ArrayList<>();
@@ -869,6 +888,27 @@ public class DBManager {
         }
 
         return childContactIDs;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public ArrayList<Contact> getAllMergeChildContacts(int contactID)
+    {
+        ArrayList<Contact> childContacts = new ArrayList<>();
+        ArrayList<Integer> childContactIDs = getAllChildContactIDs(contactID);
+        Contact currentContact;
+
+        if (childContactIDs.size() > 0)
+        {
+            for (int childContactID : childContactIDs)
+            {
+                currentContact = constructContact(getContactDB(childContactID));
+                childContacts.add(currentContact);
+            }
+
+            childContacts.sort(Comparator.comparing(Contact::getName));
+        }
+
+        return childContacts;
     }
 
     public void insertContactMergeStatus(int childContactID, int parentContactID)
