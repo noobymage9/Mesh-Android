@@ -34,7 +34,7 @@ public class ContactViewModel extends AndroidViewModel {
                 //contacts.postValue(dbManager.searchMessages(filter));
                 ;
             else
-                contacts.postValue(dbManager.getAllContacts());
+                contacts.postValue(dbManager.getAllContactsForHome());
             dbManager.close();
         }).start();
     }
