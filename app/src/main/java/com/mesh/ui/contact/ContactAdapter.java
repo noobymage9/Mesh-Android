@@ -15,14 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
-import com.mesh.Image;
 import com.mesh.R;
-import com.mesh.message.Message;
-import com.mesh.message.MessageActivity;
 import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactBubbleViewHolder> {
 
@@ -39,7 +35,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ContactB
             contactName = itemView.findViewById(R.id.contact_name);
             contactIcon = itemView.findViewById(R.id.contact_icon);
             itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(itemView.getContext(), ContactActivity.class);
+                Intent intent = new Intent(itemView.getContext(), ContactDetailActivity.class);
                 intent.putExtra(ContactFragment.CONTACT_PARCEL, contact);
                 itemView.getContext().startActivity(intent);
 
