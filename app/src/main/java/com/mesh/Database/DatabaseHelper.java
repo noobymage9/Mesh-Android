@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String settingsTableName = "Settings";
     public static final String messageSearchTableName = "Message_Search";
     public static final String contactMergeStatusTableName = "Merged_Contact_Status";
+    public static final String loginDetailsTableName = "Login_Details";
 
     /***************************/
     /**Database table columns**/
@@ -63,6 +64,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String MERGE_CHILD_ID = "Merge_Child_ID";
     public static final String MERGE_PARENT_ID = "Merge_Parent_ID";
 
+    public static final String LOGIN_ID = "Login_Key_ID";
+    public static final String LOGIN_USER_ID = "Login_User_ID";
+    public static final String LOGIN_PASSWORD = "Login_Password";
+
     /**************************/
     /**Default Setting Values**/
     /**************************/
@@ -74,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 40;
+    static int databaseVersion = 41;
 
     /****************************/
     /**Database table creation**/
@@ -140,6 +145,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SETTINGS_DELETE_NOTI_ON_STARTUP + " BOOLEAN, " +
             SETTINGS_CUSTOM_CONTACT_ORDER + " BOOLEAN);";
 
+    private static final String createLoginDetailsTable = "CREATE TABLE " + loginDetailsTableName + "(" +
+            LOGIN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            LOGIN_USER_ID + " STRING, " +
+            LOGIN_PASSWORD + " STRING);";
+
     @Override
     public void onCreate(SQLiteDatabase db)
     {
@@ -157,12 +167,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(SETTINGS_DELETE_NOTI_ON_STARTUP, defaultDeleteNotificationSetting);
         cv.put(SETTINGS_CUSTOM_CONTACT_ORDER, defaultCustomContactOrder);
         db.insert(settingsTableName, null, cv);
+        db.execSQL(createLoginDetailsTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
     {
-        if (databaseVersion == oldVersion) {
+        if (databaseVersion != newVersion) {
             db.execSQL("drop table if exists " + messageTableName);
             db.execSQL("drop table if exists " + contactsTableName);
             db.execSQL("drop table if exists " + messageTableName);

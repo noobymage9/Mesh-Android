@@ -436,6 +436,27 @@ public class DBManager {
                 BooleanEnum.getBoolean(c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_FAVOURITE))));
     }
 
+    private ArrayList<Contact> constructContactListFromCursor(Cursor c)
+    {
+        ArrayList<Contact> contacts = new ArrayList<>();
+        int isGroupUser, isMergeChild;
+        Contact currentContact;
+
+        if (c.moveToFirst()) {
+            do {
+                currentContact = constructContact(c);
+
+                isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
+                isMergeChild = c.getInt(c.getColumnIndex((DatabaseHelper.CONTACT_IS_MERGE_CHILD)));
+
+                if (!BooleanEnum.getBoolean(isGroupUser) && !BooleanEnum.getBoolean(isMergeChild))
+                    contacts.add(currentContact);
+            } while (c.moveToNext());
+        }
+
+        return contacts;
+    }
+
     private Cursor getAllContactsDB() {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName,
                 null);
@@ -445,7 +466,7 @@ public class DBManager {
     }
 
     //Helper function to get cursor for all contacts
-    private Cursor getAllContactsSortByRecency() {
+    private Cursor getAllContactsSortByRecencyDB() {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
                         + " ORDER BY " + DatabaseHelper.CONTACT_LATEST_TIMESTAMP + " DESC ",
                 null);
@@ -454,7 +475,7 @@ public class DBManager {
         return c;
     }
 
-    private Cursor getAllContactsSortByFrequency() {
+    private Cursor getAllContactsSortByFrequencyDB() {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
                 + " ORDER BY (SELECT COUNT(*) FROM " + DatabaseHelper.messageTableName +
                 " WHERE " + DatabaseHelper.messageTableName + "." + DatabaseHelper.MSG_USER_ID
@@ -465,9 +486,18 @@ public class DBManager {
         return c;
     }
 
-    private Cursor getAllContactsSortByOrder() {
+    private Cursor getAllContactsSortByOrderDB() {
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
                         + " ORDER BY " + DatabaseHelper.CONTACT_CUSTOM_ORDER + " DESC ",
+                null);
+        c.moveToFirst();
+
+        return c;
+    }
+
+    private Cursor getAllContactsSortByNameDB() {
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.contactsTableName
+                        + " ORDER BY " + DatabaseHelper.CONTACT_NAME + " ASC ",
                 null);
         c.moveToFirst();
 
@@ -480,6 +510,18 @@ public class DBManager {
         return c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME));
     }
 
+    public ArrayList<Contact> getAllContactsForHome()
+    {
+        Cursor c;
+        ArrayList<Contact> contacts = new ArrayList<>();
+
+        c = getAllContactsSortByNameDB();
+       contacts = constructContactListFromCursor(c);
+
+        c.close();
+        return contacts;
+    }
+
     public ArrayList<Contact> getAllContacts() {
         Cursor c;
         ArrayList<Contact> contacts = new ArrayList<>();
@@ -487,10 +529,10 @@ public class DBManager {
         if (!getCustomContactSortSetting()) {
             switch (getContactSortSetting()) {
                 case Recency:
-                    c = getAllContactsSortByRecency();
+                    c = getAllContactsSortByRecencyDB();
                     break;
                 case Frequency:
-                    c = getAllContactsSortByFrequency();
+                    c = getAllContactsSortByFrequencyDB();
                     break;
                 default:
                     c = getAllContactsDB();
@@ -498,21 +540,9 @@ public class DBManager {
             }
             reinitializeContactsOrder(c);;
         } else
-            c = getAllContactsSortByOrder();
+            c = getAllContactsSortByOrderDB();
 
-        int isGroupUser, isMergeChild;
-        Contact currentContact;
-        if (c.moveToFirst()) {
-            do {
-                currentContact = constructContact(c);
-
-                isGroupUser = c.getInt(c.getColumnIndex(DatabaseHelper.CONTACT_IS_GROUP_USER));
-                isMergeChild = c.getInt(c.getColumnIndex((DatabaseHelper.CONTACT_IS_MERGE_CHILD)));
-
-                if (!BooleanEnum.getBoolean(isGroupUser) && !BooleanEnum.getBoolean(isMergeChild))
-                    contacts.add(currentContact);
-            } while (c.moveToNext());
-        }
+        contacts = constructContactListFromCursor(c);
 
         c.close();
         return contacts;
