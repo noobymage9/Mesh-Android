@@ -10,12 +10,15 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
+import com.mesh.MainActivity;
 import com.mesh.R;
+import com.mesh.message.MessageActivity;
 import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.MergeItemVie
                     dbManager.close();
                     mergedContactList.remove(contact);
                     notifyDataSetChanged();
+                    Intent intent = new Intent(ContactViewModel.RECEIVE_JSON);
+                    LocalBroadcastManager.getInstance(contactDetailActivity).sendBroadcast(intent);
                 }
             });
         }

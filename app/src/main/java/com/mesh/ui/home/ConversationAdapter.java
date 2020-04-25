@@ -1,6 +1,7 @@
 package com.mesh.ui.home;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -162,11 +163,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     public void merge(int from, int to) {
         Contact dragged = contactList.get(from);
         Contact target = contactList.get(to);
+        Log.e("Child", contactList.get(from).getName());
+        Log.e("Parent", contactList.get(to).getName());
         DBManager dbManager = new DBManager(homeFragment.getContext());
         dbManager.open();
         dbManager.mergeContacts(dragged.getID(), target.getID());
         dbManager.close();
-        homeFragment.reset();
+        contactList.remove(dragged);
+        notifyDataSetChanged();
+        //homeFragment.reset();
     }
 
     public ArrayList<Contact> getContactList() {

@@ -109,7 +109,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         else if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
 
             if (homeFragment.isMerge()) { // To prevent swapping
-                if (folder != null && homeFragment.getMergeSnackbar() == null) {
+                if (folder != null && (homeFragment.getMergeSnackbar() == null || !homeFragment.getMergeSnackbar().isShown())) {
                     homeFragment.displaySnackBar(draggedFolderPosition, folderPosition);
                     folder = null;
                     folderPosition = -1;
