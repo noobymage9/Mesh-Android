@@ -1,5 +1,6 @@
 package com.mesh.ui.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -20,14 +21,25 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mesh.MainActivity;
 import com.mesh.R;
+import com.mesh.ui.contact.ContactDetailActivity;
 import com.mesh.ui.favourite.FavouriteFragment;
 
 public class ImagePickerDialog extends BottomSheetDialogFragment {
 
     Fragment fragment;
+    Activity activity;
 
     public ImagePickerDialog(Fragment fragment) {
         this.fragment = fragment;
+        this.activity = fragment.getActivity();
+    }
+
+    public ImagePickerDialog(Activity activity) {
+        this.activity = activity;
+    }
+
+    public boolean isActivity() {
+        return fragment == null;
     }
 
     @Nullable
@@ -37,36 +49,44 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
         ImageView gallery = root.findViewById(R.id.gallery_icon);
         ImageView camera = root.findViewById(R.id.camera_icon);
         try {
-            Glide.with(root).load(fragment.getActivity().getPackageManager().getApplicationIcon(MainActivity.galleryPackage)).fitCenter().into(gallery);
-            Glide.with(root).load(fragment.getActivity().getPackageManager().getApplicationIcon(MainActivity.cameraPackage)).fitCenter().into(camera);
+            Glide.with(root).load(activity.getPackageManager().getApplicationIcon(MainActivity.galleryPackage)).fitCenter().into(gallery);
+            Glide.with(root).load(activity.getPackageManager().getApplicationIcon(MainActivity.cameraPackage)).fitCenter().into(camera);
         } catch (PackageManager.NameNotFoundException e) {
             Log.e("ERROR", e + "");
         }
 
         RelativeLayout galleryGroup = root.findViewById(R.id.gallery_group);
-        galleryGroup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra("return-data", true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null)
+        galleryGroup.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.putExtra("return-data", true);
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            if (intent.resolveActivity(activity.getPackageManager()) != null)
+                if (!isActivity())
                     fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
-            }
+                else
+                    activity.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+
         });
 
         RelativeLayout cameraGroup = root.findViewById(R.id.camera_group);
         cameraGroup.setOnClickListener(v -> {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null && fragment.getActivity().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
-                fragment.getActivity().startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
+            if (intent.resolveActivity(activity.getPackageManager()) != null && activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
+                if (!isActivity())
+                    fragment.startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
+                else
+                    activity.startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
         });
 
         Button reset = root.findViewById(R.id.reset_button);
         reset.setOnClickListener(v -> {
-            if (fragment instanceof HomeFragment) ((HomeFragment) fragment).resetIcon();
-            if (fragment instanceof FavouriteFragment) ((FavouriteFragment) fragment).resetIcon();
+            if (!isActivity()) {
+                if (fragment instanceof HomeFragment) ((HomeFragment) fragment).resetIcon();
+                if (fragment instanceof FavouriteFragment)
+                    ((FavouriteFragment) fragment).resetIcon();
+            } else
+                if (activity instanceof ContactDetailActivity) ((ContactDetailActivity) activity).resetIcon();
         });
         return root;
     }

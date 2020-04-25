@@ -3,13 +3,18 @@ package com.mesh.ui.contact;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -45,7 +50,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         contactName = findViewById(R.id.contact_name);
         contactName.setText(contact.getName());
         contactIcon = findViewById(R.id.contact_icon);
-        //imagePickerDialog = new ImagePickerDialog(this);
+        imagePickerDialog = new ImagePickerDialog(this);
         contactIcon.setOnClickListener(v -> {
             imagePickerDialog.show(getSupportFragmentManager(), MainActivity.ImagePickerFragmentTag);
         });
@@ -107,17 +112,24 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        super.onActivityResult(requestCode, resultCode, data);
         if ((requestCode == HomeFragment.PICK_IMAGE || requestCode == HomeFragment.CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(this, data.getData());
             DBManager dbManager = new DBManager(this);
             dbManager.open();
+            Log.e("CHANGED", "INSERTED");
             dbManager.insertIcon(realPath, contact.getID() + "");
             dbManager.close();
+            Glide.with(this).load(realPath).apply(RequestOptions.circleCropTransform()).into(contactIcon);
+            updateContactFragment();
             findViewById(R.id.activity_contact).invalidate();
+            imagePickerDialog.dismiss();
         }
-        imagePickerDialog.dismiss();
-        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void updateContactFragment(){
+        Intent intent = new Intent(ContactViewModel.RECEIVE_JSON);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     public void resetIcon() {

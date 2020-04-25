@@ -47,8 +47,7 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.MergeItemVie
                     dbManager.close();
                     mergedContactList.remove(contact);
                     notifyDataSetChanged();
-                    Intent intent = new Intent(ContactViewModel.RECEIVE_JSON);
-                    LocalBroadcastManager.getInstance(contactDetailActivity).sendBroadcast(intent);
+                    contactDetailActivity.updateContactFragment();
                 }
             });
         }
