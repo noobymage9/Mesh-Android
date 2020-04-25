@@ -1,6 +1,7 @@
 package com.mesh.ui.contact;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ public class ContactFragment extends Fragment {
     private ContactAdapter contactAdapter;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         contactViewModel =
@@ -54,7 +57,6 @@ public class ContactFragment extends Fragment {
 
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
-        recyclerView.scrollToPosition(contacts.size() - 1);
     }
 
 
@@ -66,6 +68,7 @@ public class ContactFragment extends Fragment {
 
             }
 
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 contactViewModel.loadContacts(s.toString());
