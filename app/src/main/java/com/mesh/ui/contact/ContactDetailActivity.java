@@ -1,16 +1,16 @@
 package com.mesh.ui.contact;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -31,10 +31,14 @@ public class ContactDetailActivity extends AppCompatActivity {
     private ImageView contactIcon;
     private TextView contactName;
     private ImagePickerDialog imagePickerDialog;
+    private RecyclerView mergeContactList;
+    private MergeAdapter mergeAdapter;
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact);
+        setContentView(R.layout.activity_contact_detail);
 
         contact = getIntent().getExtras().getParcelable(ContactFragment.CONTACT_PARCEL);
         initialiseActionBar();
@@ -73,6 +77,9 @@ public class ContactDetailActivity extends AppCompatActivity {
             Image.setSource(sourceApps.get(j), this, sourceApp);
             j++;
         }
+        mergeContactList = findViewById(R.id.merge_contact_list);
+        mergeAdapter = new MergeAdapter(dbManager.getAllMergeChildContacts(contact.getID()), this);
+        mergeContactList.setAdapter(mergeAdapter);
         dbManager.close();
 
     }
@@ -122,4 +129,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         findViewById(R.id.activity_contact).invalidate();
     }
 
+    public Contact getParentContact() {
+        return contact;
+    }
 }

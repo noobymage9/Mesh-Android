@@ -273,7 +273,6 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
         recyclerView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) {
                 viewHolder.itemView.setPadding(0, 0, 0, 0);
-                // onChildDraw(c, recyclerView, viewHolder, 0F, dY, actionState, isCurrentlyActive);
                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event)

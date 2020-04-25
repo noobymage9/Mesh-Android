@@ -41,5 +41,6 @@
     <string name="camera">Camera</string>
     <string name="remove">Remove</string>
     <string name="contact_merge">Merged Contacts</string>
+    <string name="action_unmerge">Unmerge</string>
 
 </resources>
