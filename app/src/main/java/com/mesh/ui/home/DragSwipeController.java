@@ -157,7 +157,7 @@ public class DragSwipeController extends ItemTouchHelper.Callback {
                             boolean bottomWithinChild = child.getBottom() > itemBottomPosition && itemBottomPosition > child.getTop();
                             if (topWithinChild || bottomWithinChild) {
                                 folder = child;
-                                folderPosition = i;
+                                folderPosition = childView.getAdapterPosition();
                                 if (!((ConversationAdapter.ConversationViewHolder) childView).getExpanded()) {
                                     expand(child);
                                     ((ConversationAdapter.ConversationViewHolder) childView).setExpanded(true);

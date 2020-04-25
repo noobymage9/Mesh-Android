@@ -50,9 +50,9 @@ public class ContactViewModel extends AndroidViewModel {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
             if (filter != null && filter.length() != 0)
-                contacts.postValue(dbManager.getAllMergeParentContacts());
+                contacts.postValue(dbManager.getAllContactsForHome());
             else
-                contacts.postValue(dbManager.getAllMergeParentContacts());
+                contacts.postValue(dbManager.getAllContactsForHome());
             dbManager.close();
         }).start();
     }
