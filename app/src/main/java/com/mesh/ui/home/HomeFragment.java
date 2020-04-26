@@ -109,6 +109,7 @@ public class HomeFragment extends Fragment {
             dbManager.open();
             dbManager.insertIcon(realPath, conversationAdapter.getCurrentContactClicked().getID() + "");
             dbManager.close();
+            conversationAdapter.getCurrentContactClicked().setProfilePic(realPath);
             conversationAdapter.notifyDataSetChanged();
         }
         imagePickerDialog.dismiss();

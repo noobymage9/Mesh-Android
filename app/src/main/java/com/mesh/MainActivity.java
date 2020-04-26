@@ -39,15 +39,13 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     public static final String ImagePickerFragmentTag = "image_picker_dialog";
-    public static String galleryPackage;
-    public static String cameraPackage;
-
-    private static final int PICK_IMAGE = 21;
-    private static final int ALL_PERMISSIONS = 1;
 
     private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
 
+    private final int PICK_IMAGE = 21;
+    private final int ALL_PERMISSIONS = 1;
+    public static String galleryIconImage, cameraIconImage;
     private boolean deleteNotification, mergeSwitchVisible;
     private String[] neededPermissions;
     private AppBarConfiguration appBarConfiguration;
@@ -72,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
 
 
-        galleryPackage = getGalleryPackage();
-        cameraPackage = getCameraPackage();
+        galleryIconImage = getGalleryPackage();
+        cameraIconImage = getCameraPackage();
 
     }
 

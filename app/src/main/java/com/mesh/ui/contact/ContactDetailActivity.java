@@ -117,7 +117,6 @@ public class ContactDetailActivity extends AppCompatActivity {
             String realPath = Image.getPath(this, data.getData());
             DBManager dbManager = new DBManager(this);
             dbManager.open();
-            Log.e("CHANGED", "INSERTED");
             dbManager.insertIcon(realPath, contact.getID() + "");
             dbManager.close();
             Glide.with(this).load(realPath).apply(RequestOptions.circleCropTransform()).into(contactIcon);
