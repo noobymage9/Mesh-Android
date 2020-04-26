@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.mesh.Database.DBManager;
+import com.mesh.ui.home.Contact;
 
 //import android.provider.<span id="IL_AD11" class="IL_AD">MediaStore</span>;
 
@@ -24,6 +26,12 @@ import com.bumptech.glide.request.RequestOptions;
 @TargetApi(Build.VERSION_CODES.KITKAT)
 public class Image {
 
+    private  String filePath;
+    private Context context;
+
+    private Image(Context context) {
+        this.context = context;
+    }
     /**
      * Method for return file path of Gallery image
      *
@@ -213,5 +221,24 @@ public class Image {
                 break;
             default: break;
         }
+    }
+
+    public static Image with(Context context) {
+            return new Image(context);
+    }
+
+    public Image insert(String filePath) {
+        this.filePath = filePath;
+        return this;
+    }
+
+    public void into(Contact contact) {
+        DBManager dbManager = new DBManager(context);
+        dbManager.open();
+        if (contact != null)
+            dbManager.insertIcon(filePath, contact.getID() + "");
+        else
+            // TODO: 26/4/2020 Insert path into Profile Picture of the User
+        dbManager.close();
     }
 }

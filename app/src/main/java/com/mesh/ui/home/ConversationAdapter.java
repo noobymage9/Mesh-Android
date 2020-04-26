@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.mesh.BaseAdapter;
 import com.mesh.Database.DBManager;
 import com.mesh.Image;
 import com.mesh.MainActivity;
@@ -22,7 +23,7 @@ import com.mesh.message.MessageActivity;
 
 import java.util.ArrayList;
 
-public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationViewHolder> {
+public class ConversationAdapter extends BaseAdapter<ConversationAdapter.ConversationViewHolder> {
 
     private ArrayList<Contact> contactList;
     public static final String CONVERSATION_PARCEL = "Conversation Parcel";

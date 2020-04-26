@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.mesh.Database.DBManager;
 import com.mesh.Image;
+import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.ui.home.Contact;
 import com.mesh.ui.home.HomeFragment;
@@ -50,12 +51,9 @@ public class FavouriteFragment extends Fragment {
 
 
     public void resetIcon() {
-        DBManager dbManager = new DBManager(getContext());
-        dbManager.open();
-        dbManager.insertIcon(null, favouriteAdapter.getCurrentContactClicked().getID() + "");
-        dbManager.close();
+        Image.with(getContext()).insert(null).into(favouriteAdapter.getCurrentContactClicked());
+        favouriteAdapter.refresh("");
         imagePickerDialog.dismiss();
-        recyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public ImagePickerDialog getImagePickerDialog() {
@@ -65,14 +63,10 @@ public class FavouriteFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == HomeFragment.PICK_IMAGE || requestCode == HomeFragment.CAPTURE_IMAGE) && data != null && data.getData() != null) {
+        if ((requestCode == MainActivity.PICK_IMAGE || requestCode == MainActivity.CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(getContext(), data.getData());
-            DBManager dbManager = new DBManager(getContext());
-            dbManager.open();
-            dbManager.insertIcon(realPath, favouriteAdapter.getCurrentContactClicked() + "");
-            dbManager.close();
-            favouriteAdapter.getCurrentContactClicked().setProfilePic(realPath);
-            favouriteAdapter.notifyDataSetChanged();
+            Image.with(getContext()).insert(realPath).into(favouriteAdapter.getCurrentContactClicked());
+            favouriteAdapter.refresh(realPath);
         }
         imagePickerDialog.dismiss();
     }

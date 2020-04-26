@@ -3,6 +3,7 @@ package com.mesh.message;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mesh.Database.DBManager;
@@ -27,9 +29,12 @@ public class SaveDialog extends Dialog {
     private TagAdapter tagAdapter;
     private ArrayList<UserCollection> userCollections;
     private  MessageActivity messageActivity;
+    private SaveDeleteSnackbar saveDeleteSnackbar;
 
-    SaveDialog(@NonNull Context context) {
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    SaveDialog(@NonNull Context context, SaveDeleteSnackbar saveDeleteSnackbar) {
         super(context);
+        this.saveDeleteSnackbar = saveDeleteSnackbar;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.layout_savedialog_message);
         messageActivity = ((MessageActivity) ((ContextWrapper) getContext()).getBaseContext());
@@ -47,6 +52,7 @@ public class SaveDialog extends Dialog {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void initialiseSaveButton() {
         save = findViewById(R.id.save_bar);
         save.setOnClickListener(v -> {
@@ -64,8 +70,10 @@ public class SaveDialog extends Dialog {
                     userCollection.setSelected(false);
                 }
             }
-            if (selectedSome)
+            if (selectedSome) {
                 this.dismiss();
+                saveDeleteSnackbar.dismiss();
+            }
         });
     }
 
@@ -129,6 +137,7 @@ public class SaveDialog extends Dialog {
         recyclerView.setAdapter(tagAdapter);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void dismiss() {
         for (UserCollection userCollection : userCollections) {

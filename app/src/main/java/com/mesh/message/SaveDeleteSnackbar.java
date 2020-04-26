@@ -86,7 +86,7 @@ public final class SaveDeleteSnackbar extends BaseTransientBottomBar<SaveDeleteS
         });
         Button save = content.findViewById(R.id.save_button);
         save.setOnClickListener(v -> {
-            SaveDialog saveDialog = new SaveDialog(saveDeleteSnackbar.getContext());
+            SaveDialog saveDialog = new SaveDialog(saveDeleteSnackbar.getContext(), saveDeleteSnackbar);
             saveDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             saveDialog.show();
         });

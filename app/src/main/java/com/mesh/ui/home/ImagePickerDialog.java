@@ -63,9 +63,9 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
             intent.setAction(Intent.ACTION_GET_CONTENT);
             if (intent.resolveActivity(activity.getPackageManager()) != null)
                 if (!isActivity())
-                    fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+                    fragment.startActivityForResult(Intent.createChooser(intent, "Select Picture"), MainActivity.PICK_IMAGE);
                 else
-                    activity.startActivityForResult(Intent.createChooser(intent, "Select Picture"), HomeFragment.PICK_IMAGE);
+                    activity.startActivityForResult(Intent.createChooser(intent, "Select Picture"), MainActivity.PICK_IMAGE);
 
         });
 
@@ -74,9 +74,9 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (intent.resolveActivity(activity.getPackageManager()) != null && activity.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY))
                 if (!isActivity())
-                    fragment.startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
+                    fragment.startActivityForResult(intent, MainActivity.CAPTURE_IMAGE);
                 else
-                    activity.startActivityForResult(intent, HomeFragment.CAPTURE_IMAGE);
+                    activity.startActivityForResult(intent, MainActivity.CAPTURE_IMAGE);
         });
 
         Button reset = root.findViewById(R.id.reset_button);
@@ -87,6 +87,7 @@ public class ImagePickerDialog extends BottomSheetDialogFragment {
                     ((FavouriteFragment) fragment).resetIcon();
             } else
                 if (activity instanceof ContactDetailActivity) ((ContactDetailActivity) activity).resetIcon();
+                if (activity instanceof MainActivity) ((MainActivity) activity).resetIcon();
         });
         return root;
     }

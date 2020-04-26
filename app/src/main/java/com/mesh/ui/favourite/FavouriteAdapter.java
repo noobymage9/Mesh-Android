@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.mesh.BaseAdapter;
 import com.mesh.Database.DBManager;
 import com.mesh.Image;
+import com.mesh.MainActivity;
 import com.mesh.R;
 import com.mesh.message.MessageActivity;
 import com.mesh.ui.favourite.FavouriteFragment;
@@ -23,10 +25,9 @@ import com.mesh.ui.home.ConversationAdapter;
 
 import java.util.ArrayList;
 
-public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.FavouriteViewHolder> {
+public class FavouriteAdapter extends BaseAdapter<FavouriteAdapter.FavouriteViewHolder> {
 
     private ArrayList<Contact> contactList;
-    private final String imagePickerFragmentTag = "image_picker_dialog";
     private final int SOURCE_APP_IMAGE_SIZE = 20;
     private FavouriteFragment favouriteFragment;
     private int imageActualSize;
@@ -44,7 +45,7 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
             name = itemView.findViewById(R.id.contact_name);
             icon = itemView.findViewById(R.id.contact_icon);
             icon.setOnClickListener(v -> {
-                favouriteFragment.getImagePickerDialog().show(favouriteFragment.getParentFragmentManager(), imagePickerFragmentTag);
+                favouriteFragment.getImagePickerDialog().show(favouriteFragment.getParentFragmentManager(), MainActivity.ImagePickerFragmentTag);
                 currentContactClicked = contact;
 
             });

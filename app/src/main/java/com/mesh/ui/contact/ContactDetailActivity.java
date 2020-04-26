@@ -113,15 +113,10 @@ public class ContactDetailActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == HomeFragment.PICK_IMAGE || requestCode == HomeFragment.CAPTURE_IMAGE) && data != null && data.getData() != null) {
+        if ((requestCode == MainActivity.PICK_IMAGE || requestCode == MainActivity.CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(this, data.getData());
-            DBManager dbManager = new DBManager(this);
-            dbManager.open();
-            dbManager.insertIcon(realPath, contact.getID() + "");
-            dbManager.close();
+            Image.with(this).insert(realPath).into(contact);
             Glide.with(this).load(realPath).apply(RequestOptions.circleCropTransform()).into(contactIcon);
-            updateContactFragment();
-            findViewById(R.id.activity_contact).invalidate();
             imagePickerDialog.dismiss();
         }
     }
@@ -132,12 +127,9 @@ public class ContactDetailActivity extends AppCompatActivity {
     }
 
     public void resetIcon() {
-        DBManager dbManager = new DBManager(this);
-        dbManager.open();
-        dbManager.insertIcon(null, contact.getID() + "");
-        dbManager.close();
+        Image.with(this).insert(null).into(contact);
+        Glide.with(this).load(R.drawable.all_individual).apply(RequestOptions.circleCropTransform()).into(contactIcon);
         imagePickerDialog.dismiss();
-        findViewById(R.id.activity_contact).invalidate();
     }
 
     public Contact getParentContact() {

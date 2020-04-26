@@ -27,8 +27,6 @@ import com.mesh.R;
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
-    public static final int PICK_IMAGE = 7;
-    public static final int CAPTURE_IMAGE = 8;
     public boolean merge = true;
     private View root;
     private RecyclerView recyclerView;
@@ -101,16 +99,10 @@ public class HomeFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        Log.e("HomeFragment", "Received data");
-        if ((requestCode == PICK_IMAGE || requestCode == CAPTURE_IMAGE) && data != null && data.getData() != null) {
-            Log.e("HomeFragement", "MATCHED");
+        if ((requestCode == MainActivity.PICK_IMAGE || requestCode == MainActivity.CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(getContext(), data.getData());
-            DBManager dbManager = new DBManager(getContext());
-            dbManager.open();
-            dbManager.insertIcon(realPath, conversationAdapter.getCurrentContactClicked().getID() + "");
-            dbManager.close();
-            conversationAdapter.getCurrentContactClicked().setProfilePic(realPath);
-            conversationAdapter.notifyDataSetChanged();
+            Image.with(getContext()).insert(realPath).into(conversationAdapter.getCurrentContactClicked());
+            conversationAdapter.refresh(realPath);
         }
         imagePickerDialog.dismiss();
     }
@@ -120,12 +112,9 @@ public class HomeFragment extends Fragment {
     }
 
     public void resetIcon() {
-        DBManager dbManager = new DBManager(getContext());
-        dbManager.open();
-        dbManager.insertIcon(null, conversationAdapter.getCurrentContactClicked().getID() + "");
-        dbManager.close();
+        Image.with(getContext()).insert(null).into(conversationAdapter.getCurrentContactClicked());
+        conversationAdapter.refresh("");
         imagePickerDialog.dismiss();
-        reset();
     }
 
     public ConversationAdapter getConversationAdapter() {

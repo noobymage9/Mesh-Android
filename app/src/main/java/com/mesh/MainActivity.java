@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,12 +26,14 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.navigation.NavigationView;
 import com.mesh.Database.DBManager;
 import com.mesh.ui.home.HomeFragment;
+import com.mesh.ui.home.ImagePickerDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,59 +42,46 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String RECEIVE_JSON = "MainActivity.RECEIVE_JSON";
     public static final String ImagePickerFragmentTag = "image_picker_dialog";
+    public static final int PICK_IMAGE = 2;
+    public static final int CAPTURE_IMAGE = 3;
 
-    private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners";
+    private final String NOTIFICATION_LISTENER_KEY = "enabled_notification_listeners"; // Specific by Documentations
     private final String NOTIFICATION_LISTENER_SETTING = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
-
-    private final int PICK_IMAGE = 21;
     private final int ALL_PERMISSIONS = 1;
+
     public static String galleryIconImage, cameraIconImage;
-    private boolean deleteNotification, mergeSwitchVisible;
+
+    private boolean mergeSwitchVisible;
     private String[] neededPermissions;
     private AppBarConfiguration appBarConfiguration;
     private NavController navController;
     private Toast switchToast;
+    private ImagePickerDialog imagePickerDialog;
+    private ImageView profilePicture;
+    private AlertDialog notificationAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        imagePickerDialog = new ImagePickerDialog(this);
+        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT); // Merge-Swap toast
         initialiseToolbar();
         initialiseNavigationDrawer();
-
-        switchToast = Toast.makeText(this, "", Toast.LENGTH_SHORT); // Merge-Swap toast
-        deleteNotification = getDeleteNotificationSetting();
-        if (deleteNotification) // Tell MeshListener to delete related notifications
+        if (getDeleteNotificationSetting()) // Tell MeshListener to delete related notifications
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
 
-        if (!notificationIsEnabled()) // May need to remove in future. Need to research into signature permissions
+        if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signature permissions
             initialiseAlertDialog();
+            notificationAlert.show();
+        }
         if (!allPermissionsEnabled())
             ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
 
-
         galleryIconImage = getGalleryPackage();
         cameraIconImage = getCameraPackage();
-
     }
 
-    private String getCameraPackage() {
-        PackageManager packageManager = getPackageManager();
-        Intent intent = new Intent();
-        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.get(0).activityInfo.packageName;
-    }
-
-    private String getGalleryPackage() {
-        PackageManager packageManager = getPackageManager();
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setType("image/*");
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-        return list.get(0).activityInfo.packageName;
-    }
     private void initialiseToolbar() {
         setSupportActionBar(findViewById(R.id.toolbar));
     }
@@ -102,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                 R.id.nav_saved, R.id.nav_contact)
                 .setDrawerLayout(findViewById(R.id.drawer_layout))
                 .build();
-        // Latest Update Issue
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
         navController = navHostFragment.getNavController();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -111,23 +100,16 @@ public class MainActivity extends AppCompatActivity {
             mergeSwitchVisible = destination.getId() == R.id.nav_home;
             invalidateOptionsMenu();
         });
-
-        ImageView profilePicture = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.profile_picture);
+        profilePicture = ((NavigationView) findViewById(R.id.nav_view)).getHeaderView(0).findViewById(R.id.profile_picture);
         // TODO: 16/3/2020 get Profile Picture from database
-        String profilePicturePath = "test";
-        Glide.with(this).load(profilePicturePath).apply(RequestOptions.circleCropTransform()).placeholder(R.mipmap.default_icon).into(profilePicture);
-
-        profilePicture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.putExtra("return-data", true);
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
-            }
+        String temp = "test"; // Remove when can save profile picture
+        Glide.with(this).load(temp).apply(RequestOptions.circleCropTransform()).placeholder(R.mipmap.default_icon).into(profilePicture);
+        profilePicture.setOnClickListener(v -> {
+            imagePickerDialog.show(getSupportFragmentManager(), ImagePickerFragmentTag);
         });
     }
+
+
 
     private boolean getDeleteNotificationSetting() {
         DBManager dbManager = new DBManager(this);
@@ -156,8 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 R.string.alert_dialog_negative_button,
                 (dialog, id) -> dialog.cancel());
 
-        AlertDialog alert = builder.create();
-        alert.show();
+        notificationAlert = builder.create();
     }
 
     private boolean allPermissionsEnabled() {
@@ -179,6 +160,24 @@ public class MainActivity extends AppCompatActivity {
         return temp;
     }
 
+
+    private String getCameraPackage() {
+        PackageManager packageManager = getPackageManager();
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.get(0).activityInfo.packageName;
+    }
+
+    private String getGalleryPackage() {
+        PackageManager packageManager = getPackageManager();
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setType("image/*");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        List<ResolveInfo> list = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        return list.get(0).activityInfo.packageName;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) { // Create Setting Button
@@ -204,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() { // This cause home to be unable to back out of Mesh
+    public void onBackPressed() {
 
         List<Fragment> fragmentList = getSupportFragmentManager().getPrimaryNavigationFragment().getChildFragmentManager().getFragments();
 
@@ -248,17 +247,29 @@ public class MainActivity extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-    public void goToHome() {
+    public void goToHome() { // To fix issue with dragging
         navController.navigate(R.id.nav_home);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE && data != null && data.getData() != null) {
+        if ((requestCode == PICK_IMAGE || requestCode == CAPTURE_IMAGE) && data != null && data.getData() != null) {
             String realPath = Image.getPath(this, data.getData());
-            // TODO: 16/3/2020 Insert realpath into database for Personal Profile Picture
+            Image.with(this).insert(realPath).into(null);
+            Glide.with(this).load(realPath).apply(RequestOptions.circleCropTransform()).placeholder(R.mipmap.default_icon).into(profilePicture);
+        }
+        try {
+            imagePickerDialog.dismiss();
+        } catch (IllegalStateException e) {
+            Log.e("Mesh", "Failed to dismiss ImagePickerDialog");
         }
     }
 
+
+    public void resetIcon() {
+        Image.with(this).insert(null).into(null);
+        Glide.with(this).load(R.mipmap.default_icon).apply(RequestOptions.circleCropTransform()).into(profilePicture);
+        imagePickerDialog.dismiss();
+    }
 }

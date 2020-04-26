@@ -102,9 +102,6 @@ public class MessageActivity extends AppCompatActivity {
         this.messages = messages;
         recyclerView = findViewById(R.id.messageList);
         recyclerView.setHasFixedSize(true);
-        if (speechBubbleAdaptor != null)
-            if (speechBubbleAdaptor.saveDeleteSnackbarExist())
-                speechBubbleAdaptor.getSaveDeleteSnackbar().dismiss();
         speechBubbleAdaptor = new SpeechBubbleAdaptor(messages, this);
         recyclerView.setAdapter(speechBubbleAdaptor);
         resetRecyclerView();

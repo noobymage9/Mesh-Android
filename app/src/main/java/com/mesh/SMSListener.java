@@ -36,8 +36,8 @@ public class SMSListener extends BroadcastReceiver {
                 dbManager.insertMessage(contactID, text, sourceApp, currentDate);
 
                 Intent myIntent = new Intent(MainActivity.RECEIVE_JSON);
-                intent.putExtra(MessageActivity.CONTACT_NAME, contactName);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+                myIntent.putExtra(MessageActivity.CONTACT_NAME, contactName);
+                LocalBroadcastManager.getInstance(context).sendBroadcast(myIntent);
 
             }
             dbManager.close();
