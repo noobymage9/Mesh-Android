@@ -42,5 +42,6 @@
     <string name="remove">Remove</string>
     <string name="contact_merge">Merged Contacts</string>
     <string name="action_unmerge">Unmerge</string>
+    <string name="default_datestamp"><u>1st January 1970</u></string>
 
 </resources>

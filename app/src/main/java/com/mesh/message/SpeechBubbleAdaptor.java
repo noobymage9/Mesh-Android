@@ -18,6 +18,8 @@ import com.mesh.Image;
 import com.mesh.R;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -144,11 +146,14 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     @NonNull
     @Override
     public SpeechBubbleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.item_speechbubble_message, viewGroup, false);
 
-        return new SpeechBubbleViewHolder(itemView);
+        if (messageList.get(i - 1) != null && !isSameDate(messageList.get(i - 1).getRawDate(), messageList.get(i).getRawDate())) {
+            messageList.add(i, null);
+            return new SpeechBubbleViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_date_separator, viewGroup, false));
+        } else
+            return new SpeechBubbleViewHolder(LayoutInflater.
+                from(viewGroup.getContext()).
+                inflate(R.layout.item_speechbubble_message, viewGroup, false));
     }
 
     private boolean someAreSelected() {
@@ -166,7 +171,17 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         return saveDeleteSnackbar;
     }
 
-    public ArrayList<Message> getMessageList(){
-        return this.messageList;
+    public ArrayList<Message> getMessageList () {
+            return this.messageList;
+        }
+    }
+
+    private boolean isSameDate(Date firstDate, Date secondDate) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(firstDate);
+        cal2.setTime(secondDate);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 }
