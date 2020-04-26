@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_date_separator"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/date"
@@ -11,6 +11,8 @@
         android:text="@string/default_datestamp"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/textsize_medium"
+        android:textColor="@color/Ivory"
+        android:layout_margin="@dimen/margin_all_default"
         />
 
 </RelativeLayout>
