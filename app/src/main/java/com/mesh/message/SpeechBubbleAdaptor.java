@@ -2,7 +2,9 @@ package com.mesh.message;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +37,15 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
         protected ImageView sourceIcon;
         protected Message message;
         protected View background, bubble;
+        protected TextView date;
+        protected boolean isDate;
+
+        public SpeechBubbleViewHolder(@NonNull View itemView, boolean isDate) {
+            super(itemView);
+            date = itemView.findViewById(R.id.date);
+            date.setPaintFlags(date.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            this.isDate = isDate;
+        }
 
         public SpeechBubbleViewHolder(@NonNull View itemView) {  //
             super(itemView);
@@ -99,56 +110,65 @@ public class SpeechBubbleAdaptor extends RecyclerView.Adapter<SpeechBubbleAdapto
     @Override
     public void onBindViewHolder(SpeechBubbleViewHolder speechBubbleViewHolder, int i) {
         Message message = messageList.get(i);
-        speechBubbleViewHolder.message = message;
-        speechBubbleViewHolder.timestamp.setText(message.getTime());
-        if (message.isSelected())
-            speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.accent));
-        else
-            speechBubbleViewHolder.bubble.getBackground().setTintList(null);
-        if (messageActivity.isGroup()){
-            RelativeLayout.LayoutParams timestampLayoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
-            if (message.getContactName().length() > message.getMessageContent().length()) {
-                timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
-                timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
-            } else {
-                timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
-                timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
-            }
-            speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
-            speechBubbleViewHolder.title.setText(message.getContactName());
-            if (!contactColor.containsKey(message.getContactName())){
-                contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
-            }
-            speechBubbleViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
+        if (speechBubbleViewHolder.isDate) {
+            speechBubbleViewHolder.date.setText(message.getDate());
+        } else {
+            speechBubbleViewHolder.message = message;
+            speechBubbleViewHolder.timestamp.setText(message.getTime());
+            if (message.isSelected())
+                speechBubbleViewHolder.bubble.getBackground().setTint(context.getResources().getColor(R.color.accent));
+            else
+                speechBubbleViewHolder.bubble.getBackground().setTintList(null);
+            if (messageActivity.isGroup()) {
+                RelativeLayout.LayoutParams timestampLayoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.timestamp.getLayoutParams();
+                if (message.getContactName().length() > message.getMessageContent().length()) {
+                    timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_title);
+                    timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_title);
+                } else {
+                    timestampLayoutParams.addRule(RelativeLayout.RIGHT_OF, R.id.incoming_bubble_text);
+                    timestampLayoutParams.addRule(RelativeLayout.END_OF, R.id.incoming_bubble_text);
+                }
+                speechBubbleViewHolder.title.setVisibility(View.VISIBLE);
+                speechBubbleViewHolder.title.setText(message.getContactName());
+                if (!contactColor.containsKey(message.getContactName())) {
+                    contactColor.put(message.getContactName(), Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256)));
+                }
+                speechBubbleViewHolder.title.setTextColor(contactColor.get(message.getContactName()));
 
+            }
+            speechBubbleViewHolder.content.setText(message.getMessageContent());
+            speechBubbleViewHolder.content.post(() -> {
+                int lineCount = speechBubbleViewHolder.content.getLineCount();
+                if (lineCount > 1) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
+                    layoutParams.addRule(RelativeLayout.BELOW, 0);
+                    speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
+                } else {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, 0);
+                    layoutParams.addRule(RelativeLayout.BELOW, R.id.incoming_bubble_timestamp);
+                    speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
+                }
+            });
+
+            Image.setSource(message.getSourceApp(), messageActivity, speechBubbleViewHolder.sourceIcon);
         }
-        speechBubbleViewHolder.content.setText(message.getMessageContent());
-        speechBubbleViewHolder.content.post(() -> {
-            int lineCount = speechBubbleViewHolder.content.getLineCount();
-            if (lineCount > 1) {
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
-                layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.incoming_bubble_text);
-                layoutParams.addRule(RelativeLayout.BELOW, 0);
-                speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
-            } else {
-                RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) speechBubbleViewHolder.sourceIcon.getLayoutParams();
-                layoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, 0);
-                layoutParams.addRule(RelativeLayout.BELOW, R.id.incoming_bubble_timestamp);
-                speechBubbleViewHolder.sourceIcon.setLayoutParams(layoutParams);
-            }
-        });
+    }
 
-        Image.setSource(message.getSourceApp(), messageActivity, speechBubbleViewHolder.sourceIcon);
+    @Override
+    public int getItemViewType(int position) {
+        if (messageList.get(position).isDate()) return 0;
+        else return 1;
     }
 
     @NonNull
     @Override
     public SpeechBubbleViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View itemView = LayoutInflater.
-                from(viewGroup.getContext()).
-                inflate(R.layout.item_speechbubble_message, viewGroup, false);
-
-        return new SpeechBubbleViewHolder(itemView);
+        if (i == 0)
+            return new SpeechBubbleViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_date_separator, viewGroup, false), true);
+        else
+             return new SpeechBubbleViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_speechbubble_message, viewGroup, false));
     }
 
     private boolean someAreSelected() {

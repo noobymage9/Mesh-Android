@@ -2,6 +2,7 @@ package com.mesh.message;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class Message {
@@ -9,6 +10,7 @@ public class Message {
     private String contactName, groupName, content, sourceApp;
     private Date timeStamp;
     private boolean selected = false;
+    private boolean isDate;
 
     public Message(int id, String contactName, String content, String sourceApp, Date timeStamp) {
         this.id = id;
@@ -17,6 +19,7 @@ public class Message {
         this.content = content;
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
+        isDate = false;
     }
 
     public Message(int id, String contactName, String groupName, String
@@ -27,6 +30,7 @@ public class Message {
         this.content = content;
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
+        isDate = false;
     }
 
     public Message(int id, String contactName, String groupName, String
@@ -38,6 +42,12 @@ public class Message {
         this.sourceApp = sourceApp;
         this.timeStamp = timeStamp;
         this.tagID = tagID;
+        isDate = false;
+    }
+
+    public Message(Date timeStamp) {
+        isDate = true;
+        this.timeStamp = timeStamp;
     }
 
     public int getID()
@@ -88,6 +98,19 @@ public class Message {
 
     public boolean isSelected() {
         return selected;
+    }
+
+    public boolean isDate() {
+        return isDate;
+    }
+
+    public boolean isSameDateAs(Message message) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        cal1.setTime(timeStamp);
+        cal2.setTime(message.getRawDate());
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 }
 

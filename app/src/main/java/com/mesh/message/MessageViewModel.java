@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -50,9 +51,23 @@ public class MessageViewModel extends AndroidViewModel { // To format data for M
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            messages.postValue(dbManager.getMessages(contact.getID()));
+            ArrayList<Message> temp = dbManager.getMessages(contact.getID());
+            messages.postValue(addDateSeparator(temp));
             dbManager.close();
         }).start();
+    }
+
+    private ArrayList<Message> addDateSeparator(ArrayList<Message> temp) {
+        ArrayList<Message> tempList = new ArrayList<>();
+        for (int i = 0; i < temp.size(); i++) {
+            if (i == 0) tempList.add(new Message(temp.get(i).getRawDate()));
+            else if (!temp.get(i - 1).isSameDateAs(temp.get(i))) {
+                tempList.add(new Message(temp.get(i).getRawDate()));
+            }
+            tempList.add(temp.get(i));
+        }
+
+        return tempList;
     }
 
     void initialiseLocalBroadcastManager() {
