@@ -13,7 +13,7 @@
     <dimen name="size_contacticon">@dimen/_40sdp</dimen>
     <dimen name="height_snackbar">@dimen/_40sdp</dimen>
     <dimen name="height_contact_item">@dimen/_60sdp</dimen>
-    <dimen name="size_navigationheadericon">@dimen/_70sdp</dimen>
+    <dimen name="size_navigationheadericon">@dimen/_65sdp</dimen>
     <dimen name="height_settingitem">@dimen/_80sdp</dimen>
     <dimen name="height_homeitem">@dimen/_80sdp</dimen>
     <dimen name="width_savebutton">@dimen/_120sdp</dimen>

@@ -1,8 +1,13 @@
 package com.mesh.message;
 
+import android.animation.Animator;
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,13 +46,62 @@ public class MessageActivity extends AppCompatActivity {
     private ArrayList<Message> messages;
     private MessageViewModel messageViewModel;
     private int searchedMessageIndex;
+    private ValueAnimator highlight;
+    private ValueAnimator unHighlight;
+    private RecyclerView.OnScrollListener onScrollListener = new RecyclerView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
 
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    animate(recyclerView.findViewHolderForAdapterPosition(searchedMessageIndex).itemView);
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING: // Not working for some reason
+                    highlight.cancel();
+                    unHighlight.cancel();
+            }
+        }
+    };
+
+    public void animate(View view) {
+        highlight.setDuration(500); // milliseconds
+        highlight.addUpdateListener(animator -> view.setBackgroundColor((int) animator.getAnimatedValue()));
+        highlight.start();
+        highlight.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                unHighlight.setDuration(2000); // milliseconds
+                unHighlight.addUpdateListener(animator -> view.setBackgroundColor((int) animator.getAnimatedValue()));
+                unHighlight.start();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        recyclerView.removeOnScrollListener(onScrollListener);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
+        int colorFrom = getResources().getColor(R.color.Montfort);
+        int colorTo = getResources().getColor(R.color.Tiger);
+        highlight = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
+        unHighlight = ValueAnimator.ofObject(new ArgbEvaluator(), colorTo, colorFrom);
         contact = getIntent().getExtras().getParcelable(ConversationAdapter.CONVERSATION_PARCEL);
 
         DBManager dbManager = new DBManager(this);
@@ -58,6 +112,7 @@ public class MessageActivity extends AppCompatActivity {
         messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
         searchMessage = getIntent().getExtras().getString(SearchAdapter.SEARCH_MESSAGE_PARCEL);
+
     }
 
     private int getSearchMessageIndex(String searchMessage) {
@@ -95,7 +150,7 @@ public class MessageActivity extends AppCompatActivity {
         View view = LayoutInflater.from(this).inflate(R.layout.layout_toolbar_messageactivity, null);
         ImageView contactIcon = view.findViewById(R.id.contact_icon);
         TextView contactName = view.findViewById(R.id.contact_name);
-        if(contact.getProfilePic() != null)
+        if (contact.getProfilePic() != null)
             Glide.with(this).load(contact.getProfilePic()).apply(RequestOptions.circleCropTransform()).into(contactIcon);
         else
             contactIcon.setVisibility(View.GONE);
@@ -120,9 +175,17 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setAdapter(speechBubbleAdaptor);
         if (searchMessage != null) {
             searchedMessageIndex = getSearchMessageIndex(searchMessage);
-            if (searchedMessageIndex - 20 < 0) recyclerView.scrollToPosition(0);
-            else recyclerView.scrollToPosition(searchedMessageIndex - 20);
-            recyclerView.smoothScrollToPosition(searchedMessageIndex);
+            recyclerView.removeOnScrollListener(onScrollListener);
+            recyclerView.addOnScrollListener(onScrollListener);
+            if (messages.size() > 20) {
+                if (searchedMessageIndex < messages.size() / 2)
+                    recyclerView.scrollToPosition(searchedMessageIndex + 20);
+                else
+                    recyclerView.scrollToPosition(searchedMessageIndex - 20);
+                recyclerView.smoothScrollToPosition(searchedMessageIndex);
+            } else { // Fix in future. Crash on no scroll
+                // animate(recyclerView.findViewHolderForAdapterPosition(searchedMessageIndex).itemView);
+            }
         } else
             resetRecyclerView();
     }
