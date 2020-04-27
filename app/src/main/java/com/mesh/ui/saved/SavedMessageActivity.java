@@ -89,7 +89,10 @@ public class SavedMessageActivity extends AppCompatActivity {
 
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
-        recyclerView.scrollToPosition(messages.size() - 1);
+        if (messages.size() > 20) {
+            recyclerView.scrollToPosition(messages.size() - 20);
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
+        }
     }
 
     public UserCollection getUserCollection() {

@@ -2,6 +2,7 @@ package com.mesh.ui.search;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import java.util.HashMap;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubbleViewHolder> {
 
+    public static final String SEARCH_MESSAGE_PARCEL = "searched message";
     private ArrayList<Message> messageList;
     private SearchFragment searchFragment;
     private HashMap<String, Integer> contactColor;
@@ -33,6 +35,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
 
         protected TextView messageContent, messageTimeStamp, messageContactName;
         protected ImageView sourceApp;
+        protected Message message;
 
         public SearchBubbleViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -47,6 +50,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
                 dbManager.open();
                 Contact temp = new Contact(dbManager.getContactID(name), name);
                 dbManager.close();
+                intent.putExtra(SEARCH_MESSAGE_PARCEL, message.getMessageContent());
                 intent.putExtra(ConversationAdapter.CONVERSATION_PARCEL, temp);
                 itemView.getContext().startActivity(intent);
 
@@ -73,6 +77,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
     @Override
     public void onBindViewHolder(SearchBubbleViewHolder searchBubbleViewHolder, int i) {
         Message message = messageList.get(i);
+        searchBubbleViewHolder.message = message;
         searchBubbleViewHolder.messageContent.setText(message.getMessageContent());
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());

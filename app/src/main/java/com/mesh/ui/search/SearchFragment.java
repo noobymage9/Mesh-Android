@@ -58,7 +58,10 @@ public class SearchFragment extends Fragment {
 
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
-        recyclerView.scrollToPosition(messages.size() - 1);
+        if (messages.size() > 20) {
+            recyclerView.scrollToPosition(20);
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     private void initialiseSearchBar(View root) {

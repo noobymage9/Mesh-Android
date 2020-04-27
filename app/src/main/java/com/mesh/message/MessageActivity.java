@@ -26,6 +26,7 @@ import com.mesh.R;
 import com.mesh.SettingActivity;
 import com.mesh.ui.home.Contact;
 import com.mesh.ui.home.ConversationAdapter;
+import com.mesh.ui.search.SearchAdapter;
 
 import java.util.ArrayList;
 
@@ -35,9 +36,11 @@ public class MessageActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private RecyclerView recyclerView;
     private Contact contact;
+    private String searchMessage;
     private boolean isGroup;
     private ArrayList<Message> messages;
     private MessageViewModel messageViewModel;
+    private int searchedMessageIndex;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -46,6 +49,7 @@ public class MessageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         contact = getIntent().getExtras().getParcelable(ConversationAdapter.CONVERSATION_PARCEL);
+
         DBManager dbManager = new DBManager(this);
         dbManager.open();
         isGroup = dbManager.isGroup(contact.getID());
@@ -53,6 +57,16 @@ public class MessageActivity extends AppCompatActivity {
         messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
         messageViewModel.getMessages(contact).observe(this, this::initialiseRecyclerView);
         initialiseActionBar();
+        searchMessage = getIntent().getExtras().getString(SearchAdapter.SEARCH_MESSAGE_PARCEL);
+    }
+
+    private int getSearchMessageIndex(String searchMessage) {
+        for (int i = 0; i < this.messages.size(); i++) {
+            Message temp = messages.get(i);
+            if (!temp.isDate())
+                if (temp.getMessageContent().equals(searchMessage)) return i;
+        }
+        return 0;
     }
 
     @Override
@@ -104,7 +118,13 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         speechBubbleAdaptor = new SpeechBubbleAdaptor(messages, this);
         recyclerView.setAdapter(speechBubbleAdaptor);
-        resetRecyclerView();
+        if (searchMessage != null) {
+            searchedMessageIndex = getSearchMessageIndex(searchMessage);
+            if (searchedMessageIndex - 20 < 0) recyclerView.scrollToPosition(0);
+            else recyclerView.scrollToPosition(searchedMessageIndex - 20);
+            recyclerView.smoothScrollToPosition(searchedMessageIndex);
+        } else
+            resetRecyclerView();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -131,7 +151,10 @@ public class MessageActivity extends AppCompatActivity {
 
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
-        recyclerView.scrollToPosition(messages.size() - 1);
+        if (messages.size() > 20) {
+            recyclerView.scrollToPosition(messages.size() - 20);
+            recyclerView.smoothScrollToPosition(messages.size() - 1);
+        }
     }
 
     public MessageViewModel getMessageViewModel(){

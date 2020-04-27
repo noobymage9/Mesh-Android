@@ -57,6 +57,10 @@ public class ContactFragment extends Fragment {
 
     public void resetRecyclerView(){
         recyclerView.setPadding(0, 0, 0, 0);
+        if (contacts.size() > 20) {
+            recyclerView.scrollToPosition(20);
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
 

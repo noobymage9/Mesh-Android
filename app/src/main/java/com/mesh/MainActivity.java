@@ -74,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         if (getDeleteNotificationSetting()) // Tell MeshListener to delete related notifications
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
 
-       //if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signature permissions
+       if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signature permissions
             initialiseAlertDialog();
             notificationAlert.show();
-        //}
+        }
         if (!allPermissionsEnabled())
             ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
 
