@@ -153,6 +153,7 @@ public class SaveDialog extends Dialog {
         messageActivity.initialiseRecyclerView(messageActivity.getSpeechBubbleAdaptor().getMessageList());
         if (messageActivity.getSpeechBubbleAdaptor().getSaveDeleteSnackbar() != null)
             messageActivity.getSpeechBubbleAdaptor().getSaveDeleteSnackbar().dismiss();
+        saveDeleteSnackbar.dismiss();
         super.dismiss();
     }
 
@@ -160,5 +161,6 @@ public class SaveDialog extends Dialog {
     public void onBackPressed() {
         this.dismiss();
     }
+
 
 }
