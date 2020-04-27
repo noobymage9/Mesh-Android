@@ -27,6 +27,7 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.MergeItemVie
 
     private ArrayList<Contact> mergedContactList;
     private ContactDetailActivity contactDetailActivity;
+    private Contact currentlyClickedContact;
 
     public class MergeItemViewHolder extends RecyclerView.ViewHolder {
 
@@ -41,13 +42,8 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.MergeItemVie
             unmerge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DBManager dbManager = new DBManager(contactDetailActivity);
-                    dbManager.open();
-                    dbManager.unMergeContacts(contact.getID(), contactDetailActivity.getParentContact().getID());
-                    dbManager.close();
-                    mergedContactList.remove(contact);
-                    notifyDataSetChanged();
-                    contactDetailActivity.updateContactFragment();
+                    currentlyClickedContact = contact;
+                    contactDetailActivity.getNotificationAlert().show();
                 }
             });
         }
@@ -94,5 +90,15 @@ public class MergeAdapter extends RecyclerView.Adapter<MergeAdapter.MergeItemVie
 
     public ArrayList<Contact> getContactList(){
         return mergedContactList;
+    }
+
+    public void unmerge() {
+        DBManager dbManager = new DBManager(contactDetailActivity);
+        dbManager.open();
+        dbManager.unMergeContacts(currentlyClickedContact.getID(), contactDetailActivity.getParentContact().getID());
+        dbManager.close();
+        mergedContactList.remove(currentlyClickedContact);
+        notifyDataSetChanged();
+        contactDetailActivity.updateContactFragment();
     }
 }

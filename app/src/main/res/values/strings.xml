@@ -43,5 +43,11 @@
     <string name="contact_merge">Merged Contacts</string>
     <string name="action_unmerge">Unmerge</string>
     <string name="default_datestamp"><u>1st January 1970</u></string>
+    <string name="cancel">CANCEL</string>
+    <string name="ok">OK</string>
+    <string name="default_alert_dialog_details">This is an alert dialog detail</string>
+    <string name="default_alert_dialog_title">This is an alert dialog title</string>
+    <string name="alert_dialog_notification_listener">Mesh Listener</string>
+    <string name="alert_dialog_unmerge_title">Unmerge Contact?</string>
 
 </resources>

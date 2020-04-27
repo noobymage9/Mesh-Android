@@ -12,8 +12,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -71,10 +74,10 @@ public class MainActivity extends AppCompatActivity {
         if (getDeleteNotificationSetting()) // Tell MeshListener to delete related notifications
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MeshListener.RECEIVE_JSON));
 
-        if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signature permissions
+       //if (!notificationIsEnabled()) { // May need to remove in future. Need to research into signature permissions
             initialiseAlertDialog();
             notificationAlert.show();
-        }
+        //}
         if (!allPermissionsEnabled())
             ActivityCompat.requestPermissions(this, neededPermissions, ALL_PERMISSIONS);
 
@@ -126,18 +129,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialiseAlertDialog() {
+        View alertRoot = getLayoutInflater().inflate(R.layout.layout_alert_dialog_all, null);
+        ((TextView) alertRoot.findViewById(R.id.title)).setText(R.string.alert_dialog_notification_listener);
+        ((TextView) alertRoot.findViewById(R.id.details)).setText(R.string.alert_dialog_enable_notification_warning);
+        alertRoot.findViewById(R.id.ok_button).setOnClickListener(v -> {
+            startActivity(new Intent(NOTIFICATION_LISTENER_SETTING));
+            notificationAlert.dismiss();
+        });
+        alertRoot.findViewById(R.id.cancel_button).setOnClickListener(v -> notificationAlert.cancel());
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(R.string.alert_dialog_enable_notification_warning);
-        builder.setCancelable(true);
-
-        builder.setPositiveButton(
-                R.string.alert_dialog_positive_button,
-                (dialog, id) -> startActivity(new Intent(NOTIFICATION_LISTENER_SETTING)));
-
-        builder.setNegativeButton(
-                R.string.alert_dialog_negative_button,
-                (dialog, id) -> dialog.cancel());
-
+        builder.setView(alertRoot);
         notificationAlert = builder.create();
     }
 

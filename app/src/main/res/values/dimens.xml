@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="padding_speechbubble_vertical">@dimen/_3sdp</dimen>
     <dimen name="margin_all_default">@dimen/_5sdp</dimen>
+    <dimen name="margin_all_double_default">@dimen/_10sdp</dimen>
     <dimen name="margin_all_recyclerview">@dimen/_16sdp</dimen>
     <dimen name="padding_searchbar_horizontal">@dimen/_20sdp</dimen>
     <dimen name="padding_tagcheckbox_horizontal">@dimen/_20sdp</dimen>

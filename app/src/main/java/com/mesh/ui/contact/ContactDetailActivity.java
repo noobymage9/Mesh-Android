@@ -7,11 +7,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -38,15 +41,16 @@ public class ContactDetailActivity extends AppCompatActivity {
     private ImagePickerDialog imagePickerDialog;
     private RecyclerView mergeContactList;
     private MergeAdapter mergeAdapter;
+    private AlertDialog notificationAlert;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
-
         contact = getIntent().getExtras().getParcelable(ContactFragment.CONTACT_PARCEL);
         initialiseActionBar();
+        initialiseAlertDialog();
         contactName = findViewById(R.id.contact_name);
         contactName.setText(contact.getName());
         contactIcon = findViewById(R.id.contact_icon);
@@ -134,5 +138,23 @@ public class ContactDetailActivity extends AppCompatActivity {
 
     public Contact getParentContact() {
         return contact;
+    }
+
+    private void initialiseAlertDialog() {
+        View alertRoot = getLayoutInflater().inflate(R.layout.layout_alert_dialog_all, null);
+        ((TextView) alertRoot.findViewById(R.id.title)).setText(R.string.alert_dialog_unmerge_title);
+        ((TextView) alertRoot.findViewById(R.id.details)).setText("");
+        ((Button) alertRoot.findViewById(R.id.ok_button)).setText("Unmerge");
+        alertRoot.findViewById(R.id.ok_button).setOnClickListener(v -> {
+            mergeAdapter.unmerge();
+        });
+        alertRoot.findViewById(R.id.cancel_button).setOnClickListener(v -> notificationAlert.cancel());
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(alertRoot);
+        notificationAlert = builder.create();
+    }
+
+    public AlertDialog getNotificationAlert() {
+        return notificationAlert;
     }
 }
