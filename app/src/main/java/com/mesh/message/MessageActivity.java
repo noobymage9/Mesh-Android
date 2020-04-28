@@ -4,10 +4,9 @@ import android.animation.Animator;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +18,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,7 +54,7 @@ public class MessageActivity extends AppCompatActivity {
 
             switch (newState) {
                 case RecyclerView.SCROLL_STATE_IDLE:
-                    animate(recyclerView.findViewHolderForAdapterPosition(searchedMessageIndex).itemView);
+                    animateHighlight(recyclerView.findViewHolderForAdapterPosition(searchedMessageIndex).itemView.findViewById(R.id.bubble));
                     break;
                 case RecyclerView.SCROLL_STATE_DRAGGING: // Not working for some reason
                     highlight.cancel();
@@ -63,9 +63,11 @@ public class MessageActivity extends AppCompatActivity {
         }
     };
 
-    public void animate(View view) {
+    public void animateHighlight(View view) {
+        Drawable unwrappedDrawable = view.getBackground();
+        Drawable wrappedDrawable = DrawableCompat.wrap(unwrappedDrawable);
         highlight.setDuration(500); // milliseconds
-        highlight.addUpdateListener(animator -> view.setBackgroundColor((int) animator.getAnimatedValue()));
+        highlight.addUpdateListener(animator -> DrawableCompat.setTint(wrappedDrawable, (int) animator.getAnimatedValue()));
         highlight.start();
         highlight.addListener(new Animator.AnimatorListener() {
             @Override
@@ -76,7 +78,7 @@ public class MessageActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(Animator animation) {
                 unHighlight.setDuration(2000); // milliseconds
-                unHighlight.addUpdateListener(animator -> view.setBackgroundColor((int) animator.getAnimatedValue()));
+                unHighlight.addUpdateListener(animator -> DrawableCompat.setTint(wrappedDrawable, (int) animator.getAnimatedValue()));
                 unHighlight.start();
             }
 
@@ -98,7 +100,7 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        int colorFrom = getResources().getColor(R.color.Montfort);
+        int colorFrom = getResources().getColor(R.color.FloralWhite);
         int colorTo = getResources().getColor(R.color.Tiger);
         highlight = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         unHighlight = ValueAnimator.ofObject(new ArgbEvaluator(), colorTo, colorFrom);
