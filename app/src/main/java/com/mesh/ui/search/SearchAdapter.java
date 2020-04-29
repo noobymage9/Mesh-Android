@@ -3,6 +3,7 @@ package com.mesh.ui.search;
 import android.content.Intent;
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,10 +80,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
     @Override
     public void onBindViewHolder(SearchBubbleViewHolder searchBubbleViewHolder, int i) {
         Message message = messageList.get(i);
+        ArrayList<Integer> index = messageToIndex.get(message);
         // If you see this, I found an easier way... psps
-        String newString = message.getMessageContent().replaceAll(searchFragment.getSearchWord(), "<font color='#F9AA33'><u>" + searchFragment.getSearchWord() + "</u></font>");
+        String temp = message.getMessageContent().replaceAll("(?i)" + searchFragment.getSearchWord(), "<font color='#F9AA33'><u>" +  searchFragment.getSearchWord() + "</u></font>");
         searchBubbleViewHolder.message = message;
-        searchBubbleViewHolder.messageContent.setText(Html.fromHtml(newString));
+        searchBubbleViewHolder.messageContent.setText(Html.fromHtml(temp));
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());
         Image.setSource(message.getSourceApp(), searchFragment, searchBubbleViewHolder.sourceApp);
