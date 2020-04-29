@@ -20,6 +20,8 @@ import com.mesh.Database.DBManager;
 import com.mesh.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class SaveDialog extends Dialog {
 
@@ -28,6 +30,7 @@ public class SaveDialog extends Dialog {
     private RecyclerView recyclerView;
     private TagAdapter tagAdapter;
     private ArrayList<UserCollection> userCollections;
+    private HashMap<UserCollection, ArrayList<Integer>> userCollectionToIndex;
     private  MessageActivity messageActivity;
     private SaveDeleteSnackbar saveDeleteSnackbar;
 
@@ -93,8 +96,7 @@ public class SaveDialog extends Dialog {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO: 17/2/2020 uncomment when DB is ready
-                //initialiseRecyclerView(s.toString());
+                initialiseRecyclerView(s.toString());
             }
 
             @Override
@@ -124,17 +126,23 @@ public class SaveDialog extends Dialog {
     }
 
     private void initialiseRecyclerView(String filter){
+        userCollections = new ArrayList<>();
         DBManager dbManager = new DBManager(getContext());
         dbManager.open();
-        if (filter.equals(""))
-            userCollections = dbManager.getAllUserCollections();
-        else
-            // TODO: 17/2/2020 get tags based on filter
+        if (filter.equals("")) userCollections = dbManager.getAllUserCollections();
+        else {
+            userCollectionToIndex = dbManager.searchCollectionNames(filter);
+            initialiseUserCollection();
+        }
         dbManager.close();
         recyclerView = findViewById(R.id.tag_list);
         recyclerView.setHasFixedSize(true);
         tagAdapter = new TagAdapter(userCollections, getContext());
         recyclerView.setAdapter(tagAdapter);
+    }
+
+    private void initialiseUserCollection() {
+        userCollections.addAll(userCollectionToIndex.keySet());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
