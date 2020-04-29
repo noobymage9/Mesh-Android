@@ -24,15 +24,17 @@ import com.mesh.message.Message;
 import com.mesh.message.SpeechBubbleAdaptor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
     private EditText searchBar;
-    private ArrayList<Message> messages;
+    private HashMap<Message, ArrayList<Integer>> messages;
     private RecyclerView recyclerView;
     private View root;
     private SearchAdapter searchAdapter;
+    private String searchWord;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -46,7 +48,7 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
-    public void initialiseRecyclerView(ArrayList<Message> messageList){
+    public void initialiseRecyclerView(HashMap<Message, ArrayList<Integer>> messageList){
         this.messages = messageList;
         recyclerView = root.findViewById(R.id.search_recycler_view);
         recyclerView.setHasFixedSize(true);
@@ -74,7 +76,8 @@ public class SearchFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                searchViewModel.loadMessages(s.toString());
+                searchWord = s.toString();
+                searchViewModel.loadMessages(searchWord);
             }
 
             @Override
@@ -90,6 +93,10 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public String getSearchWord() {
+        return searchWord;
     }
 
     private void hideKeyboard() {

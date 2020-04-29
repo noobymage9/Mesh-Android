@@ -131,7 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MSG_SOURCE_APP + ", " +
             MSG_TIMESTAMP + ")";
 
-    private static final String createSearchCollectionsTable = "CREATE VIRTUAL TABLE " + userCollectionsTableName +
+    private static final String createSearchCollectionsTable = "CREATE VIRTUAL TABLE " + userCollectionSearchTableName +
             " USING fts4 (" +  COLLECTIONS_ID+ ", " +
             COLLECTIONS_NAME + ")";
 

@@ -13,16 +13,17 @@ import com.mesh.message.Message;
 import com.mesh.ui.home.Contact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SearchViewModel extends AndroidViewModel {
-    private MutableLiveData<ArrayList<Message>> messages;
+    private MutableLiveData<HashMap<Message, ArrayList<Integer>>> messages;
 
 
     public SearchViewModel(@NonNull Application application) {
         super(application);
     }
 
-    LiveData<ArrayList<Message>> getMessages(String filter){
+    LiveData<HashMap<Message, ArrayList<Integer>>> getMessages(String filter){
         messages = new MutableLiveData<>();
         loadMessages(filter);
         return messages;
