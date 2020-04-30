@@ -255,7 +255,7 @@ public class DBManager {
             return null;
 
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
-                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE \"%" + searchField + "%\"", null);
+                " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE '%" + searchField + "%'", null);
 
         if (c.moveToFirst()) {
             do {
@@ -395,7 +395,7 @@ public class DBManager {
             return null;
 
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.userCollectionSearchTableName +
-                " WHERE " + DatabaseHelper.COLLECTIONS_NAME + " LIKE \"%" + searchField + "%\"", null);
+                " WHERE " + DatabaseHelper.COLLECTIONS_NAME + " = '%" + searchField + "%'", null);
 
         if (c.moveToFirst()) {
             do {
