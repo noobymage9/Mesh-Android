@@ -205,16 +205,18 @@ public class DBManager {
     private ArrayList<Integer> searchFirstIndexInstancesOfString(String word, String searchField)
     {
         ArrayList<Integer> indexResults = new ArrayList<>();
-        int currentSearchIndex;
+        int currentSearchIndex = 0, currentIndexOf;
 
-        for (int i = 0; i <= word.length() - searchField.length(); i++)
+        while(currentSearchIndex <= word.length() - searchField.length())
         {
-            currentSearchIndex = word.substring(i).indexOf(searchField);
-            if (currentSearchIndex > -1)
+            currentIndexOf = word.substring(currentSearchIndex).indexOf(searchField);
+            if (currentIndexOf > -1)
             {
-                indexResults.add(currentSearchIndex);
-                i += searchField.length();
+                indexResults.add(currentIndexOf);
+                currentSearchIndex += searchField.length();
             }
+            else
+                break;
         }
 
         return indexResults;
