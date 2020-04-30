@@ -223,12 +223,12 @@ public class DBManager {
         database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
     }
 
-    public HashMap<ArrayList<Integer>, Message> searchMessages(String searchField) {
+    public HashMap<Message, ArrayList<Integer>> searchMessages(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
-        HashMap<ArrayList<Integer>, Message> searchResults = new HashMap<>();
+        HashMap<Message, ArrayList<Integer>> searchResults = new HashMap<>();
         ArrayList<Integer> searchIndexes = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
@@ -241,7 +241,7 @@ public class DBManager {
                 m = constructMessage(c);
                 assert m != null;
                 searchIndexes = searchFirstIndexInstancesOfString(m.getMessageContent(), searchField);
-                searchResults.put(searchIndexes, m);
+                searchResults.put(m, searchIndexes);
             } while (c.moveToNext());
         }
 
@@ -361,12 +361,12 @@ public class DBManager {
     }
 
     //returns all indexOf indexes as well as the collection name that was found from sql
-    public HashMap<ArrayList<Integer>, String> searchCollectionNames(String searchField) {
+    public HashMap<String, ArrayList<Integer>> searchCollectionNames(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
-        HashMap<ArrayList<Integer>, String> searchResults = new HashMap<>();
+        HashMap<String, ArrayList<Integer>> searchResults = new HashMap<>();
         ArrayList<String> collectionNames = new ArrayList<>();
         ArrayList<Integer> searchIndexes = new ArrayList<>();
 
@@ -382,7 +382,7 @@ public class DBManager {
 
                 //method found in message search section
                 searchIndexes = searchFirstIndexInstancesOfString(currentCollectionName, searchField);
-                searchResults.put(searchIndexes, currentCollectionName);
+                searchResults.put(currentCollectionName, searchIndexes);
             } while (c.moveToNext());
         }
 
