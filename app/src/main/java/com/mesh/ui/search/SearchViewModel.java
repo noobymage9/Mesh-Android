@@ -1,6 +1,7 @@
 package com.mesh.ui.search;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -16,14 +17,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class SearchViewModel extends AndroidViewModel {
-    private MutableLiveData<HashMap<Message, ArrayList<Integer>>> messages;
+    private MutableLiveData<ArrayList<Message>> messages;
 
 
     public SearchViewModel(@NonNull Application application) {
         super(application);
     }
 
-    LiveData<HashMap<Message, ArrayList<Integer>>> getMessages(String filter){
+    LiveData<ArrayList<Message>> getMessages(String filter){
         messages = new MutableLiveData<>();
         loadMessages(filter);
         return messages;
@@ -33,7 +34,8 @@ public class SearchViewModel extends AndroidViewModel {
         new Thread(() -> {
             DBManager dbManager = new DBManager(this.getApplication());
             dbManager.open();
-            messages.postValue(dbManager.searchMessages(filter));
+            ArrayList<Message> temp = dbManager.searchMessages(filter);
+            messages.postValue(temp);
             dbManager.close();
         }).start();
     }

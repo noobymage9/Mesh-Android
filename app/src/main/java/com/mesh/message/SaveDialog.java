@@ -30,7 +30,6 @@ public class SaveDialog extends Dialog {
     private RecyclerView recyclerView;
     private TagAdapter tagAdapter;
     private ArrayList<UserCollection> userCollections;
-    private HashMap<UserCollection, ArrayList<Integer>> userCollectionToIndex;
     private  MessageActivity messageActivity;
     private SaveDeleteSnackbar saveDeleteSnackbar;
 
@@ -130,19 +129,12 @@ public class SaveDialog extends Dialog {
         DBManager dbManager = new DBManager(getContext());
         dbManager.open();
         if (filter.equals("")) userCollections = dbManager.getAllUserCollections();
-        else {
-            userCollectionToIndex = dbManager.searchCollectionNames(filter);
-            initialiseUserCollection();
-        }
+        else userCollections = dbManager.searchCollectionNames(filter);
         dbManager.close();
         recyclerView = findViewById(R.id.tag_list);
         recyclerView.setHasFixedSize(true);
         tagAdapter = new TagAdapter(userCollections, getContext());
         recyclerView.setAdapter(tagAdapter);
-    }
-
-    private void initialiseUserCollection() {
-        userCollections.addAll(userCollectionToIndex.keySet());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

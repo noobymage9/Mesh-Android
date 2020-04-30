@@ -1,5 +1,7 @@
 package com.mesh.message;
 
+import android.util.Log;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,14 +103,17 @@ public class Message {
 
         while (currentIndex <= content.length() - highLightWord.length())
         {
+            Log.e("result", content + "");
+
             int searchedIndex = lowerCaseMessageContent.substring(currentIndex).indexOf(lowerCaseHighLightWord);
+
             if (searchedIndex > -1)
             {
                 String wordToHighLight = content.substring(searchedIndex, searchedIndex + highLightWord.length());
                 resultMessage.replaceAll(wordToHighLight,
                         "<font color = '"+ color + "'><u>" + wordToHighLight + "</u></font>");
-            }
-            currentIndex = searchedIndex + highLightWord.length();
+            } else
+            currentIndex = searchedIndex + highLightWord.length() + 1;
         }
 
         return resultMessage;

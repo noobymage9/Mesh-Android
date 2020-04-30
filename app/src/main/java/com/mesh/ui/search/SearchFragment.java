@@ -30,7 +30,7 @@ public class SearchFragment extends Fragment {
 
     private SearchViewModel searchViewModel;
     private EditText searchBar;
-    private HashMap<Message, ArrayList<Integer>> messages;
+    private ArrayList<Message> messages;
     private RecyclerView recyclerView;
     private View root;
     private SearchAdapter searchAdapter;
@@ -48,7 +48,7 @@ public class SearchFragment extends Fragment {
         return root;
     }
 
-    public void initialiseRecyclerView(HashMap<Message, ArrayList<Integer>> messageList){
+    public void initialiseRecyclerView(ArrayList<Message> messageList){
         this.messages = messageList;
         recyclerView = root.findViewById(R.id.search_recycler_view);
         recyclerView.setHasFixedSize(true);

@@ -28,10 +28,8 @@ import java.util.HashMap;
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubbleViewHolder> {
 
     public static final String SEARCH_MESSAGE_PARCEL = "searched message";
-    private HashMap<Message, ArrayList<Integer>> messageToIndex;
-    private ArrayList<Message> messageList = new ArrayList<>();
+    private ArrayList<Message> messageList;
     private SearchFragment searchFragment;
-    private HashMap<String, Integer> contactColor;
 
     public class SearchBubbleViewHolder extends RecyclerView.ViewHolder {
 
@@ -63,10 +61,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
 
 
 
-    public SearchAdapter(HashMap<Message, ArrayList<Integer>> messageToIndex, SearchFragment searchFragment) {
-        this.messageToIndex = messageToIndex;
+    public SearchAdapter(ArrayList<Message> messageList, SearchFragment searchFragment) {
+        this.messageList = messageList;
         this.searchFragment = searchFragment;
-        if (messageToIndex != null) initialiseMessageList();
     }
 
     @Override
@@ -80,11 +77,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
     @Override
     public void onBindViewHolder(SearchBubbleViewHolder searchBubbleViewHolder, int i) {
         Message message = messageList.get(i);
-        ArrayList<Integer> index = messageToIndex.get(message);
-        // If you see this, I found an easier way... psps
-        String temp = message.getMessageContent().replaceAll("(?i)" + searchFragment.getSearchWord(), "<font color='#F9AA33'><u>" +  searchFragment.getSearchWord() + "</u></font>");
         searchBubbleViewHolder.message = message;
-        searchBubbleViewHolder.messageContent.setText(Html.fromHtml(temp));
+        searchBubbleViewHolder.messageContent.setText(Html.fromHtml(message.highlightMessage(searchFragment.getSearchWord(), "#F9AA33")));
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());
         Image.setSource(message.getSourceApp(), searchFragment, searchBubbleViewHolder.sourceApp);
@@ -100,14 +94,4 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
         return new SearchBubbleViewHolder(itemView);
     }
 
-    private boolean someAreSelected() {
-        for (Message message : messageList)
-            if (message.isSelected())
-                return true;
-        return false;
-    }
-
-    public void initialiseMessageList(){
-        for (Message message : messageToIndex.keySet()) messageList.add(message);
-    }
 }
