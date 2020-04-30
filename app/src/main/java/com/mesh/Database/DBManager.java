@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -201,6 +202,24 @@ public class DBManager {
     /**Virtual Message Search table functions**/
     /******************************************/
 
+    private ArrayList<Integer> searchFirstIndexInstancesOfString(String word, String searchField)
+    {
+        ArrayList<Integer> indexResults = new ArrayList<>();
+        int currentSearchIndex;
+
+        for (int i = 0; i <= word.length() - searchField.length(); i++)
+        {
+            currentSearchIndex = word.substring(i).indexOf(searchField);
+            if (currentSearchIndex > -1)
+            {
+                indexResults.add(currentSearchIndex);
+                i += searchField.length();
+            }
+        }
+
+        return indexResults;
+    }
+
     private void insertVirtualMessage(int userID, String contents, String sourceApp, Date timeStamp) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
@@ -220,11 +239,13 @@ public class DBManager {
         database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
     }
 
-    public ArrayList<Message> searchMessages(String searchField) {
+    public HashMap<ArrayList<Integer>, Message> searchMessages(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
+        HashMap<ArrayList<Integer>, Message> searchResults = new HashMap<>();
+        ArrayList<Integer> searchIndexes = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
 
@@ -237,14 +258,15 @@ public class DBManager {
         if (c.moveToFirst()) {
             do {
                 m = constructMessage(c);
-                messages.add(m);
+                searchIndexes = searchFirstIndexInstancesOfString(m.getMessageContent(), searchField);
+                searchResults.put(searchIndexes, m);
             } while (c.moveToNext());
         }
 
-        Log.e("Messages", messages + "");
-        return messages;
+        return searchResults;
     }
 
+    //Tagging messages to user collections
     /*******************************/
     /**Message Tag table functions**/
     /*******************************/
@@ -342,6 +364,48 @@ public class DBManager {
     public void deleteUserCollection(int userCollectionID) {
         database.delete(DatabaseHelper.userCollectionsTableName,
                 DatabaseHelper.COLLECTIONS_ID + " = '" + userCollectionID, null);
+    }
+
+    /**************************************/
+    /**Message Tag Search table functions**/
+    /**************************************/
+
+    private void insertVirtualCollection(String collectionName) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper.COLLECTIONS_NAME, collectionName);
+        database.insert(DatabaseHelper.userCollectionSearchTableName, null, contentValue);
+    }
+
+    //returns all indexOf indexes as well as the collection name that was found from sql
+    public HashMap<ArrayList<Integer>, String> searchCollectionNames(String searchField) {
+
+        if (searchField == null || searchField.equals(""))
+            return null;
+
+        HashMap<ArrayList<Integer>, String> searchResults = new HashMap<>();
+        ArrayList<String> collectionNames = new ArrayList<>();
+        ArrayList<Integer> searchIndexes = new ArrayList<>();
+
+        String currentCollectionName;
+
+        if (searchField == null || searchField.equals(""))
+            return null;
+
+        Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.userCollectionSearchTableName +
+                " WHERE " + DatabaseHelper.COLLECTIONS_NAME + " LIKE \"%" + searchField + "%\"", null);
+
+        if (c.moveToFirst()) {
+            do {
+                currentCollectionName = c.getString(c.getColumnIndex(DatabaseHelper.COLLECTIONS_NAME));
+                collectionNames.add(currentCollectionName);
+
+                //method found in message search section
+                searchIndexes = searchFirstIndexInstancesOfString(currentCollectionName, searchField);
+                searchResults.put(searchIndexes, currentCollectionName);
+            } while (c.moveToNext());
+        }
+
+        return searchResults;
     }
 
     /****************************/
