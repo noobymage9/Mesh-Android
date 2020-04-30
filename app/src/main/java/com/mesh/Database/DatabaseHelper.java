@@ -7,79 +7,80 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public DatabaseHelper(Context context) {
+    DatabaseHelper(Context context) {
         super(context, databaseName, null, databaseVersion);
     }
 
     /************************/
     /**Database table names**/
     /************************/
-    public static final String messageTableName = "Message";
-    public static final String messageTagsTableName = "Message_Tags";
-    public static final String contactsTableName = "Contacts";
-    public static final String groupsTableName = "Groups";
-    public static final String userCollectionsTableName = "User_Collections";
-    public static final String settingsTableName = "Settings";
-    public static final String messageSearchTableName = "Message_Search";
-    public static final String contactMergeStatusTableName = "Merged_Contact_Status";
-    public static final String loginDetailsTableName = "Login_Details";
+    static final String messageTableName = "Message";
+    static final String messageTagsTableName = "Message_Tags";
+    static final String contactsTableName = "Contacts";
+    static final String groupsTableName = "Groups";
+    static final String userCollectionsTableName = "User_Collections";
+    static final String userCollectionSearchTableName = "Collection_Search";
+    static final String settingsTableName = "Settings";
+    static final String messageSearchTableName = "Message_Search";
+    static final String contactMergeStatusTableName = "Merged_Contact_Status";
+    static final String loginDetailsTableName = "Login_Details";
 
     /***************************/
     /**Database table columns**/
     /**************************/
-    public static final String MSG_ID = "MessageID";
-    public static final String MSG_USER_ID = "UserID";
-    public static final String MSG_GROUP_ID = "Group_ID";
-    public static final String MSG_CONTENTS = "Message_Contents";
-    public static final String MSG_SOURCE_APP = "SourceApp";
-    public static final String MSG_TIMESTAMP = "Timestamp";
+    static final String MSG_ID = "MessageID";
+    static final String MSG_USER_ID = "UserID";
+    static final String MSG_GROUP_ID = "Group_ID";
+    static final String MSG_CONTENTS = "Message_Contents";
+    static final String MSG_SOURCE_APP = "SourceApp";
+    static final String MSG_TIMESTAMP = "Timestamp";
 
-    public static final String MSGTAG_ID = "MessageTagID";
-    public static final String MSGTAG_MSG_ID = "MessageTag_Message_ID";
-    public static final String MSGTAG_COLLECTION_ID = "Group_Tag_ID";
+    static final String MSGTAG_ID = "MessageTagID";
+    static final String MSGTAG_MSG_ID = "MessageTag_Message_ID";
+    static final String MSGTAG_COLLECTION_ID = "Group_Tag_ID";
 
-    public static final String CONTACT_ID = "Contact_ID";
-    public static final String CONTACT_PROFILE_PIC = "Profile_Picture";
-    public static final String CONTACT_NAME = "Contact_Name";
-    public static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
-    public static final String CONTACT_IS_GROUP = "Is_Group";
-    public static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
-    public static final String CONTACT_CUSTOM_ORDER = "Custom_Contact_Order";
-    public static final String CONTACT_IS_FAVOURITE = "Is_Favourite";
-    public static final String CONTACT_IS_MERGE_PARENT = "Is_Merge_Parent";
-    public static final String CONTACT_IS_MERGE_CHILD = "Is_Merge_Child";
+    static final String CONTACT_ID = "Contact_ID";
+    static final String CONTACT_PROFILE_PIC = "Profile_Picture";
+    static final String CONTACT_NAME = "Contact_Name";
+    static final String CONTACT_LATEST_TIMESTAMP = "Latest_Message_Timestamp";
+    static final String CONTACT_IS_GROUP = "Is_Group";
+    static final String CONTACT_IS_GROUP_USER = "Is_Group_User";
+    static final String CONTACT_CUSTOM_ORDER = "Custom_Contact_Order";
+    static final String CONTACT_IS_FAVOURITE = "Is_Favourite";
+    static final String CONTACT_IS_MERGE_PARENT = "Is_Merge_Parent";
+    static final String CONTACT_IS_MERGE_CHILD = "Is_Merge_Child";
 
-    public static final String GROUPS_ID = "Group_ID";
-    public static final String GROUPS_NAME = "Group_Name";
+    static final String GROUPS_ID = "Group_ID";
+    static final String GROUPS_NAME = "Group_Name";
 
-    public static final String COLLECTIONS_ID = "Collection_ID";
-    public static final String COLLECTIONS_NAME = "Collection_Name";
+    static final String COLLECTIONS_ID = "Collection_ID";
+    static final String COLLECTIONS_NAME = "Collection_Name";
 
-    public static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
-    public static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
-    public static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
-    public static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order_Setting";
+    static final String SETTINGS_TABLE_ID = "Settings_Table_ID";
+    static final String SETTINGS_CONTACT_SORT_ORDER = "Contact_Sort_Order";
+    static final String SETTINGS_DELETE_NOTI_ON_STARTUP = "Clear_Notifications";
+    static final String SETTINGS_CUSTOM_CONTACT_ORDER = "Custom_Contact_Order_Setting";
 
-    public static final String MERGE_ID = "Merge_Status_ID";
-    public static final String MERGE_CHILD_ID = "Merge_Child_ID";
-    public static final String MERGE_PARENT_ID = "Merge_Parent_ID";
+    static final String MERGE_ID = "Merge_Status_ID";
+    static final String MERGE_CHILD_ID = "Merge_Child_ID";
+    static final String MERGE_PARENT_ID = "Merge_Parent_ID";
 
-    public static final String LOGIN_ID = "Login_Key_ID";
-    public static final String LOGIN_USER_ID = "Login_User_ID";
-    public static final String LOGIN_PASSWORD = "Login_Password";
+    static final String LOGIN_ID = "Login_Key_ID";
+    static final String LOGIN_USER_ID = "Login_User_ID";
+    static final String LOGIN_PASSWORD = "Login_Password";
 
     /**************************/
     /**Default Setting Values**/
     /**************************/
-    public static final int defaultSortContactSetting = SortSetting.getSettingID(SortSetting.Recency);
-    public static final boolean defaultDeleteNotificationSetting = false;
-    public static final boolean defaultCustomContactOrder = false;
+    static final int defaultSortContactSetting = SortSetting.getSettingID(SortSetting.Recency);
+    static final boolean defaultDeleteNotificationSetting = false;
+    static final boolean defaultCustomContactOrder = false;
 
     /*************************/
     /**Database information**/
     /************************/
     static final String databaseName = "Mesh.DB";
-    static int databaseVersion = 41;
+    static int databaseVersion = 42;
 
     /****************************/
     /**Database table creation**/
@@ -130,6 +131,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             MSG_SOURCE_APP + ", " +
             MSG_TIMESTAMP + ")";
 
+    private static final String createSearchCollectionsTable = "CREATE VIRTUAL TABLE " + userCollectionsTableName +
+            " USING fts4 (" +  COLLECTIONS_ID+ ", " +
+            COLLECTIONS_NAME + ")";
+
     private static final String createContactMergeStatusTable = "CREATE TABLE " + contactMergeStatusTableName + "(" +
             MERGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MERGE_CHILD_ID + " INTEGER, " +
@@ -158,6 +163,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createMessageTagsTable);
         db.execSQL(createGroupsTable);
         db.execSQL(createUserCollectionsTable);
+        db.execSQL(createSearchCollectionsTable);
         db.execSQL(createContactMergeStatusTable);
         db.execSQL(createSettingsTable);
         db.execSQL(createSearchMessageTable);
