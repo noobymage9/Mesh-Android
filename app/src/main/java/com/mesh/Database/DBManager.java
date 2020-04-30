@@ -27,8 +27,8 @@ public class DBManager {
     private DatabaseHelper dbHelper;
     private Context context;
     private SQLiteDatabase database;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
-    SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss zzz yyy", Locale.getDefault());
+    private SimpleDateFormat time = new SimpleDateFormat("hh:mm a");
 
     public DBManager(Context c) {
         context = c;
@@ -116,24 +116,6 @@ public class DBManager {
         }
         return null;
     }/*Get all messages for 1 user*/
-
-    public static class MyObject implements Comparable<MyObject> {
-
-        private Date dateTime;
-
-        public Date getDateTime() {
-            return dateTime;
-        }
-
-        public void setDateTime(Date datetime) {
-            this.dateTime = datetime;
-        }
-
-        @Override
-        public int compareTo(MyObject o) {
-            return getDateTime().compareTo(o.getDateTime());
-        }
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public ArrayList<Message> getMessages(int contactID) {
@@ -251,15 +233,13 @@ public class DBManager {
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
 
-        if (searchField == null || searchField.equals(""))
-            return null;
-
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.messageSearchTableName +
                 " WHERE " + DatabaseHelper.MSG_CONTENTS + " LIKE '%" + searchField + "%'", null);
 
         if (c.moveToFirst()) {
             do {
                 m = constructMessage(c);
+                assert m != null;
                 searchIndexes = searchFirstIndexInstancesOfString(m.getMessageContent(), searchField);
                 searchResults.put(searchIndexes, m);
             } while (c.moveToNext());
@@ -361,6 +341,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
+        c.close();
         return userCollections;
     }
 
@@ -391,9 +372,6 @@ public class DBManager {
 
         String currentCollectionName;
 
-        if (searchField == null || searchField.equals(""))
-            return null;
-
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.userCollectionSearchTableName +
                 " WHERE " + DatabaseHelper.COLLECTIONS_NAME + " LIKE '%" + searchField + "%'", null);
 
@@ -417,7 +395,7 @@ public class DBManager {
     /**Contacts table functions**/
     /****************************/
 
-    //Theres 2 types of contact with the same name:
+    //There are 2 types of contact with the same name:
     //1.Contact that messages you directly
     //2.Contact that only messages in one or more of your group chats
     //if contact's name exists in table, check for whether its type 1 or type 2.
@@ -485,6 +463,7 @@ public class DBManager {
             } while (c.moveToNext());
         }
 
+        c.close();
         return userSourceApps;
     }
 
@@ -595,7 +574,7 @@ public class DBManager {
         return c;
     }
 
-    public String getContactName(int contactID) {
+    private String getContactName(int contactID) {
         Cursor c = getContactDB(contactID);
 
         return c.getString(c.getColumnIndex(DatabaseHelper.CONTACT_NAME));
@@ -938,6 +917,7 @@ public class DBManager {
             parentContacts.sort(Comparator.comparing(Contact::getName));
         }
 
+        c.close();
         return parentContacts;
     }
 
@@ -980,7 +960,7 @@ public class DBManager {
         return childContacts;
     }
 
-    public void insertContactMergeStatus(int childContactID, int parentContactID)
+    private void insertContactMergeStatus(int childContactID, int parentContactID)
     {
         ContentValues cv = new ContentValues();
         cv.put(DatabaseHelper.MERGE_CHILD_ID, childContactID);
@@ -988,7 +968,7 @@ public class DBManager {
         database.insert(DatabaseHelper.contactMergeStatusTableName, null, cv);
     }
 
-    public void deleteContactMergeStatus(int childContactID, int parentContactID)
+    private void deleteContactMergeStatus(int childContactID, int parentContactID)
     {
         database.delete(DatabaseHelper.contactMergeStatusTableName,
                 DatabaseHelper.MERGE_CHILD_ID + " = " + childContactID + " AND " +
