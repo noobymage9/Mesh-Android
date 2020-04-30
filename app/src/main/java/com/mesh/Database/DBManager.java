@@ -318,6 +318,29 @@ public class DBManager {
     /**User Collections table functions**/
     /************************************/
 
+    private ArrayList<UserCollection> getUserCollectionsFromCursor(Cursor c)
+    {
+        ArrayList<UserCollection> userCollections = new ArrayList<>();
+        UserCollection currentCollection;
+
+        if (c.moveToFirst()) {
+            do {
+                currentCollection = getSingleUserCollectionFromCursor(c);
+                userCollections.add(currentCollection);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        return userCollections;
+    }
+
+    private UserCollection getSingleUserCollectionFromCursor(Cursor c)
+    {
+        return new UserCollection
+                (c.getInt(c.getColumnIndex(DatabaseHelper.COLLECTIONS_ID)),
+                        c.getString(c.getColumnIndex(DatabaseHelper.COLLECTIONS_NAME)));
+    }
+
     public void insertUserCollection(String collectionName) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.COLLECTIONS_NAME, collectionName);
@@ -330,16 +353,7 @@ public class DBManager {
                 DatabaseHelper.userCollectionsTableName, null);
         c.moveToFirst();
         ArrayList<UserCollection> userCollections = new ArrayList<>();
-        UserCollection currentCollection;
-
-        if (c.moveToFirst()) {
-            do {
-                currentCollection = new UserCollection
-                        (c.getInt(c.getColumnIndex(DatabaseHelper.COLLECTIONS_ID)),
-                                c.getString(c.getColumnIndex(DatabaseHelper.COLLECTIONS_NAME)));
-                userCollections.add(currentCollection);
-            } while (c.moveToNext());
-        }
+        userCollections = getUserCollectionsFromCursor(c);
 
         c.close();
         return userCollections;
@@ -361,13 +375,13 @@ public class DBManager {
     }
 
     //returns all indexOf indexes as well as the collection name that was found from sql
-    public HashMap<String, ArrayList<Integer>> searchCollectionNames(String searchField) {
+    public HashMap<UserCollection, ArrayList<Integer>> searchCollectionNames(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
-        HashMap<String, ArrayList<Integer>> searchResults = new HashMap<>();
-        ArrayList<String> collectionNames = new ArrayList<>();
+        HashMap<UserCollection, ArrayList<Integer>> searchResults = new HashMap<>();
+        UserCollection currentCollection;
         ArrayList<Integer> searchIndexes = new ArrayList<>();
 
         String currentCollectionName;
@@ -377,12 +391,11 @@ public class DBManager {
 
         if (c.moveToFirst()) {
             do {
-                currentCollectionName = c.getString(c.getColumnIndex(DatabaseHelper.COLLECTIONS_NAME));
-                collectionNames.add(currentCollectionName);
+                currentCollection = getSingleUserCollectionFromCursor(c);
 
                 //method found in message search section
-                searchIndexes = searchFirstIndexInstancesOfString(currentCollectionName, searchField);
-                searchResults.put(currentCollectionName, searchIndexes);
+                searchIndexes = searchFirstIndexInstancesOfString(currentCollection.getName(), searchField);
+                searchResults.put(currentCollection, searchIndexes);
             } while (c.moveToNext());
         }
 
