@@ -342,6 +342,7 @@ public class DBManager {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.COLLECTIONS_NAME, collectionName);
         database.insert(DatabaseHelper.userCollectionsTableName, null, contentValue);
+        insertVirtualCollection(collectionName);
     }
 
     public ArrayList<UserCollection> getAllUserCollections() {
@@ -409,6 +410,8 @@ public class DBManager {
 
         return searchResults;
     }
+
+
 
     /****************************/
     /**Contacts table functions**/
