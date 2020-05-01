@@ -228,6 +228,9 @@ public class DBManager {
         if (searchField == null || searchField.equals(""))
             return null;
 
+        String lowerCaseSearchField = searchField.toLowerCase();
+        String lowerCaseCurrentMessageContent;
+
         HashMap<Message, ArrayList<Integer>> searchResults = new HashMap<>();
         ArrayList<Integer> searchIndexes = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
@@ -240,7 +243,8 @@ public class DBManager {
             do {
                 m = constructMessage(c);
                 assert m != null;
-                searchIndexes = searchFirstIndexInstancesOfString(m.getMessageContent(), searchField);
+                lowerCaseCurrentMessageContent = m.getMessageContent().toLowerCase();
+                searchIndexes = searchFirstIndexInstancesOfString(lowerCaseCurrentMessageContent, lowerCaseSearchField);
                 searchResults.put(m, searchIndexes);
             } while (c.moveToNext());
         }
@@ -380,11 +384,12 @@ public class DBManager {
         if (searchField == null || searchField.equals(""))
             return null;
 
+        String lowerCaseSearchField = searchField.toLowerCase();
+        String lowerCaseCurrentCollectionName;
+
         HashMap<UserCollection, ArrayList<Integer>> searchResults = new HashMap<>();
         UserCollection currentCollection;
-        ArrayList<Integer> searchIndexes = new ArrayList<>();
-
-        String currentCollectionName;
+        ArrayList<Integer> searchIndexes;
 
         Cursor c = database.rawQuery("SELECT * FROM " + DatabaseHelper.userCollectionSearchTableName +
                 " WHERE " + DatabaseHelper.COLLECTIONS_NAME + " LIKE '%" + searchField + "%'", null);
@@ -392,9 +397,9 @@ public class DBManager {
         if (c.moveToFirst()) {
             do {
                 currentCollection = getSingleUserCollectionFromCursor(c);
-
+                lowerCaseCurrentCollectionName =  currentCollection.getName().toLowerCase();
                 //method found in message search section
-                searchIndexes = searchFirstIndexInstancesOfString(currentCollection.getName(), searchField);
+                searchIndexes = searchFirstIndexInstancesOfString(lowerCaseCurrentCollectionName, lowerCaseSearchField);
                 searchResults.put(currentCollection, searchIndexes);
             } while (c.moveToNext());
         }
