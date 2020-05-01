@@ -2,6 +2,7 @@ package com.mesh.message;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -90,6 +91,28 @@ public class Message {
     }
 
     public int getTagID() { return tagID; }
+
+    public String highlightMessage(String highLightWord, String color)
+    {
+        String lowerCaseMessageContent = content.toLowerCase();
+        String lowerCaseHighLightWord = highLightWord.toLowerCase();
+        int currentIndex = 0;
+        String resultMessage = content;
+
+        while (currentIndex <= content.length() - highLightWord.length())
+        {
+            int searchedIndex = lowerCaseMessageContent.substring(currentIndex).indexOf(lowerCaseHighLightWord);
+            if (searchedIndex > -1)
+            {
+                String wordToHighLight = content.substring(searchedIndex, searchedIndex + highLightWord.length());
+                resultMessage.replaceAll(wordToHighLight,
+                        "<font color = '"+ color + "'><u>" + wordToHighLight + "</u></font>");
+            }
+            currentIndex = searchedIndex + highLightWord.length();
+        }
+
+        return resultMessage;
+    }
 
     public void setSelected(boolean b) {
         this.selected = b;

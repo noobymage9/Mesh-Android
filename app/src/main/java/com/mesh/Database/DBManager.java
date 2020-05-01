@@ -184,26 +184,6 @@ public class DBManager {
     /**Virtual Message Search table functions**/
     /******************************************/
 
-    private ArrayList<Integer> searchFirstIndexInstancesOfString(String word, String searchField)
-    {
-        ArrayList<Integer> indexResults = new ArrayList<>();
-        int currentSearchIndex = 0, currentIndexOf;
-
-        while(currentSearchIndex <= word.length() - searchField.length())
-        {
-            currentIndexOf = word.substring(currentSearchIndex).indexOf(searchField);
-            if (currentIndexOf > -1)
-            {
-                indexResults.add(currentIndexOf);
-                currentSearchIndex += searchField.length();
-            }
-            else
-                break;
-        }
-
-        return indexResults;
-    }
-
     private void insertVirtualMessage(int userID, String contents, String sourceApp, Date timeStamp) {
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.MSG_USER_ID, userID);
@@ -223,16 +203,11 @@ public class DBManager {
         database.insert(DatabaseHelper.messageSearchTableName, null, contentValue);
     }
 
-    public HashMap<Message, ArrayList<Integer>> searchMessages(String searchField) {
+    public ArrayList<Message> searchMessages(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
-        String lowerCaseSearchField = searchField.toLowerCase();
-        String lowerCaseCurrentMessageContent;
-
-        HashMap<Message, ArrayList<Integer>> searchResults = new HashMap<>();
-        ArrayList<Integer> searchIndexes = new ArrayList<>();
         ArrayList<Message> messages = new ArrayList<>();
         Message m;
 
@@ -243,13 +218,11 @@ public class DBManager {
             do {
                 m = constructMessage(c);
                 assert m != null;
-                lowerCaseCurrentMessageContent = m.getMessageContent().toLowerCase();
-                searchIndexes = searchFirstIndexInstancesOfString(lowerCaseCurrentMessageContent, lowerCaseSearchField);
-                searchResults.put(m, searchIndexes);
+                messages.add(m);
             } while (c.moveToNext());
         }
 
-        return searchResults;
+        return messages;
     }
 
     //Tagging messages to user collections
@@ -379,15 +352,12 @@ public class DBManager {
     }
 
     //returns all indexOf indexes as well as the collection name that was found from sql
-    public HashMap<UserCollection, ArrayList<Integer>> searchCollectionNames(String searchField) {
+    public ArrayList<UserCollection> searchCollectionNames(String searchField) {
 
         if (searchField == null || searchField.equals(""))
             return null;
 
-        String lowerCaseSearchField = searchField.toLowerCase();
-        String lowerCaseCurrentCollectionName;
-
-        HashMap<UserCollection, ArrayList<Integer>> searchResults = new HashMap<>();
+        ArrayList<UserCollection> userCollections = new ArrayList<>();
         UserCollection currentCollection;
         ArrayList<Integer> searchIndexes;
 
@@ -397,17 +367,12 @@ public class DBManager {
         if (c.moveToFirst()) {
             do {
                 currentCollection = getSingleUserCollectionFromCursor(c);
-                lowerCaseCurrentCollectionName =  currentCollection.getName().toLowerCase();
-                //method found in message search section
-                searchIndexes = searchFirstIndexInstancesOfString(lowerCaseCurrentCollectionName, lowerCaseSearchField);
-                searchResults.put(currentCollection, searchIndexes);
+                userCollections.add(currentCollection);
             } while (c.moveToNext());
         }
 
-        return searchResults;
+        return userCollections;
     }
-
-
 
     /****************************/
     /**Contacts table functions**/
