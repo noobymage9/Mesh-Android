@@ -217,7 +217,6 @@ public class DBManager {
         if (c.moveToFirst()) {
             do {
                 m = constructMessage(c);
-                assert m != null;
                 messages.add(m);
             } while (c.moveToNext());
         }

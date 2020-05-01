@@ -94,27 +94,37 @@ public class Message {
 
     public int getTagID() { return tagID; }
 
+    private ArrayList<Integer> searchFirstIndexInstancesOfString(String word, String searchField)
+    {
+        ArrayList<Integer> indexResults = new ArrayList<>();
+        int currentSearchIndex = 0, currentIndexOf;
+
+        while(currentSearchIndex <= word.length() - searchField.length())
+        {
+            currentIndexOf = word.substring(currentSearchIndex).indexOf(searchField);
+            if (currentIndexOf > -1)
+            {
+                indexResults.add(currentIndexOf);
+                currentSearchIndex += currentIndexOf + searchField.length();
+            }
+            else
+                break;
+        }
+
+        return indexResults;
+    }
+
     public String highlightMessage(String highLightWord, String color)
     {
-        String lowerCaseMessageContent = content.toLowerCase();
-        String lowerCaseHighLightWord = highLightWord.toLowerCase();
-        int currentIndex = 0;
+        String htmlTagFront = "<font color = '"+ color + "'><u>";
+        String htmlTagEnd = "</u></font>";
         String resultMessage = content;
 
-        while (currentIndex <= content.length() - highLightWord.length())
-        {
-            Log.e("result", content + "");
+        if (content.length() < 1)
+            return null;
 
-            int searchedIndex = lowerCaseMessageContent.substring(currentIndex).indexOf(lowerCaseHighLightWord);
-
-            if (searchedIndex > -1)
-            {
-                String wordToHighLight = content.substring(searchedIndex, searchedIndex + highLightWord.length());
-                resultMessage.replaceAll(wordToHighLight,
-                        "<font color = '"+ color + "'><u>" + wordToHighLight + "</u></font>");
-            } else
-            currentIndex = searchedIndex + highLightWord.length() + 1;
-        }
+        resultMessage = resultMessage.replaceAll("(?i)(" + highLightWord + ")",
+                htmlTagFront + "$1" + htmlTagEnd);
 
         return resultMessage;
     }

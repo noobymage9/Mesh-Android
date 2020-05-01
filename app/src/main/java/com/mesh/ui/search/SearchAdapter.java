@@ -78,7 +78,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.SearchBubb
     public void onBindViewHolder(SearchBubbleViewHolder searchBubbleViewHolder, int i) {
         Message message = messageList.get(i);
         searchBubbleViewHolder.message = message;
+
         searchBubbleViewHolder.messageContent.setText(Html.fromHtml(message.highlightMessage(searchFragment.getSearchWord(), "#F9AA33")));
+        Log.e("result", message.getMessageContent() + "");
         searchBubbleViewHolder.messageTimeStamp.setText(message.getTime());
         searchBubbleViewHolder.messageContactName.setText(message.getContactName());
         Image.setSource(message.getSourceApp(), searchFragment, searchBubbleViewHolder.sourceApp);
