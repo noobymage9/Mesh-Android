@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="?attr/actionBarSize"
     tools:context=".LoginActivity">
 
     <ImageView
@@ -18,11 +19,11 @@
 
     <Button
         android:id="@+id/loginbtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_105sdp"
+        android:layout_height="@dimen/_30sdp"
         android:layout_marginTop="32dp"
         android:background="@color/colorPrimary"
-        android:text="Login"
+        android:text="@string/login"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="18sp"
@@ -43,9 +44,9 @@
 
     <Button
         android:id="@+id/regformbtn"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@null"
         android:text="Register"
         android:textAllCaps="false"
         android:textColor="@color/colorPrimary"
@@ -60,7 +61,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/email"
+        android:paddingStart="@dimen/_10sdp"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +73,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="password"
+        android:hint="@string/password"
+        android:paddingStart="@dimen/_10sdp"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

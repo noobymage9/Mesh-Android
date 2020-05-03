@@ -49,5 +49,8 @@
     <string name="default_alert_dialog_title">This is an alert dialog title</string>
     <string name="alert_dialog_notification_listener">Mesh Listener</string>
     <string name="alert_dialog_unmerge_title">Unmerge Contact?</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="email">Email</string>
 
 </resources>
